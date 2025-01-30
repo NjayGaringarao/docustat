@@ -2,6 +2,7 @@ import { SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import "../global.css";
 
 export default function RootLayout() {
   const [loaded] = useFonts({
@@ -20,11 +21,7 @@ export default function RootLayout() {
   }
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 100,
-      }}
-    >
+    <SafeAreaView className="flex flex-1">
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
       </Stack>
