@@ -1,4 +1,4 @@
-import { env } from "@/constant/env";
+import { env } from "@/constants/env";
 import {
   ID,
   Account,
