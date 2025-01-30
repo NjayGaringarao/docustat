@@ -1,13 +1,13 @@
+import Ionicons from "@expo/vector-icons/Ionicons";
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   TextInputProps,
-  Image,
 } from "react-native";
 import React, { useState } from "react";
-import { colors, icons } from "../constants";
+import colors from "@/constants/color";
 
 interface TextBoxProps extends TextInputProps {
   title?: string;
@@ -46,7 +46,7 @@ const FormField: React.FC<TextBoxProps> = ({
         {title}
       </Text>
       <View className="w-full">
-        <View className={`py-2 px-4 ${boxStyles} flex-row`}>
+        <View className={` px-4 ${boxStyles} flex-row`}>
           <TextInput
             className={`flex-1 text-uBlack font-medium mr-10 ${textInputStyles}`}
             value={textValue}
@@ -70,11 +70,10 @@ const FormField: React.FC<TextBoxProps> = ({
             onPress={() => setShowPassword(!showPassword)}
             className="absolute right-4 bottom-2"
           >
-            <Image
-              source={!showPassword ? icons.show : icons.hide}
-              className="w-6 h-6"
-              resizeMode="contain"
-              tintColor={colors.primary}
+            <Ionicons
+              name={showPassword ? "eye" : "eye-off"}
+              size={24}
+              color={colors.uBlack}
             />
           </TouchableOpacity>
         )}

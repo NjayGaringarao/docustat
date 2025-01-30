@@ -1,9 +1,8 @@
 import { Text, View, Image } from "react-native";
-import { BlurView } from "expo-blur";
 import React from "react";
 import { StatusBar } from "expo-status-bar";
-import color from "@/constant/color";
-import image from "@/constant/image";
+import color from "@/constants/color";
+import image from "@/constants/image";
 import CustomButton from "@/components/CustomButton";
 import { router } from "expo-router";
 
@@ -46,17 +45,19 @@ export default function Index() {
             </Text>
             <View className="w-full items-center mt-6 gap-2">
               <CustomButton
-                title="Administrator"
-                textStyles="text-white"
-                containerStyles="bg-secondary h-11 w-1/2 rounded-xl"
-                handlePress={() => {}}
-              />
-              <CustomButton
-                title="Student"
+                title="Sign in"
                 textStyles="text-white"
                 containerStyles="bg-secondary h-11 w-1/2 rounded-xl"
                 handlePress={() => {
-                  router.push("/(auth)/student_signin");
+                  router.push("/(auth)/sign_in");
+                }}
+              />
+              <CustomButton
+                title="Sign up"
+                textStyles="text-white"
+                containerStyles="bg-secondary h-11 w-1/2 rounded-xl"
+                handlePress={() => {
+                  router.push("/(auth)/sign_up");
                 }}
               />
             </View>
