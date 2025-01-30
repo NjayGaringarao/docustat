@@ -7,7 +7,8 @@ import "../global.css";
 export default function RootLayout() {
   const [loaded] = useFonts({
     Sarina: require("@/assets/fonts/sarina/Sarina-Regular.ttf"),
-    Merriweather: require("@/assets/fonts/merriweather/Merriweather-Regular.ttf"),
+    Merriweather: require("@/assets/fonts/merriweather/Merriweather-Bold.ttf"),
+    Mono: require("@/assets/fonts/SpaceMono-Regular.ttf"),
   });
 
   useEffect(() => {
