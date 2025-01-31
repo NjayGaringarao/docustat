@@ -48,7 +48,9 @@ const FormField: React.FC<TextBoxProps> = ({
       <View className="w-full">
         <View className={` px-4 h-10 ${boxStyles} flex-row`}>
           <TextInput
-            className={`flex-1 text-uBlack font-medium mr-10 ${textInputStyles}`}
+            className={`flex-1 text-uBlack font-medium ${
+              isPassword ? "mr-10" : ""
+            } ${textInputStyles}`}
             value={textValue}
             placeholder={placeholderValue}
             placeholderTextColor={color.uGrayLight}
