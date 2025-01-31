@@ -6,6 +6,7 @@ import image from "@/constants/image";
 import CustomButton from "@/components/CustomButton";
 import TextBox from "@/components/TextBox";
 import { Picker } from "@react-native-picker/picker";
+import { router } from "expo-router";
 
 interface IFormType {
   id: string;
@@ -115,7 +116,9 @@ export default function SignIn() {
                 title="Sign In"
                 textStyles="text-white"
                 containerStyles="bg-secondary h-11 w-full rounded-xl mt-4"
-                handlePress={() => {}}
+                handlePress={() => {
+                  router.navigate("/(tabs)/home");
+                }}
               />
             </View>
           </View>

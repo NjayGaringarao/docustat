@@ -7,7 +7,7 @@ import {
   TextInputProps,
 } from "react-native";
 import React, { useState } from "react";
-import colors from "@/constants/color";
+import color from "@/constants/color";
 
 interface TextBoxProps extends TextInputProps {
   title?: string;
@@ -51,7 +51,7 @@ const FormField: React.FC<TextBoxProps> = ({
             className={`flex-1 text-uBlack font-medium mr-10 ${textInputStyles}`}
             value={textValue}
             placeholder={placeholderValue}
-            placeholderTextColor={colors.uGrayLight}
+            placeholderTextColor={color.uGrayLight}
             onChangeText={handleChangeText}
             secureTextEntry={isPassword && !showPassword}
             style={{
@@ -73,7 +73,7 @@ const FormField: React.FC<TextBoxProps> = ({
             <Ionicons
               name={showPassword ? "eye-off" : "eye"}
               size={24}
-              color={colors.uBlack}
+              color={color.uBlack}
             />
           </TouchableOpacity>
         )}
