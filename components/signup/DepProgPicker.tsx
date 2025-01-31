@@ -14,7 +14,7 @@ const DeptProgPicker: React.FC<DeptProgPickerProps> = ({
   containerStyle,
 }) => {
   return (
-    <View className={`justify-center h-12 ${containerStyle}`}>
+    <View className={`justify-center h-10 ${containerStyle}`}>
       <Picker selectedValue={value} onValueChange={onChange}>
         <Picker.Item label="Choose Department - Program" value="" />
         <Picker.Item label="CCIT - BSCS" value="CCIT - BSCS" />

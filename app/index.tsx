@@ -18,20 +18,39 @@ export default function Index() {
           <View className="h-40 w-full gap-2 bg-primary p-4 rounded-b-2xl flex-row justify-center items-center">
             <Image className="w-28 h-28" source={image.prmsu} />
 
-            <Text
-              style={{
-                lineHeight: 20,
-              }}
-              className="text-gray-800 text-lg font-semibold"
-            >
-              {"PRESIDENT RAMON MAGSAYSAY\nSTATE UNIVERSITY"}
-              <Text className="text-gray-200">{"\nCASTILLEJOS CAMPUS"}</Text>
-            </Text>
+            <View>
+              <Text
+                style={{
+                  lineHeight: 20,
+                  textShadowRadius: 10,
+                  textShadowColor: "#fff",
+                  textShadowOffset: { width: 2, height: 2 },
+                }}
+                className="text-gray-800 text-lg font-semibold"
+              >
+                {"PRESIDENT RAMON MAGSAYSAY\nSTATE UNIVERSITY"}
+              </Text>
+              <Text
+                className="text-gray-100 text-lg font-semibold"
+                style={{
+                  lineHeight: 20,
+                  textShadowRadius: 10,
+                  textShadowColor: "#00000",
+                }}
+              >
+                CASTILLEJOS CAMPUS
+              </Text>
+            </View>
           </View>
           <View className="flex-1 justify-center items-center">
             <Text
               className="text-7xl text-secondary"
-              style={{ fontFamily: "Merriweather" }}
+              style={{
+                fontFamily: "Merriweather",
+                textShadowRadius: 10,
+                textShadowColor: "#00000",
+                textShadowOffset: { width: 3, height: 3 },
+              }}
             >
               DocuStats
             </Text>
@@ -54,8 +73,8 @@ export default function Index() {
               />
               <CustomButton
                 title="Sign up"
-                textStyles="text-white"
-                containerStyles="bg-secondary h-11 w-1/2 rounded-xl"
+                textStyles="text-secondary"
+                containerStyles="bg-secondary h-11 w-1/2 rounded-xl bg-transparent border border-secondary"
                 handlePress={() => {
                   router.push("/(auth)/sign_up");
                 }}

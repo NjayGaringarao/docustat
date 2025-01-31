@@ -46,7 +46,7 @@ const FormField: React.FC<TextBoxProps> = ({
         {title}
       </Text>
       <View className="w-full">
-        <View className={` px-4 ${boxStyles} flex-row`}>
+        <View className={` px-4 h-10 ${boxStyles} flex-row`}>
           <TextInput
             className={`flex-1 text-uBlack font-medium mr-10 ${textInputStyles}`}
             value={textValue}
@@ -71,7 +71,7 @@ const FormField: React.FC<TextBoxProps> = ({
             className="absolute right-4 bottom-2"
           >
             <Ionicons
-              name={showPassword ? "eye" : "eye-off"}
+              name={showPassword ? "eye-off" : "eye"}
               size={24}
               color={colors.uBlack}
             />

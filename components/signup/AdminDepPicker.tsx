@@ -14,7 +14,7 @@ const AdminDepPicker: React.FC<AdminDepPickerProps> = ({
   containerStyle,
 }) => {
   return (
-    <View className={`justify-center h-12 ${containerStyle}`}>
+    <View className={`justify-center h-10 ${containerStyle}`}>
       <Picker selectedValue={value} onValueChange={onChange}>
         <Picker.Item label="Choose Department" value="" />
         <Picker.Item label="Registrar" value="Registrar" />

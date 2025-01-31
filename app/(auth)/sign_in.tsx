@@ -32,15 +32,29 @@ export default function SignIn() {
           <View className="h-40 w-full gap-2 bg-primary p-4 rounded-b-2xl flex-row justify-center items-center">
             <Image className="w-28 h-28" source={image.prmsu} />
 
-            <Text
-              style={{
-                lineHeight: 20,
-              }}
-              className="text-gray-800 text-lg font-semibold"
-            >
-              {"PRESIDENT RAMON MAGSAYSAY\nSTATE UNIVERSITY"}
-              <Text className="text-gray-200">{"\nCASTILLEJOS CAMPUS"}</Text>
-            </Text>
+            <View>
+              <Text
+                style={{
+                  lineHeight: 20,
+                  textShadowRadius: 10,
+                  textShadowColor: "#fff",
+                  textShadowOffset: { width: 2, height: 2 },
+                }}
+                className="text-gray-800 text-lg font-semibold"
+              >
+                {"PRESIDENT RAMON MAGSAYSAY\nSTATE UNIVERSITY"}
+              </Text>
+              <Text
+                className="text-gray-100 text-lg font-semibold"
+                style={{
+                  lineHeight: 20,
+                  textShadowRadius: 10,
+                  textShadowColor: "#00000",
+                }}
+              >
+                CASTILLEJOS CAMPUS
+              </Text>
+            </View>
           </View>
           <View className="flex-1 justify-center items-center">
             <Text
@@ -72,33 +86,30 @@ export default function SignIn() {
                   </Picker>
                 </View>
               </View>
-              <View className="w-full mt-4">
-                <TextBox
-                  title={
-                    accountType === "admin"
-                      ? "Employee Number"
-                      : "Student Number"
-                  }
-                  textValue={form.id}
-                  placeholder="XX-X-X-XXXX"
-                  handleChangeText={(e) => setForm({ ...form, id: e })}
-                  titleTextStyles="text-uGray text-base font-semibold"
-                  textInputStyles="text-base text-uBlack"
-                  boxStyles="w-full bg-white rounded-xl border-secondary border"
-                />
-              </View>
-              <View className="w-full items-end">
-                <TextBox
-                  title="Password"
-                  textValue={form.password}
-                  placeholder="#Docustat!"
-                  handleChangeText={(e) => setForm({ ...form, password: e })}
-                  isPassword={true}
-                  titleTextStyles="text-uGray text-base font-semibold"
-                  textInputStyles="text-base text-uBlack"
-                  boxStyles="w-full bg-white rounded-xl border-secondary border"
-                />
-              </View>
+
+              <TextBox
+                title={
+                  accountType === "admin" ? "Employee Number" : "Student Number"
+                }
+                textValue={form.id}
+                placeholder="XX-X-X-XXXX"
+                handleChangeText={(e) => setForm({ ...form, id: e })}
+                titleTextStyles="text-uGray text-base font-semibold"
+                textInputStyles="text-base text-uBlack"
+                boxStyles="w-full bg-white rounded-xl border-secondary border h-11"
+                containerStyles="pt-4"
+              />
+
+              <TextBox
+                title="Password"
+                textValue={form.password}
+                placeholder="#Docustat!"
+                handleChangeText={(e) => setForm({ ...form, password: e })}
+                isPassword={true}
+                titleTextStyles="text-uGray text-base font-semibold"
+                textInputStyles="text-base text-uBlack"
+                boxStyles="w-full bg-white rounded-xl border-secondary border h-11"
+              />
 
               <CustomButton
                 title="Sign In"

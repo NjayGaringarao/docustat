@@ -15,7 +15,7 @@ const YearLevelPicker: React.FC<YearLevelPickerProps> = ({
   containerStyle,
 }) => {
   return (
-    <View className={`justify-center h-12 ${containerStyle}`}>
+    <View className={`justify-center h-10 ${containerStyle}`}>
       <Picker selectedValue={value} onValueChange={onChange}>
         <Picker.Item label="Choose Year Level" value="" />
         <Picker.Item label="First Year" value="first" />

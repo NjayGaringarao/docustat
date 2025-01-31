@@ -48,21 +48,40 @@ const sign_up = () => {
           <View className="h-40 w-full gap-2 bg-primary p-4 rounded-b-2xl flex-row justify-center items-center">
             <Image className="w-28 h-28" source={image.prmsu} />
 
-            <Text
-              style={{
-                lineHeight: 20,
-              }}
-              className="text-gray-800 text-lg font-semibold"
-            >
-              {"PRESIDENT RAMON MAGSAYSAY\nSTATE UNIVERSITY"}
-              <Text className="text-gray-200">{"\nCASTILLEJOS CAMPUS"}</Text>
-            </Text>
+            <View>
+              <Text
+                style={{
+                  lineHeight: 20,
+                  textShadowRadius: 10,
+                  textShadowColor: "#fff",
+                  textShadowOffset: { width: 2, height: 2 },
+                }}
+                className="text-gray-800 text-lg font-semibold"
+              >
+                {"PRESIDENT RAMON MAGSAYSAY\nSTATE UNIVERSITY"}
+              </Text>
+              <Text
+                className="text-gray-100 text-lg font-semibold"
+                style={{
+                  lineHeight: 20,
+                  textShadowRadius: 10,
+                  textShadowColor: "#00000",
+                }}
+              >
+                CASTILLEJOS CAMPUS
+              </Text>
+            </View>
           </View>
           <View className="flex-1 justify-evenly items-center">
             <View className="w-10/12 -mb-6">
               <Text
                 className="text-5xl text-secondary"
-                style={{ fontFamily: "Merriweather" }}
+                style={{
+                  fontFamily: "Merriweather",
+                  textShadowRadius: 10,
+                  textShadowColor: "#00000",
+                  textShadowOffset: { width: 3, height: 3 },
+                }}
               >
                 DocuStats
               </Text>
@@ -111,7 +130,7 @@ const sign_up = () => {
                       }
                       titleTextStyles="text-uGray text-base font-semibold"
                       textInputStyles="text-sm text-uBlack"
-                      boxStyles="w-full bg-white rounded-xl border-secondary border h-11"
+                      boxStyles="w-full bg-white rounded-xl border-secondary border "
                     />
 
                     <TextBox
@@ -123,7 +142,7 @@ const sign_up = () => {
                       }
                       titleTextStyles="text-uGray text-base font-semibold"
                       textInputStyles="text-sm text-uBlack"
-                      boxStyles="w-full bg-white rounded-xl border-secondary border h-11"
+                      boxStyles="w-full bg-white rounded-xl border-secondary border "
                     />
 
                     <TextBox
@@ -135,7 +154,7 @@ const sign_up = () => {
                       }
                       titleTextStyles="text-uGray text-base font-semibold"
                       textInputStyles="text-sm text-uBlack"
-                      boxStyles="w-full bg-white rounded-xl border-secondary border h-11"
+                      boxStyles="w-full bg-white rounded-xl border-secondary border "
                     />
                   </View>
                 </View>
@@ -156,7 +175,7 @@ const sign_up = () => {
                         }
                         titleTextStyles="text-uGray text-base font-semibold"
                         textInputStyles="text-sm text-uBlack"
-                        boxStyles="w-full bg-white rounded-xl border-secondary border h-11"
+                        boxStyles="w-full bg-white rounded-xl border-secondary border "
                       />
 
                       <DeptProgPicker
@@ -164,7 +183,7 @@ const sign_up = () => {
                         onChange={(value) =>
                           setStudentForm({ ...studentForm, dept_prog: value })
                         }
-                        containerStyle="border border-secondary rounded-xl h-12 bg-white"
+                        containerStyle="border border-secondary rounded-xl bg-white"
                       />
 
                       <YearLevelPicker
@@ -193,7 +212,7 @@ const sign_up = () => {
                         }
                         titleTextStyles="text-uGray text-base font-semibold"
                         textInputStyles="text-sm text-uBlack"
-                        boxStyles="w-full bg-white rounded-xl border-secondary border h-11"
+                        boxStyles="w-full bg-white rounded-xl border-secondary border "
                       />
                       <AdminDepPicker
                         value={adminForm.department}
@@ -221,7 +240,7 @@ const sign_up = () => {
                       }
                       titleTextStyles="text-uGray text-base font-semibold"
                       textInputStyles="text-sm text-uBlack"
-                      boxStyles="w-full bg-white rounded-xl border-secondary border h-11"
+                      boxStyles="w-full bg-white rounded-xl border-secondary border "
                     />
                     <TextBox
                       textValue={credentialForm.password}
@@ -233,7 +252,7 @@ const sign_up = () => {
                       isPassword
                       titleTextStyles="text-uGray text-base font-semibold"
                       textInputStyles="text-sm text-uBlack"
-                      boxStyles="w-full bg-white rounded-xl border-secondary border h-11"
+                      boxStyles="w-full bg-white rounded-xl border-secondary border "
                     />
                     <TextBox
                       textValue={credentialForm.confPassword}
@@ -248,7 +267,7 @@ const sign_up = () => {
                       isPassword
                       titleTextStyles="text-uGray text-base font-semibold"
                       textInputStyles="text-sm text-uBlack"
-                      boxStyles="w-full bg-white rounded-xl border-secondary border h-11"
+                      boxStyles="w-full bg-white rounded-xl border-secondary border "
                     />
                   </View>
                 </View>
