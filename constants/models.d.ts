@@ -41,6 +41,7 @@ export declare namespace RequestType {
     request_note: string;
     user_id: string;
     status: string;
+    remarks: string;
     updated_at: Date;
     created_at: Date;
   };
