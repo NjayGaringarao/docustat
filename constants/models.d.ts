@@ -23,12 +23,12 @@ export declare namespace UserType {
     };
     created_at: Date;
   };
+}
 
-  type Credential = {
-    id: string;
-    email: string;
-    role: string;
-  };
+export interface Credential {
+  id: string;
+  email: string;
+  role: string;
 }
 
 export declare namespace RequestType {
