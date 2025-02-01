@@ -164,9 +164,9 @@ const transaction = () => {
         </View>
         <Text className="text-lg text-uBlack font-semibold">Other</Text>
         <ParagraphBox
-          value={form.request_note}
+          value={form.others}
           placeholder="ex: Certificate of Participation"
-          handleChangeText={(e) => setForm({ ...form, request_note: e })}
+          handleChangeText={(e) => setForm({ ...form, others: e })}
           containerStyles="bg-white border border-secondary rounded-lg max-h-16 mx-4"
         />
         <Text className="text-lg text-uBlack font-semibold">Purpose</Text>
