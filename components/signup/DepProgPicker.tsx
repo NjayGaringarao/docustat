@@ -20,6 +20,7 @@ const DeptProgPicker: React.FC<DeptProgPickerProps> = ({
         <Picker.Item label="CCIT - BSCS" value="CCIT - BSCS" />
         <Picker.Item label="CTE - BSED" value="CTE - BSED" />
         <Picker.Item label="CTE - BEED" value="CTE - BEED" />
+        <Picker.Item label="CBAPA - BSBA" value="CBAPA - BSBA" />
       </Picker>
     </View>
   );
