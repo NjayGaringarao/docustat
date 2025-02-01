@@ -44,27 +44,28 @@ const RequestItem: React.FC<RequestItemProps> = ({ request, onPress }) => {
       </View>
       <View className="p-4">
         {/* Details Section */}
-        <View className="mb-2 text-sm gap-2">
-          <View>
-            <Text className=" text-uGray">Purpose:</Text>
-            <Text className="text-uBlack ml-2">{request.purpose}</Text>
-          </View>
-          <View>
-            <Text className="text-uGray">Requested Documents:</Text>
-            <View className="ml-2">
-              {request.document.map((value, index) => (
-                <Text className="text-uBlack" key={index}>
-                  {(index + 1).toString().concat(". ").concat(value)}
-                </Text>
-              ))}
-            </View>
-          </View>
-          <View>
-            <Text className="text-uGray">Last Updated: </Text>
-            <Text className="ml-2 text-uBlack">
+        <View className="mb-2 text-sm">
+          <Text className=" text-uGray">
+            Purpose: <Text className="text-black">{request.purpose}</Text>
+          </Text>
+          <Text className="text-uGray">
+            Last Updated:{" "}
+            <Text className="text-black">
               {new Date(request.updated_at).toLocaleDateString()}
             </Text>
-          </View>
+          </Text>
+
+          <Text className="text-uGray mt-2">Requested Document : </Text>
+
+          {request.document.map((value, index) => (
+            <Text className="text-uBlack font-semibold" key={index}>
+              {"- ".concat(value)}
+            </Text>
+          ))}
+          <Text className="text-uGray mt-2">Request Note : </Text>
+          <Text className="ml-2 italic text-uBlack text-sm">
+            {request.request_note}
+          </Text>
         </View>
         {request.status === "pending" ? (
           <View className="w-full flex-row justify-end">
