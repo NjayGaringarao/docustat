@@ -40,7 +40,7 @@ const profile = () => {
 
   const resetHandle = () => {
     setForm({
-      name: _userInfo?.name!,
+      name: [_userInfo?.name[0]!, _userInfo?.name[1]!, _userInfo?.name[2]!],
       sex: _userInfo?.sex!,
       birthdate: _userInfo?.birthdate || new Date(0),
       civil_status: _userInfo?.civil_status!,
@@ -80,25 +80,24 @@ const profile = () => {
   };
 
   useEffect(() => {
-    const queryUser = async () => {
-      const userData = await generateDummyStudent();
-      const userCredential = await generateDummyStudentCredentials();
+    if (_userInfo)
       setForm({
-        name: userData.name || [],
-        sex: userData.sex!,
-        birthdate: userData.birthdate || new Date(0),
-        civil_status: userData.civil_status!,
-        address: [userData.address[0], userData.address[1]],
-        department: userData.admin_info?.department || "",
-        dept_prog: userData.student_info?.dept_prog || "",
-        year_level: userData.student_info?.year_level || "",
-        year_graduated: userData.alumni_info?.year_graduated || new Date(0),
+        name: _userInfo.name || [],
+        sex: _userInfo.sex!,
+        birthdate: _userInfo.birthdate || new Date(0),
+        civil_status: _userInfo.civil_status!,
+        address: [_userInfo.address[0], _userInfo.address[1]],
+        department: _userInfo.admin_info?.department || "",
+        dept_prog: _userInfo.student_info?.dept_prog || "",
+        year_level: _userInfo.student_info?.year_level || "",
+        year_graduated: _userInfo.alumni_info?.year_graduated || new Date(0),
       });
-      setUserCredential({
-        id: userCredential.id,
-        email: userCredential.email,
-        role: userCredential.role,
-      });
+  }, [_userInfo]);
+
+  useEffect(() => {
+    const queryUser = async () => {
+      _setUserInfo(await generateDummyStudent());
+      setUserCredential(await generateDummyStudentCredentials());
     };
 
     queryUser();
