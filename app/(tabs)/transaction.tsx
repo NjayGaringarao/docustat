@@ -84,15 +84,21 @@ const transaction = () => {
   };
 
   const submitHandle = async () => {
-    if (!verifyInput()) return;
+    setIsSubmitting(true);
+    if (!verifyInput()) {
+      setIsSubmitting(false);
+      return;
+    }
 
     if (
       await confirmAction(
         "Confirm Submission",
         "Are your certain that your input is correct accoding to your knowledge?"
       )
-    )
+    ) {
+      setIsSubmitting(false);
       return;
+    }
   };
 
   return (
@@ -241,6 +247,7 @@ const transaction = () => {
           title="Submit Request"
           handlePress={submitHandle}
           containerStyles="flex-1 bg-secondary"
+          isLoading={isSubmitting}
         />
         <CustomButton
           title="Clear"
