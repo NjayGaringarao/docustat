@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, Alert } from "react-native";
 import React, { useState } from "react";
 import TextBox from "@/components/TextBox";
 import ParagraphBox from "@/components/ParagraphBox";
@@ -7,8 +7,11 @@ import RequestLetterPicker from "@/components/transaction/RequestLetterPicker";
 import CertGradeSemPicker from "@/components/transaction/CertGradeSemPicker";
 import CertGradeAyPicker from "@/components/transaction/CertGradeAyPicker";
 import CustomButton from "@/components/CustomButton";
+import { confirmAction } from "@/lib/commonUtil";
+import color from "@/constants/color";
 
 const transaction = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
     academic_year: "",
     semester: "",
@@ -57,10 +60,45 @@ const transaction = () => {
     });
   };
 
+  const verifyInput = () => {
+    if (checkbox.request_letter && !request_letter.length) {
+      Alert.alert(
+        "Missing Field",
+        "Please specify the document for\n'Request Letter'"
+      );
+      return false;
+    } else if (
+      checkbox.cert_grade &&
+      (!cert_grade.sem.length || !cert_grade.ay.length)
+    ) {
+      Alert.alert(
+        "Missing Field",
+        "Please specify both Semester and Academic Year (A.Y.) for\n'Grade/Units Earned'"
+      );
+      return false;
+    } else if (!form.purpose.length) {
+      Alert.alert("Missing Field", "Please specify the 'Purpose'");
+    } else {
+      return true;
+    }
+  };
+
+  const submitHandle = async () => {
+    if (!verifyInput()) return;
+
+    if (
+      await confirmAction(
+        "Confirm Submission",
+        "Are your certain that your input is correct accoding to your knowledge?"
+      )
+    )
+      return;
+  };
+
   return (
     <View className="flex-1 px-2 py-4 gap-4">
       <ScrollView
-        className="flex-1 bg-panel border-secondary border-2 rounded-xl px-2 py-4"
+        className="flex-1 bg-panel rounded-xl px-2 py-4"
         contentContainerStyle={{
           alignItems: "flex-start",
           flexDirection: "column",
@@ -70,11 +108,12 @@ const transaction = () => {
         <Text className="text-lg text-uBlack font-semibold">
           Documents to be Requested (Please Check)
         </Text>
-        <View className="px-4 gap-2">
+        <View className="px-4 mx-2 gap-2 border-l border-secondary">
           <View className="flex-row items-center gap-2">
             <Checkbox
               value={checkbox.tor}
               onValueChange={(e) => setCheckbox({ ...checkbox, tor: e })}
+              color={color.secondary}
             />
             <Text className="text-base text-uBlack">
               Official Transcript of Records
@@ -86,6 +125,7 @@ const transaction = () => {
               onValueChange={(e) =>
                 setCheckbox({ ...checkbox, request_letter: e })
               }
+              color={color.secondary}
             />
             <Text className="text-base text-uBlack">Request Letter for</Text>
             <RequestLetterPicker
@@ -98,11 +138,12 @@ const transaction = () => {
         <Text className="text-lg text-uBlack font-semibold">
           Certifications
         </Text>
-        <View className="px-4 gap-2 w-full">
+        <View className="px-4 mx-2 gap-2 border-l border-secondary w-full">
           <View className="flex-row items-center gap-2">
             <Checkbox
               value={checkbox.cert_grade}
               onValueChange={(e) => setCheckbox({ ...checkbox, cert_grade: e })}
+              color={color.secondary}
             />
             <Text className="text-base text-uBlack">Grade/Units Earned</Text>
           </View>
@@ -135,6 +176,7 @@ const transaction = () => {
               onValueChange={(e) =>
                 setCheckbox({ ...checkbox, cert_enrollment: e })
               }
+              color={color.secondary}
             />
             <Text className="text-base text-uBlack">Enrollment</Text>
           </View>
@@ -142,11 +184,12 @@ const transaction = () => {
         <Text className="text-lg text-uBlack font-semibold">
           Certified True Copy of
         </Text>
-        <View className="px-4 gap-2 w-full">
+        <View className="px-4 mx-2 gap-2 border-l border-secondary w-full">
           <View className="flex-row items-center gap-2">
             <Checkbox
               value={checkbox.ctc_tor}
               onValueChange={(e) => setCheckbox({ ...checkbox, ctc_tor: e })}
+              color={color.secondary}
             />
             <Text className="text-base text-uBlack">
               Official Transcript of Records
@@ -156,6 +199,7 @@ const transaction = () => {
             <Checkbox
               value={checkbox.ctc_cor}
               onValueChange={(e) => setCheckbox({ ...checkbox, ctc_cor: e })}
+              color={color.secondary}
             />
             <Text className="text-base text-uBlack">
               Certificate of Registration
@@ -163,35 +207,39 @@ const transaction = () => {
           </View>
         </View>
         <Text className="text-lg text-uBlack font-semibold">Other</Text>
-        <ParagraphBox
-          value={form.others}
-          placeholder="ex: Certificate of Participation"
-          handleChangeText={(e) => setForm({ ...form, others: e })}
-          containerStyles="bg-white border border-secondary rounded-lg max-h-16 mx-4"
-        />
+        <View className="px-4 mx-2 gap-2 border-l border-secondary w-full">
+          <ParagraphBox
+            value={form.others}
+            placeholder="ex: Certificate of Participation"
+            handleChangeText={(e) => setForm({ ...form, others: e })}
+            containerStyles="bg-white rounded-lg max-h-16"
+          />
+        </View>
         <Text className="text-lg text-uBlack font-semibold">Purpose</Text>
-        <TextBox
-          textValue={form.purpose}
-          placeholder="ex: Scholarship Grant"
-          handleChangeText={(e) => setForm({ ...form, purpose: e })}
-          textInputStyles="text-sm text-uBlack"
-          boxStyles="w-full bg-white rounded-xl border-secondary border "
-          containerStyles="mx-4"
-        />
+        <View className="px-4 mx-2 gap-2 border-l border-secondary w-full">
+          <TextBox
+            textValue={form.purpose}
+            placeholder="ex: Scholarship Grant"
+            handleChangeText={(e) => setForm({ ...form, purpose: e })}
+            textInputStyles="text-sm text-uBlack"
+            boxStyles="w-full bg-white rounded-xl "
+          />
+        </View>
         <Text className="text-lg text-uBlack font-semibold">Request Note</Text>
-
-        <ParagraphBox
-          value={form.request_note}
-          placeholder="ex: I need 2 copies of each document."
-          handleChangeText={(e) => setForm({ ...form, request_note: e })}
-          containerStyles="bg-white border border-secondary rounded-lg max-h-40 mx-4"
-        />
+        <View className="px-4 mx-2 gap-2 border-l border-secondary w-full mb-8 max-h-40">
+          <ParagraphBox
+            value={form.request_note}
+            placeholder="ex: I need 2 copies of each document."
+            handleChangeText={(e) => setForm({ ...form, request_note: e })}
+            containerStyles="h-full bg-white rounded-lg max-h-40"
+          />
+        </View>
       </ScrollView>
 
-      <View className="px-2 flex-row gap-2 justify-end items-center">
+      <View className="flex-row gap-2 justify-end items-center">
         <CustomButton
-          title="Request"
-          handlePress={() => {}}
+          title="Submit Request"
+          handlePress={submitHandle}
           containerStyles="flex-1 bg-secondary"
         />
         <CustomButton

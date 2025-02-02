@@ -5,6 +5,7 @@ import Entypo from "@expo/vector-icons/Entypo";
 import color from "@/constants/color";
 import { RequestType } from "@/constants/models";
 import CustomButton from "../CustomButton";
+import { confirmAction } from "@/lib/commonUtil";
 
 interface RequestItemProps {
   request: RequestType.Info;
@@ -12,6 +13,15 @@ interface RequestItemProps {
 }
 
 const RequestItem: React.FC<RequestItemProps> = ({ request, onPress }) => {
+  const deleteHandle = async () => {
+    if (
+      !(await confirmAction(
+        "Confim Deletion",
+        `Do you want to delete your request for your '${request.purpose}' purposes?`
+      ))
+    )
+      return;
+  };
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -76,7 +86,7 @@ const RequestItem: React.FC<RequestItemProps> = ({ request, onPress }) => {
               <MaterialIcons name="edit" size={24} color="black" />
             </CustomButton> */}
             <CustomButton
-              handlePress={() => {}}
+              handlePress={deleteHandle}
               containerStyles="bg-transparent"
             >
               <MaterialIcons name="delete" size={24} color="black" />
