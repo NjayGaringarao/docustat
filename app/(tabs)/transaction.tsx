@@ -102,7 +102,10 @@ const transaction = () => {
   };
 
   return (
-    <View className="flex-1 px-2 py-4 gap-4">
+    <View className="flex-1 px-2 py-4 gap-4 bg-background">
+      <Text className="font-black text-secondary text-3xl -mb-2">
+        NEW REQUEST
+      </Text>
       <ScrollView
         className="flex-1 bg-panel rounded-xl px-2 py-4"
         contentContainerStyle={{
@@ -111,7 +114,7 @@ const transaction = () => {
           gap: 8,
         }}
       >
-        <Text className="text-lg text-uBlack font-semibold">
+        <Text className="text-xl text-uBlack font-semibold">
           Documents to be Requested (Please Check)
         </Text>
         <View className="px-4 mx-2 gap-2 border-l border-secondary">
@@ -121,7 +124,7 @@ const transaction = () => {
               onValueChange={(e) => setCheckbox({ ...checkbox, tor: e })}
               color={color.secondary}
             />
-            <Text className="text-base text-uBlack">
+            <Text className="text-lg text-uBlack">
               Official Transcript of Records
             </Text>
           </View>
@@ -133,7 +136,7 @@ const transaction = () => {
               }
               color={color.secondary}
             />
-            <Text className="text-base text-uBlack">Request Letter for</Text>
+            <Text className="text-lg text-uBlack">Request Letter for</Text>
             <RequestLetterPicker
               value={request_letter}
               onChange={setRequest_letter}
@@ -141,7 +144,7 @@ const transaction = () => {
             />
           </View>
         </View>
-        <Text className="text-lg text-uBlack font-semibold">
+        <Text className="text-xl text-uBlack font-semibold">
           Certifications
         </Text>
         <View className="px-4 mx-2 gap-2 border-l border-secondary w-full">
@@ -151,12 +154,12 @@ const transaction = () => {
               onValueChange={(e) => setCheckbox({ ...checkbox, cert_grade: e })}
               color={color.secondary}
             />
-            <Text className="text-base text-uBlack">Grade/Units Earned</Text>
+            <Text className="text-lg text-uBlack">Grade/Units Earned</Text>
           </View>
           {checkbox.cert_grade ? (
             <View className="items-center gap-2 w-8/12 self-end">
               <View className="flex-row">
-                <Text className="text-base text-uBlack">{"Semester\t\t:"}</Text>
+                <Text className="text-lg text-uBlack">{"Semester\t\t:"}</Text>
                 <CertGradeSemPicker
                   value={cert_grade.sem}
                   onChange={(e) => setCert_grade({ ...cert_grade, sem: e })}
@@ -164,7 +167,7 @@ const transaction = () => {
                 />
               </View>
               <View className="flex-row">
-                <Text className="text-base text-uBlack">
+                <Text className="text-lg text-uBlack">
                   {"A.Y.\t\t\t\t\t\t:"}
                 </Text>
                 <CertGradeAyPicker
@@ -184,10 +187,10 @@ const transaction = () => {
               }
               color={color.secondary}
             />
-            <Text className="text-base text-uBlack">Enrollment</Text>
+            <Text className="text-lg text-uBlack">Enrollment</Text>
           </View>
         </View>
-        <Text className="text-lg text-uBlack font-semibold">
+        <Text className="text-xl text-uBlack font-semibold">
           Certified True Copy of
         </Text>
         <View className="px-4 mx-2 gap-2 border-l border-secondary w-full">
@@ -197,7 +200,7 @@ const transaction = () => {
               onValueChange={(e) => setCheckbox({ ...checkbox, ctc_tor: e })}
               color={color.secondary}
             />
-            <Text className="text-base text-uBlack">
+            <Text className="text-lg text-uBlack">
               Official Transcript of Records
             </Text>
           </View>
@@ -207,31 +210,31 @@ const transaction = () => {
               onValueChange={(e) => setCheckbox({ ...checkbox, ctc_cor: e })}
               color={color.secondary}
             />
-            <Text className="text-base text-uBlack">
+            <Text className="text-lg text-uBlack">
               Certificate of Registration
             </Text>
           </View>
         </View>
-        <Text className="text-lg text-uBlack font-semibold">Other</Text>
+        <Text className="text-xl text-uBlack font-semibold">Other</Text>
         <View className="px-4 mx-2 gap-2 border-l border-secondary w-full">
           <ParagraphBox
             value={form.others}
             placeholder="ex: Certificate of Participation"
             handleChangeText={(e) => setForm({ ...form, others: e })}
-            containerStyles="bg-white rounded-lg max-h-16"
+            containerStyles="bg-white rounded-xl h-24"
           />
         </View>
-        <Text className="text-lg text-uBlack font-semibold">Purpose</Text>
+        <Text className="text-xl text-uBlack font-semibold">Purpose</Text>
         <View className="px-4 mx-2 gap-2 border-l border-secondary w-full">
           <TextBox
             textValue={form.purpose}
             placeholder="ex: Scholarship Grant"
             handleChangeText={(e) => setForm({ ...form, purpose: e })}
-            textInputStyles="text-sm text-uBlack"
+            textInputStyles="text-base text-uBlack"
             boxStyles="w-full bg-white rounded-xl "
           />
         </View>
-        <Text className="text-lg text-uBlack font-semibold">Request Note</Text>
+        <Text className="text-xl text-uBlack font-semibold">Request Note</Text>
         <View className="px-4 mx-2 gap-2 border-l border-secondary w-full mb-8 max-h-40">
           <ParagraphBox
             value={form.request_note}
@@ -244,7 +247,7 @@ const transaction = () => {
 
       <View className="flex-row gap-2 justify-end items-center">
         <CustomButton
-          title="Submit Request"
+          title="Submit"
           handlePress={submitHandle}
           containerStyles="flex-1 bg-secondary"
           isLoading={isSubmitting}

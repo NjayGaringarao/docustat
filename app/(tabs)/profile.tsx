@@ -105,7 +105,10 @@ const profile = () => {
 
   if (form && userCredential) {
     return (
-      <View className="flex-1 px-2 py-4 gap-4">
+      <View className="flex-1 px-2 py-4 gap-4 bg-background">
+        <Text className="font-black text-secondary text-3xl -mb-2">
+          PROFILE
+        </Text>
         <ScrollView
           className="flex-1 bg-panel rounded-xl px-2 py-4"
           contentContainerStyle={{
@@ -126,7 +129,7 @@ const profile = () => {
               }
               containerStyles="w-full "
               titleTextStyles="text-uGray text-base font-semibold"
-              textInputStyles="text-sm text-uBlack"
+              textInputStyles="text-base text-uBlack"
               boxStyles="w-full bg-white rounded-xl "
             />
             <TextBox
@@ -138,7 +141,7 @@ const profile = () => {
               }
               containerStyles="w-full "
               titleTextStyles="text-uGray text-base font-semibold"
-              textInputStyles="text-sm text-uBlack"
+              textInputStyles="text-base text-uBlack"
               boxStyles="w-full bg-white rounded-xl "
             />
             <TextBox
@@ -150,7 +153,7 @@ const profile = () => {
               }
               containerStyles="w-full "
               titleTextStyles="text-uGray text-base font-semibold"
-              textInputStyles="text-sm text-uBlack"
+              textInputStyles="text-base text-uBlack"
               boxStyles="w-full bg-white rounded-xl "
             />
           </View>
@@ -207,7 +210,7 @@ const profile = () => {
               handleChangeText={(e) =>
                 setForm({ ...form, address: [form.address[0], e] })
               }
-              containerStyles="bg-white rounded-lg h-16 "
+              containerStyles="bg-white rounded-lg h-20 "
             />
             <TextBox
               textValue={form.address[1]}
@@ -217,7 +220,7 @@ const profile = () => {
                 setForm({ ...form, address: [form.address[1], e] })
               }
               titleTextStyles="text-uGray text-base font-semibold"
-              textInputStyles="text-sm text-uBlack"
+              textInputStyles="text-base text-uBlack"
               boxStyles="w-full bg-white rounded-xl "
             />
           </View>
@@ -229,7 +232,7 @@ const profile = () => {
                 Admin Information
               </Text>
               <View className="w-full px-4 mx-2 gap-2 border-l border-secondary">
-                <Text className="text-sm text-uBlack font-semibold">
+                <Text className="text-base text-uBlack font-semibold">
                   Department
                 </Text>
                 <AdminDepPicker
@@ -295,7 +298,7 @@ const profile = () => {
               handleChangeText={() => {}}
               containerStyles="w-full "
               titleTextStyles="text-uGray text-base font-semibold"
-              textInputStyles="text-sm text-uBlack"
+              textInputStyles="text-base text-uBlack"
               boxStyles="w-full bg-white rounded-xl "
               isDisabled
             />
@@ -307,7 +310,7 @@ const profile = () => {
               isDisabled
               containerStyles="w-full "
               titleTextStyles="text-uGray text-base font-semibold"
-              textInputStyles="text-sm text-uBlack"
+              textInputStyles="text-base text-uBlack"
               boxStyles="w-full bg-white rounded-xl "
               isPassword
             />
@@ -324,7 +327,7 @@ const profile = () => {
                 handleChangeText={() => {}}
                 containerStyles="w-full "
                 titleTextStyles="text-uGray text-base font-semibold"
-                textInputStyles="text-sm text-uBlack"
+                textInputStyles="text-base text-uBlack"
                 boxStyles="w-full bg-white rounded-xl "
                 isDisabled
                 isPassword

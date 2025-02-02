@@ -37,7 +37,7 @@ const layout = () => {
         screenOptions={{
           headerShown: false,
           tabBarStyle: {
-            backgroundColor: "#fff",
+            backgroundColor: color.primary,
             height: 64,
           },
           tabBarShowLabel: false,
@@ -56,7 +56,7 @@ const layout = () => {
               <Ionicons
                 name={focused ? "home-sharp" : "home-outline"}
                 size={36}
-                color={color.primary}
+                color={color.secondary}
               />
             ),
           }}
@@ -70,7 +70,7 @@ const layout = () => {
               <Ionicons
                 name={focused ? "add-circle-sharp" : "add-circle-outline"}
                 size={36}
-                color={color.primary}
+                color={color.secondary}
               />
             ),
           }}
@@ -84,7 +84,7 @@ const layout = () => {
               <Ionicons
                 name={focused ? "person-sharp" : "person-outline"}
                 size={36}
-                color={color.primary}
+                color={color.secondary}
               />
             ),
           }}
@@ -100,7 +100,7 @@ const layout = () => {
                     focused ? "notifications-sharp" : "notifications-outline"
                   }
                   size={36}
-                  color={color.primary}
+                  color={color.secondary}
                 />
                 {!!(totalUnread > 0) && (
                   <View className="absolute -top-2 -right-2 w-5 bg-panel items-center justify center rounded-full">

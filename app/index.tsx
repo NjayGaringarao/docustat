@@ -11,7 +11,7 @@ export default function Index() {
     <>
       <View className="flex-1 justify-center items-center">
         <Image
-          className="absolute flex-1 opacity-15 bg-gray-500"
+          className="absolute flex-1 opacity-15 bg-background"
           source={image.building}
         />
         <View className="absolute h-full w-full justify-around">

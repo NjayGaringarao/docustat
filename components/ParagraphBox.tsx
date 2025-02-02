@@ -30,7 +30,7 @@ const ParagraphBox: React.FC<IParagraphBoxType> = ({
         className="max-h-96"
       >
         <TextInput
-          className="h-full w-full text-uBlack text-sm font-semibold py-3"
+          className="h-full w-full text-uBlack text-base font-semibold py-3"
           value={value}
           placeholder={placeholder}
           placeholderTextColor="#9ca3af"

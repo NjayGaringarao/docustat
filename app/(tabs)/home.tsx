@@ -44,13 +44,14 @@ const home = () => {
   }, []);
 
   return (
-    <View className="flex-1 px-2 py-4 gap-4">
+    <View className="flex-1 px-2 py-4 gap-4 bg-background">
+      <Text className="font-black text-secondary text-3xl -mb-2">HOME</Text>
       <TransactionTabBar
-        containerStyle="border-secondary border-2 rounded-xl bg-panel"
+        containerStyle="rounded-xl bg-panel"
         setActiveTab={setActiveTab}
         activeTab={activeTab}
       />
-      <View className="flex-1 border-secondary border-2 bg-panel rounded-xl">
+      <View className="flex-1 bg-panel rounded-xl">
         {activeTab === "pending" && !isRefreshing ? (
           <FlatList
             data={pendingList}

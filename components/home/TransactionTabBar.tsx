@@ -29,13 +29,13 @@ const TransactionTabBar = ({
         <MaterialIcons
           name="pending-actions"
           size={32}
-          color={activeTab === "pending" ? color.secondary : color.uGray}
+          color={activeTab === "pending" ? color.secondary : color.uGrayLight}
         />
         <Text
           className={`text-sm ${
             activeTab === "pending"
               ? "font-semibold text-secondary"
-              : "font-normal text-uGray"
+              : "font-normal text-uGrayLight"
           }`}
         >
           Pending
@@ -50,13 +50,15 @@ const TransactionTabBar = ({
         <FontAwesome
           name="spinner"
           size={32}
-          color={activeTab === "processing" ? color.secondary : color.uGray}
+          color={
+            activeTab === "processing" ? color.secondary : color.uGrayLight
+          }
         />
         <Text
           className={`text-sm ${
             activeTab === "processing"
               ? "font-semibold text-secondary"
-              : "font-normal text-uGray"
+              : "font-normal text-uGrayLight"
           }`}
         >
           Processing
@@ -71,13 +73,13 @@ const TransactionTabBar = ({
         <FontAwesome5
           name="inbox"
           size={32}
-          color={activeTab === "pickup" ? color.secondary : color.uGray}
+          color={activeTab === "pickup" ? color.secondary : color.uGrayLight}
         />
         <Text
           className={`text-sm ${
             activeTab === "pickup"
               ? "font-semibold text-secondary"
-              : "font-normal text-uGray"
+              : "font-normal text-uGrayLight"
           }`}
         >
           For Pickup
@@ -92,13 +94,13 @@ const TransactionTabBar = ({
         <MaterialIcons
           name="assignment-turned-in"
           size={32}
-          color={activeTab === "complete" ? color.secondary : color.uGray}
+          color={activeTab === "complete" ? color.secondary : color.uGrayLight}
         />
         <Text
           className={`text-sm ${
             activeTab === "complete"
               ? "font-semibold text-secondary"
-              : "font-normal text-uGray"
+              : "font-normal text-uGrayLight"
           }`}
         >
           Complete

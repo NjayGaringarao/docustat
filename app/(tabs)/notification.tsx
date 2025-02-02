@@ -93,8 +93,8 @@ const Notification = () => {
 
   return (
     <View className="flex-1 bg-background">
-      <View className="flex-row justify-between items-center">
-        <Text className="font-bold text-uBlack text-2xl my-4 mx-2">
+      <View className="flex-row justify-between items-center mx-2">
+        <Text className="font-black text-secondary text-3xl mt-4 mb-2">
           NOTIFICATION
         </Text>
         <CustomButton

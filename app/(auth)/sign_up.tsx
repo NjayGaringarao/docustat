@@ -136,7 +136,7 @@ const sign_up = () => {
                         setNameForm({ ...nameForm, last: e })
                       }
                       titleTextStyles="text-uGray text-base font-semibold"
-                      textInputStyles="text-sm text-uBlack"
+                      textInputStyles="text-base text-uBlack"
                       boxStyles="w-full bg-white rounded-xl border-secondary border "
                     />
 
@@ -148,8 +148,8 @@ const sign_up = () => {
                         setNameForm({ ...nameForm, first: e })
                       }
                       titleTextStyles="text-uGray text-base font-semibold"
-                      textInputStyles="text-sm text-uBlack"
-                      boxStyles="w-full bg-white rounded-xl border-secondary border "
+                      textInputStyles="text-base text-uBlack"
+                      boxStyles="w-full bg-white rounded-xl border-secondary border"
                     />
 
                     <TextBox
@@ -160,8 +160,8 @@ const sign_up = () => {
                         setNameForm({ ...nameForm, middle: e })
                       }
                       titleTextStyles="text-uGray text-base font-semibold"
-                      textInputStyles="text-sm text-uBlack"
-                      boxStyles="w-full bg-white rounded-xl border-secondary border "
+                      textInputStyles="text-base text-uBlack"
+                      boxStyles="w-full bg-white rounded-xl border-secondary border"
                     />
                   </View>
                 </View>
@@ -181,8 +181,8 @@ const sign_up = () => {
                           setStudentForm({ ...studentForm, student_id: e })
                         }
                         titleTextStyles="text-uGray text-base font-semibold"
-                        textInputStyles="text-sm text-uBlack"
-                        boxStyles="w-full bg-white rounded-xl border-secondary border "
+                        textInputStyles="text-base text-uBlack"
+                        boxStyles="w-full bg-white rounded-xl border-secondary border"
                       />
 
                       <DeptProgPicker
@@ -218,8 +218,8 @@ const sign_up = () => {
                           setAdminForm({ ...adminForm, employee_id: e })
                         }
                         titleTextStyles="text-uGray text-base font-semibold"
-                        textInputStyles="text-sm text-uBlack"
-                        boxStyles="w-full bg-white rounded-xl border-secondary border "
+                        textInputStyles="text-base text-uBlack"
+                        boxStyles="w-full bg-white rounded-xl border-secondary border"
                       />
                       <AdminDepPicker
                         value={adminForm.department}
@@ -246,8 +246,8 @@ const sign_up = () => {
                         setCredentialForm({ ...credentialForm, email: e })
                       }
                       titleTextStyles="text-uGray text-base font-semibold"
-                      textInputStyles="text-sm text-uBlack"
-                      boxStyles="w-full bg-white rounded-xl border-secondary border "
+                      textInputStyles="text-base text-uBlack"
+                      boxStyles="w-full bg-white rounded-xl border-secondary border"
                     />
                     <TextBox
                       textValue={credentialForm.password}
@@ -258,8 +258,8 @@ const sign_up = () => {
                       }
                       isPassword
                       titleTextStyles="text-uGray text-base font-semibold"
-                      textInputStyles="text-sm text-uBlack"
-                      boxStyles="w-full bg-white rounded-xl border-secondary border "
+                      textInputStyles="text-base text-uBlack"
+                      boxStyles="w-full bg-white rounded-xl border-secondary border"
                     />
                     <TextBox
                       textValue={credentialForm.confPassword}
@@ -273,8 +273,8 @@ const sign_up = () => {
                       }
                       isPassword
                       titleTextStyles="text-uGray text-base font-semibold"
-                      textInputStyles="text-sm text-uBlack"
-                      boxStyles="w-full bg-white rounded-xl border-secondary border "
+                      textInputStyles="text-base text-uBlack"
+                      boxStyles="w-full bg-white rounded-xl border-secondary border"
                     />
                   </View>
                 </View>
