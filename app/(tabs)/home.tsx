@@ -1,11 +1,15 @@
 import { View, Text, FlatList } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import TransactionTabBar from "@/components/home/TransactionTabBar";
 import { RequestType } from "@/constants/models";
 import RequestItem from "@/components/home/RequestItem";
 import { RequestStatusType } from "@/constants/utils";
 import EmptyRequestListItem from "@/components/home/EmptyRequestListItem";
 import { generateDummyRequest } from "@/services/dummyData";
+import Loading from "@/components/Loading";
+import { color } from "@/constants/color";
+import { isLoading } from "expo-font";
+import { sortByDate } from "@/lib/commonUtil";
 
 const home = () => {
   const [activeTab, setActiveTab] = useState<RequestStatusType>("pending");
@@ -13,14 +17,30 @@ const home = () => {
   const [processingList, setProcessingList] = useState<RequestType.Info[]>([]);
   const [pickupList, setPickupList] = useState<RequestType.Info[]>([]);
   const [completeList, setCompleteList] = useState<RequestType.Info[]>([]);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const queryData = async () => {
+    const query = await generateDummyRequest();
+    setPendingList(
+      sortByDate(query.filter((item) => item.status === "pending"))
+    );
+    setProcessingList(
+      sortByDate(query.filter((item) => item.status === "processing"))
+    );
+    setPickupList(sortByDate(query.filter((item) => item.status === "pickup")));
+    setCompleteList(
+      sortByDate(query.filter((item) => item.status === "complete"))
+    );
+  };
+
+  const onRefreshFeedHandle = useCallback(async () => {
+    setIsRefreshing(true);
+    await queryData();
+    setIsRefreshing(false);
+  }, []);
 
   useEffect(() => {
-    const query = generateDummyRequest();
-
-    setPendingList(query.filter((item) => item.status === "pending"));
-    setProcessingList(query.filter((item) => item.status === "processing"));
-    setPickupList(query.filter((item) => item.status === "pickup"));
-    setCompleteList(query.filter((item) => item.status === "complete"));
+    queryData();
   }, []);
 
   return (
@@ -31,42 +51,54 @@ const home = () => {
         activeTab={activeTab}
       />
       <View className="flex-1 border-secondary border-2 bg-panel rounded-xl">
-        {activeTab === "pending" ? (
+        {activeTab === "pending" && !isRefreshing ? (
           <FlatList
             data={pendingList}
             renderItem={({ item }) => <RequestItem request={item} />}
             ListEmptyComponent={() => (
               <EmptyRequestListItem message="You don't have pending request." />
             )}
+            onRefresh={onRefreshFeedHandle}
+            refreshing={isRefreshing}
           />
-        ) : null}
-        {activeTab === "processing" ? (
+        ) : activeTab === "processing" && !isRefreshing ? (
           <FlatList
             data={processingList}
             renderItem={({ item }) => <RequestItem request={item} />}
             ListEmptyComponent={() => (
               <EmptyRequestListItem message="You don't have a request that is on process." />
             )}
+            onRefresh={onRefreshFeedHandle}
+            refreshing={isRefreshing}
           />
-        ) : null}
-        {activeTab === "pickup" ? (
+        ) : activeTab === "pickup" && !isRefreshing ? (
           <FlatList
             data={pickupList}
             renderItem={({ item }) => <RequestItem request={item} />}
             ListEmptyComponent={() => (
               <EmptyRequestListItem message="You don't have a document that is ready to pickup." />
             )}
+            onRefresh={onRefreshFeedHandle}
+            refreshing={isRefreshing}
           />
-        ) : null}
-        {activeTab === "complete" ? (
+        ) : activeTab === "complete" && !isRefreshing ? (
           <FlatList
             data={completeList}
             renderItem={({ item }) => <RequestItem request={item} />}
             ListEmptyComponent={() => (
               <EmptyRequestListItem message="You don't have a completed request yet." />
             )}
+            onRefresh={onRefreshFeedHandle}
+            refreshing={isRefreshing}
           />
-        ) : null}
+        ) : (
+          <View className="flex-1 items-center justify-center rounded-xl mx-2 my-4 gap-4 bg-panel">
+            <Loading
+              loadingPrompt="Please wait"
+              loadingColor={color.secondary}
+            />
+          </View>
+        )}
       </View>
     </View>
   );
