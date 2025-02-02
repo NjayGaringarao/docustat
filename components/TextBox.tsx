@@ -7,7 +7,7 @@ import {
   TextInputProps,
 } from "react-native";
 import React, { useState } from "react";
-import color from "@/constants/color";
+import { color } from "@/constants/color";
 
 interface TextBoxProps extends TextInputProps {
   title?: string;

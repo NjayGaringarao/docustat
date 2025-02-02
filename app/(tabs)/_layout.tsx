@@ -1,7 +1,7 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Tabs } from "expo-router";
-import color from "@/constants/color";
+import { color } from "@/constants/color";
 import image from "@/constants/image";
 import { StatusBar } from "expo-status-bar";
 import { Linking } from "react-native";

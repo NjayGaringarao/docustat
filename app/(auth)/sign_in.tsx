@@ -1,7 +1,7 @@
 import { Text, View, Image } from "react-native";
 import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import color from "@/constants/color";
+import { color } from "@/constants/color";
 import image from "@/constants/image";
 import CustomButton from "@/components/CustomButton";
 import TextBox from "@/components/TextBox";

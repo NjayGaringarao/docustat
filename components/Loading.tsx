@@ -1,25 +1,32 @@
 import { View, Text, ActivityIndicator } from "react-native";
 import React from "react";
-import { colors } from "@/constants";
+import { color } from "@/constants/color";
 
 type LoadingType = {
   containerStyles?: string;
   loadingPrompt: string;
-  color?: string;
+  loadingColor?: string;
 };
 
-const Loading = ({ containerStyles, loadingPrompt, color }: LoadingType) => {
+const Loading = ({
+  containerStyles,
+  loadingPrompt,
+  loadingColor,
+}: LoadingType) => {
   return (
     <View
       className={`flex-1 items-center justify-center bg-transparent flex-row space-x-2 ${containerStyles}`}
     >
       <Text
         className=" text-2xl font-semibold"
-        style={{ color: color ? color : colors.primary }}
+        style={{ color: loadingColor ? loadingColor : color.primary }}
       >
         {loadingPrompt}
       </Text>
-      <ActivityIndicator color={color ? color : colors.primary} size="large" />
+      <ActivityIndicator
+        color={loadingColor ? loadingColor : color.primary}
+        size="large"
+      />
     </View>
   );
 };

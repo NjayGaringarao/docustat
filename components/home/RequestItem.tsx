@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Entypo from "@expo/vector-icons/Entypo";
-import color from "@/constants/color";
+import { color } from "@/constants/color";
 import { RequestType } from "@/constants/models";
 import CustomButton from "../CustomButton";
 import { confirmAction } from "@/lib/commonUtil";

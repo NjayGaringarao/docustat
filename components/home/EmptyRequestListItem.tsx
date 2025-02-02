@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import React from "react";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import color from "@/constants/color";
+import { color } from "@/constants/color";
 
 interface EmptyRequestListItemProps {
   message?: string;

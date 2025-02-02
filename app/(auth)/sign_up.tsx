@@ -5,7 +5,7 @@ import image from "@/constants/image";
 import { Picker } from "@react-native-picker/picker";
 import TextBox from "@/components/TextBox";
 import CustomButton from "@/components/CustomButton";
-import color from "@/constants/color";
+import { color } from "@/constants/color";
 import DeptProgPicker from "@/components/signup/DepProgPicker";
 import YearLevelPicker from "@/components/signup/YearLevelPicker";
 import AdminDepPicker from "@/components/signup/AdminDepPicker";

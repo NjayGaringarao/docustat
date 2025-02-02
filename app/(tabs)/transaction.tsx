@@ -8,7 +8,7 @@ import CertGradeSemPicker from "@/components/transaction/CertGradeSemPicker";
 import CertGradeAyPicker from "@/components/transaction/CertGradeAyPicker";
 import CustomButton from "@/components/CustomButton";
 import { confirmAction } from "@/lib/commonUtil";
-import color from "@/constants/color";
+import { color } from "@/constants/color";
 
 const transaction = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
