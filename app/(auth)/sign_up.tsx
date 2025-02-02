@@ -114,7 +114,14 @@ const sign_up = () => {
                 </View>
               </View>
 
-              <ScrollView className="w-full border-t-2 border-b-2 py-4 border-secondary h-[50vh]">
+              <ScrollView
+                className="w-full border-t-2 border-b-2 py-4 border-secondary h-[50vh]"
+                contentContainerStyle={{
+                  alignItems: "flex-start",
+                  flexDirection: "column",
+                  gap: 8,
+                }}
+              >
                 {/* Name Section */}
                 <View className="w-full">
                   <Text className="text-xl font-black text-uBlack my-2">
