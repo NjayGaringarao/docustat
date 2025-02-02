@@ -15,7 +15,7 @@ const Loading = ({
 }: LoadingType) => {
   return (
     <View
-      className={`flex-1 items-center justify-center bg-transparent flex-row space-x-2 ${containerStyles}`}
+      className={`flex-1 items-center justify-center bg-transparent flex-row space-x-2 gap-2 ${containerStyles}`}
     >
       <Text
         className=" text-2xl font-semibold"

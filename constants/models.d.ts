@@ -1,24 +1,20 @@
 export declare namespace UserType {
   type Info = {
     id: string;
-    auth_id: string;
     name: string[];
     avatar_url: string;
-    sex: string;
-    birthdate: Date;
-    civil_status: string;
+    sex?: string;
+    birthdate?: Date;
+    civil_status?: string;
     address: string[];
     admin_info?: {
-      id: string;
       department: string;
     };
     student_info?: {
-      id: string;
-      dept_prog: string[];
+      dept_prog: string;
       year_level: string;
     };
     alumni_info?: {
-      id: string;
       year_graduated: Date;
     };
     created_at: Date;
