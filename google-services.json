@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "643666164509",
+    "project_id": "docustat",
+    "storage_bucket": "docustat.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:643666164509:android:ab2e2ee480e8616def7ff4",
+        "android_client_info": {
+          "package_name": "com.com.prmsu.docustats"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCItnv124ZrhBDBpsUNnhnradG5iECIIQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
