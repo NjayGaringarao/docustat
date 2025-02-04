@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:643666164509:android:ab2e2ee480e8616def7ff4",
+        "mobilesdk_app_id": "1:643666164509:android:0d64e0055d792142ef7ff4",
         "android_client_info": {
-          "package_name": "com.com.prmsu.docustats"
+          "package_name": "com.prmsu.docustats"
         }
       },
       "oauth_client": [],
