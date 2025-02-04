@@ -6,11 +6,11 @@ import { RefreshUserRecordType } from "@/context/context";
 import ModalUpdate from "./ModalUpdate";
 
 interface NotificationItemProps {
-  notification: NotificationType.Info;
+  notification: NotificationType;
   isSelected: boolean;
   refreshUserRecord: (update: RefreshUserRecordType) => void;
   onLongPress: () => void;
-  handleSelectNotification: (notification: NotificationType.Info) => void;
+  handleSelectNotification: (notification: NotificationType) => void;
   isSelectionOn: boolean;
 }
 
@@ -29,7 +29,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
     setIsModalNotificationVisible(true);
     if (!notification.isViewed) {
       //   await setNotificationViewed(notification.id);
-      refreshUserRecord({ notification: true });
+      refreshUserRecord({ notificationList: true });
     }
   };
 

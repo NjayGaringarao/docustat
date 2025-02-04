@@ -13,16 +13,16 @@ const Notification = () => {
   const searchParams = useGlobalSearchParams();
   // const { refreshUserRecord, userNotification, isInternetConnection } =
   //   useGlobalContext();
-  const [notificationList, setNotificationList] = useState<
-    NotificationType.Info[]
-  >([]);
+  const [notificationList, setNotificationList] = useState<NotificationType[]>(
+    []
+  );
   const [isSelectionOn, setIsSelectionOn] = useState(false);
   const [selectedNotification, setSelectedNotification] = useState<
-    NotificationType.Info[]
+    NotificationType[]
   >([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const handleSelectNotification = (notification: NotificationType.Info) => {
+  const handleSelectNotification = (notification: NotificationType) => {
     setSelectedNotification((prev) =>
       prev.find(
         (selectedNotification) => selectedNotification.id === notification.id
@@ -123,7 +123,7 @@ const Notification = () => {
                   setIsSelectionOn(true);
                   handleSelectNotification(item);
                 }}
-                handleSelectNotification={(e: NotificationType.Info) => {
+                handleSelectNotification={(e: NotificationType) => {
                   handleSelectNotification(e);
                 }}
                 isSelectionOn={isSelectionOn}

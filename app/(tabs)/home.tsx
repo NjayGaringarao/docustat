@@ -13,10 +13,10 @@ import { sortByDate } from "@/lib/commonUtil";
 
 const home = () => {
   const [activeTab, setActiveTab] = useState<RequestStatusType>("pending");
-  const [pendingList, setPendingList] = useState<RequestType.Info[]>([]);
-  const [processingList, setProcessingList] = useState<RequestType.Info[]>([]);
-  const [pickupList, setPickupList] = useState<RequestType.Info[]>([]);
-  const [completeList, setCompleteList] = useState<RequestType.Info[]>([]);
+  const [pendingList, setPendingList] = useState<RequestType[]>([]);
+  const [processingList, setProcessingList] = useState<RequestType[]>([]);
+  const [pickupList, setPickupList] = useState<RequestType[]>([]);
+  const [completeList, setCompleteList] = useState<RequestType[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const queryData = async () => {

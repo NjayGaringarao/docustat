@@ -4,7 +4,7 @@ import { NotificationType, RequestType } from "@/constants/models";
 import RequestItem from "../home/RequestItem";
 
 interface ModalLinePostType {
-  notification: NotificationType.Info;
+  notification: NotificationType;
   isVisible: boolean;
   onClose: () => void;
 }
@@ -15,7 +15,7 @@ const ModalLinePost = ({
   onClose,
 }: ModalLinePostType) => {
   // const [post, setpost] = useState<PostType.Info>();
-  const [request, setRequest] = useState<RequestType.Info>(Object);
+  const [request, setRequest] = useState<RequestType>(Object);
   const [isLoading, setIsLoading] = useState(false);
 
   const queryData = async () => {

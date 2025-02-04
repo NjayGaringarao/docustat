@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView } from "react-native";
 import TextBox from "@/components/TextBox";
 import CustomButton from "@/components/CustomButton";
-import { UserType, Credential } from "@/constants/models";
+import { UserType, UserCredentialType } from "@/constants/models";
 import SexPicker from "@/components/profile/SexPicker";
 import BirthDatePicker from "@/components/profile/BirthDatePicker";
 import CivilStatusPicker from "@/components/profile/CivilStatusPicker";
@@ -33,8 +33,8 @@ interface FormType {
 
 const profile = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [_userInfo, _setUserInfo] = useState<UserType.Info>();
-  const [userCredential, setUserCredential] = useState<Credential>();
+  const [_userInfo, _setUserInfo] = useState<UserType>();
+  const [userCredential, setUserCredential] = useState<UserCredentialType>();
 
   const [form, setForm] = useState<FormType>(Object);
 
