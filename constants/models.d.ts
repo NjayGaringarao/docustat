@@ -41,8 +41,8 @@ export interface NotificationType {
   id: string;
   title: string;
   description: string;
-  origin: { type: string; id: string };
-  content: { type: string; id: string };
+  origin: [string, string];
+  content: [string, string];
   user_id: string;
   isViewed: boolean;
   created_at: Date;

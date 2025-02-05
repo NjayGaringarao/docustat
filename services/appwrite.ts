@@ -34,7 +34,7 @@ class AppwriteService {
 const appwriteService = new AppwriteService();
 
 //#region Authentication
-export const _createAccount = async (
+export const signUpAccount = async (
   username: string,
   email: string,
   password: string
@@ -49,16 +49,16 @@ export const _createAccount = async (
 
     return userAccount;
   } catch (error) {
-    console.log(`ERROR (appwrite.ts => createAccount) :: ${error}`);
+    console.log(`appwrite.signUpAccount : ${error}`);
     throw error;
   }
 };
 
-export const _generateAvatar = (username: string) => {
+export const generateAvatar = (username: string) => {
   return appwriteService.avatars.getInitials(username);
 };
 
-export const _loginUser = async (email: string, password: string) => {
+export const signInUser = async (email: string, password: string) => {
   try {
     const session = await appwriteService.account.createEmailPasswordSession(
       email,
@@ -66,7 +66,7 @@ export const _loginUser = async (email: string, password: string) => {
     );
     return session;
   } catch (error) {
-    console.log(`ERROR (appwrite.ts => loginUser) :: ${error}`);
+    console.log(`appwrite.signInUser : ${error}`);
     throw error;
   }
 };
@@ -79,7 +79,7 @@ export const _createEmailVerification = async (
       verificationPageLink
     );
   } catch (error) {
-    console.log(`ERROR (appwrite.ts => _createEmailVerification) :: ${error}`);
+    console.log(`appwrite._createEmailVerification : ${error}`);
     throw error;
   }
 };
@@ -94,7 +94,7 @@ export const _createRecovery = async (
       recoveryPageLink
     );
   } catch (error) {
-    console.log(`ERROR (appwrite.ts => _createRecovery) :: ${error}`);
+    console.log(`appwrite._createRecovery :${error}`);
     throw error;
   }
 };
@@ -109,12 +109,12 @@ export const _updatePassword = async (
       oldPassword
     );
   } catch (error) {
-    console.log(`ERROR (appwrite.ts => _updatePassword) :: ${error}`);
+    console.log(`appwrite._updatePassword : ${error}`);
     throw error;
   }
 };
 
-export const _logoutUser = async (session_id?: string) => {
+export const signOutUser = async (session_id?: string) => {
   try {
     if (session_id) {
       return await appwriteService.account.deleteSession(session_id);
@@ -122,42 +122,42 @@ export const _logoutUser = async (session_id?: string) => {
       return await appwriteService.account.deleteSession("current");
     }
   } catch (error) {
-    console.log(`ERROR (appwrite.ts => logoutUser) :: ${error}`);
+    console.log(`appwrite.signOutUser : ${error}`);
     throw error;
   }
 };
 
-export const _getCurrentUser = async () => {
+export const getCurrentUser = async () => {
   try {
     const res = await appwriteService.account.get();
     return res;
   } catch (error) {
-    console.log(`ERROR (appwrite.ts => getCurrentUser) :: ${error}`);
+    console.log(`appwrite.getCurrentUser : ${error}`);
     throw error;
   }
 };
 
-export const _getSession = async () => {
+export const getSession = async () => {
   try {
     const res = await appwriteService.account.getSession("current");
     return res;
   } catch (error) {
-    console.log(`ERROR (appwrite.ts => getSession) :: ${error}`);
+    console.log(`appwrite.getSession : ${error}`);
     throw error;
   }
 };
 
-export const _listSession = async () => {
+export const listSession = async () => {
   try {
     const res = await appwriteService.account.listSessions();
     return res;
   } catch (error) {
-    console.log(`ERROR (appwrite.ts => listSession) :: ${error}`);
+    console.log(`appwrite.listSession : ${error}`);
     throw error;
   }
 };
 
-export const _createTarget = async (sessionId: string, fcmToken: string) => {
+export const createPushTarget = async (sessionId: string, fcmToken: string) => {
   try {
     const target = await appwriteService.account.createPushTarget(
       sessionId,
@@ -165,25 +165,25 @@ export const _createTarget = async (sessionId: string, fcmToken: string) => {
     );
     return target;
   } catch (error) {
-    console.log(`ERROR (appwrite.ts => createTarget) :: ${error}`);
+    console.log(`appwrite.createTarget : ${error}`);
     throw error;
   }
 };
 
-export const _deleteTarget = async (targetId: string) => {
+export const deletePushTarget = async (targetId: string) => {
   try {
     return appwriteService.account.deletePushTarget(targetId);
   } catch (error) {
-    console.log(`ERROR (appwrite.ts => deleteTarget) :: ${error}`);
+    console.log(`appwrite.deletePushTarget : ${error}`);
     throw error;
   }
 };
 
-export const _updateTarget = async (targetId: string, fcmToken: string) => {
+export const updatePushTarget = async (targetId: string, fcmToken: string) => {
   try {
     return await appwriteService.account.updatePushTarget(targetId, fcmToken);
   } catch (error) {
-    console.log(`ERROR (appwrite.ts => updateTarget) :: ${error}`);
+    console.log(`appwrite.updatePushTarget: ${error}`);
     throw error;
   }
 };
@@ -207,7 +207,7 @@ export const _createDocument = async (
     );
     return result;
   } catch (error) {
-    console.log(`ERROR (appwrite.ts => createDocument) :: ${error}`);
+    console.log(`appwrite._createDocument : ${error}`);
     throw error;
   }
 };
@@ -225,7 +225,7 @@ export const _getDocument = async (
     );
     return document;
   } catch (error) {
-    console.log(`ERROR (appwrite.ts => getDocument) :: ${error}`);
+    console.log(`appwrite._getDocument : ${error}`);
     throw error;
   }
 };
@@ -243,7 +243,7 @@ export const _listDocuments = async (
     );
     return documentList;
   } catch (error) {
-    console.log(`ERROR (appwrite.ts => listDocuments) :: ${error}`);
+    console.log(`appwrite._listDocuments : ${error}`);
     throw error;
   }
 };
@@ -263,7 +263,7 @@ export const _updateDocument = async (
     );
     return result;
   } catch (error) {
-    console.log(`ERROR (appwrite.ts => updateDocument) :: ${error}`);
+    console.log(`appwrite._updateDocument : ${error}`);
     throw error;
   }
 };
@@ -280,7 +280,7 @@ export const _deleteDocument = async (
       document_ID
     );
   } catch (error) {
-    console.log(`ERROR (appwrite.ts => deleteDocument) :: ${error}`);
+    console.log(`appwrite.deleteDocument : ${error}`);
     throw error;
   }
 };
