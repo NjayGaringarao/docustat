@@ -136,3 +136,11 @@ export const adminSignIn = async (admin_id: string, password: string) => {
     }
   }
 };
+
+export const emailPasswordSignIn = async (email: string, password: string) => {
+  try {
+    return await signInUser(email, password);
+  } catch (error) {
+    throw Error("There was a problem signing in to your account.");
+  }
+};

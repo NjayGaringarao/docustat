@@ -21,7 +21,7 @@ import Loading from "@/components/Loading";
 import {
   createAdminAccount,
   createStudentAccount,
-  studentSignIn,
+  emailPasswordSignIn,
 } from "@/services/auth";
 import { useGlobalContext } from "@/context/GlobalProvider";
 
@@ -142,17 +142,17 @@ const sign_up = () => {
   const signUpStudent = async () => {
     try {
       const avatar = generateAvatar(
-        `${nameForm.first.slice()} ${nameForm.last.slice()}`
+        `${nameForm.first.trim()} ${nameForm.last.trim()}`
       );
 
       await createStudentAccount({
-        student_id: studentForm.student_id.slice(),
-        email: credentialForm.email.slice(),
+        student_id: studentForm.student_id.trim(),
+        email: credentialForm.email.trim(),
         password: credentialForm.password,
         name: [
-          nameForm.first.slice(),
-          nameForm.middle.slice(),
-          nameForm.last.slice(),
+          nameForm.first.trim(),
+          nameForm.middle.trim(),
+          nameForm.last.trim(),
         ],
         dept_prog: studentForm.dept_prog,
         year_level: studentForm.year_level,
@@ -165,8 +165,11 @@ const sign_up = () => {
         text2: "Your student account is succesfully created.",
       });
 
-      await studentSignIn(credentialForm.email.trim(), credentialForm.password);
-      initializeGlobalState();
+      await emailPasswordSignIn(
+        credentialForm.email.trim(),
+        credentialForm.password
+      );
+      await initializeGlobalState();
     } catch (error) {
       console.log("signUp.signUpStudent : ", error);
       Toast.show({
@@ -203,8 +206,11 @@ const sign_up = () => {
         text2: "Your admin account is succesfully created.",
       });
 
-      await studentSignIn(credentialForm.email.trim(), credentialForm.password);
-      initializeGlobalState();
+      await emailPasswordSignIn(
+        credentialForm.email.trim(),
+        credentialForm.password
+      );
+      await initializeGlobalState();
     } catch (error) {
       console.log("signUp.signUpAdmin : ", error);
       Toast.show({

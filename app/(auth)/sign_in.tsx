@@ -1,5 +1,5 @@
 import { Text, View, Image } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { color } from "@/constants/color";
 import image from "@/constants/image";
@@ -31,7 +31,7 @@ export default function SignIn() {
   const adminSignInHandle = async () => {
     try {
       await adminSignIn(form.id.trim(), form.password);
-      initializeGlobalState();
+      await initializeGlobalState();
     } catch (error) {
       Toast.show({
         type: "error",
@@ -45,7 +45,7 @@ export default function SignIn() {
   const studentSignInHandle = async () => {
     try {
       await studentSignIn(form.id.trim(), form.password);
-      initializeGlobalState();
+      await initializeGlobalState();
     } catch (error) {
       Toast.show({
         type: "error",
@@ -59,7 +59,7 @@ export default function SignIn() {
   const signInHandle = async () => {
     setForm({ ...form, id: form.id.trim() });
     setIsLoading(true);
-    if (accountType === "admin") {
+    if (accountType == "admin") {
       await adminSignInHandle();
     } else {
       await studentSignInHandle();
