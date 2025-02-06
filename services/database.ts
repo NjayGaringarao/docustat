@@ -48,6 +48,37 @@ export const getUserCredential = async (
   }
 };
 
+export const isEmailAvailable = async (email : string) => {
+  try {
+    const result = await _listDocuments(
+      env.DATABASE_PRIMARY,
+      env.COLLECTION_CREDENTIAL,
+      [
+        Query.contains("email", email)
+      ]
+    )
+
+    return !!result.total
+  } catch (error) {
+    console.log(`database.isEmailAvailable : ${error}`);
+    throw error;
+  }
+}
+
+export const isIDAvailable = async (user_id : string) => {
+  try {
+    const result = await _getDocument(
+      env.DATABASE_PRIMARY,
+      env.COLLECTION_CREDENTIAL,
+      user_id
+    )
+
+    if (result) return true
+  } catch (error) {
+    return false
+  }
+}
+
 //#endregion
 
 //#region Request

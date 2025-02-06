@@ -9,6 +9,11 @@ import { color } from "@/constants/color";
 import DeptProgPicker from "@/components/signup/DepProgPicker";
 import YearLevelPicker from "@/components/signup/YearLevelPicker";
 import AdminDepPicker from "@/components/signup/AdminDepPicker";
+import Toast from "react-native-toast-message";
+import { _createDocument, _deleteDocument, _listDocuments, generateAvatar, signUpAccount } from "@/services/appwrite";
+import { isEmailAvailable, isIDAvailable } from "@/services/database";
+import { Models } from "react-native-appwrite";
+import { env } from "@/constants/env";
 
 const sign_up = () => {
   const [accountType, setAccountType] = useState<"student" | "admin">(
@@ -36,6 +41,189 @@ const sign_up = () => {
     employee_id: "",
     department: "",
   });
+
+  const isInputValid = async () => {
+    if (!nameForm.last.length || !nameForm.first.length) {
+      Toast.show({
+        type: "error",
+        text1: "Incomplete Name",
+        text2: "Please fillout first and last name.",
+      });
+      return false;
+    }
+
+    if (
+      accountType == "admin" &&
+      (!adminForm.employee_id.length || !adminForm.department.length)
+    ) {
+      Toast.show({
+        type: "error",
+        text1: "Incomplete Admin Details",
+        text2: "Please fillout Employee ID and set department.",
+      });
+      return false;
+    }
+
+    if (
+      accountType == "student" &&
+      (!studentForm.student_id.length ||
+        !studentForm.dept_prog.length ||
+        !studentForm.year_level.length)
+    ) {
+      Toast.show({
+        type: "error",
+        text1: "Incomplete Student Details",
+        text2:
+          "Please fillout Student ID, set Department-Program, and set Year Level.",
+      });
+      return false;
+    }
+
+    if (!await isEmailAvailable(credentialForm.email)) {
+      Toast.show({
+        type: "error",
+        text1: "Email Not Available",
+        text2:
+          "The email you have entered is already being used by the existing account.",
+      });
+      return false;
+    }
+
+    if (!await isIDAvailable(accountType == "admin" ? adminForm.employee_id : studentForm.student_id)) {
+      Toast.show({
+        type: "error",
+        text1: `${accountType == "admin" ? "Employee" : "Student"} ID Not Available`,
+        text2:
+          `The ${accountType == "admin" ? "Employee" : "Student"} ID you have entered is already being used by the existing account.`,
+      });
+      return false;
+    }
+
+    if (credentialForm.password.length < 8) {
+      Toast.show({
+        type: "error",
+        text1: "Weak Password",
+        text2:
+          "Password should be not less than 8 characters",
+      });
+      return false;
+    }
+
+    if(credentialForm.password != credentialForm.confPassword) {
+      Toast.show({
+        type: "error",
+        text1: "Password Not Matched",
+        text2:
+          "Your password does not matched to your confirmation password.",
+      });
+      return false;
+    }
+
+    return true;
+  };
+
+  const signUpStudent = async () => {
+    let account: Models.User<Models.Preferences> | undefined = undefined 
+
+    try {
+      account = await signUpAccount(
+        `${nameForm.first.slice()} ${nameForm.last.slice()}`,
+        credentialForm.email.slice(),
+        credentialForm.password
+      )
+
+      if (!account) throw Error("Failed")
+
+        await _createDocument(env.DATABASE_PRIMARY,env.COLLECTION_STUDENT_INFO, account.$id, {
+          dept_prog : studentForm.dept_prog,
+          year_level : studentForm.year_level
+        })
+
+        await _createDocument(env.DATABASE_PRIMARY, env.COLLECTION_CREDENTIAL, studentForm.student_id.slice(), {
+          email : credentialForm.email.slice(),
+          role : accountType,
+        })
+
+        const avatar = generateAvatar( `${nameForm.first.slice()} ${nameForm.last.slice()}`)
+
+        await _createDocument(env.DATABASE_PRIMARY, env.COLLECTION_USER, studentForm.student_id.slice(), {
+          name : [nameForm.first, nameForm.middle, nameForm.last],
+          avatar_url : avatar.href,
+          student_info: credentialForm.email.slice(),
+          created_at : new Date()
+        })
+
+        Toast.show({
+          type: "success",
+          text1: "Signup Success",
+          text2: "Your student account is succesfully created.",
+        });
+
+    } catch (error) {
+      console.log("signUp.signUpStudent : ", error)
+      Toast.show({
+        type: "error",
+        text1: "Failed",
+        text2: "There was an error creating your account. Please try again later.",
+      });
+    }
+  }
+
+  const signUpAdmin = async () => {
+ 
+    let account: Models.User<Models.Preferences> | undefined = undefined 
+
+    try {
+      account = await signUpAccount(
+        `${nameForm.first.slice()} ${nameForm.last.slice()}`,
+        credentialForm.email.slice(),
+        credentialForm.password
+      )
+
+      if (!account) throw Error("Failed")
+
+        await _createDocument(env.DATABASE_PRIMARY,env.COLLECTION_ADMIN_INFO, account.$id, {
+          department : adminForm.department
+        })
+
+        await _createDocument(env.DATABASE_PRIMARY, env.COLLECTION_CREDENTIAL, adminForm.employee_id.slice(), {
+          email : credentialForm.email.slice(),
+          role : accountType,
+        })
+
+        const avatar = generateAvatar( `${nameForm.first.slice()} ${nameForm.last.slice()}`)
+
+        await _createDocument(env.DATABASE_PRIMARY, env.COLLECTION_USER, adminForm.employee_id.slice(), {
+          name : [nameForm.first, nameForm.middle, nameForm.last],
+          avatar_url : avatar.href,
+          student_info: credentialForm.email.slice(),
+          created_at : new Date()
+        })
+
+        Toast.show({
+          type: "success",
+          text1: "Signup Success",
+          text2: "Your admin account is succesfully created.",
+        });
+    } catch (error) {
+      console.log("signUp.signUpAdmin : ", error)
+      Toast.show({
+        type: "error",
+        text1: "Failed",
+        text2: "There was an error creating your account. Please try again later.",
+      });
+    }
+  }
+
+  const signUpHandle = async () => {
+    if (!(await isInputValid())) return;
+    
+    if (accountType === "admin") {
+      signUpAdmin()
+    } else {
+      signUpStudent()
+    }
+  };
 
   return (
     <>
@@ -133,7 +321,7 @@ const sign_up = () => {
                       title="Surname"
                       placeholder="DELA CRUZ"
                       handleChangeText={(e) =>
-                        setNameForm({ ...nameForm, last: e })
+                        setNameForm({ ...nameForm, last: e.toUpperCase() })
                       }
                       titleTextStyles="text-uGray text-base font-semibold"
                       textInputStyles="text-base text-uBlack"
@@ -145,7 +333,7 @@ const sign_up = () => {
                       title="First Name"
                       placeholder="JUAN"
                       handleChangeText={(e) =>
-                        setNameForm({ ...nameForm, first: e })
+                        setNameForm({ ...nameForm, first: e.toUpperCase() })
                       }
                       titleTextStyles="text-uGray text-base font-semibold"
                       textInputStyles="text-base text-uBlack"
@@ -157,7 +345,7 @@ const sign_up = () => {
                       title="Middle Name (Optional)"
                       placeholder="Tagailog"
                       handleChangeText={(e) =>
-                        setNameForm({ ...nameForm, middle: e })
+                        setNameForm({ ...nameForm, middle: e.toUpperCase() })
                       }
                       titleTextStyles="text-uGray text-base font-semibold"
                       textInputStyles="text-base text-uBlack"
@@ -283,7 +471,7 @@ const sign_up = () => {
                   title="Sign Up"
                   textStyles="text-white"
                   containerStyles="bg-secondary h-11 w-full rounded-xl mt-4 mb-12"
-                  handlePress={() => {}}
+                  handlePress={signUpHandle}
                 />
               </ScrollView>
             </View>
@@ -294,5 +482,6 @@ const sign_up = () => {
     </>
   );
 };
+
 
 export default sign_up;
