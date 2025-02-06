@@ -14,8 +14,11 @@ import { _createDocument, _deleteDocument, _listDocuments, generateAvatar, signU
 import { isEmailAvailable, isIDAvailable } from "@/services/database";
 import { Models } from "react-native-appwrite";
 import { env } from "@/constants/env";
+import Loading from "@/components/Loading";
 
 const sign_up = () => {
+
+  const [isLoading, setIsLoading] = useState(false)
   const [accountType, setAccountType] = useState<"student" | "admin">(
     "student"
   );
@@ -216,6 +219,7 @@ const sign_up = () => {
   }
 
   const signUpHandle = async () => {
+    setIsLoading(true)
     if (!(await isInputValid())) return;
     
     if (accountType === "admin") {
@@ -223,6 +227,7 @@ const sign_up = () => {
     } else {
       signUpStudent()
     }
+    setIsLoading(false)
   };
 
   return (
@@ -477,6 +482,13 @@ const sign_up = () => {
             </View>
           </View>
         </View>
+        {
+          !!isLoading && 
+          <View className="absolute w-full h-full items-center justify-center">
+            <View className="absolute w-full h-full bg-white opacity-95" />
+            <Loading loadingPrompt="Signing you up" loadingColor={color.secondary} />
+          </View>
+        }
       </View>
       <StatusBar backgroundColor={color.primary} style="auto" />
     </>
