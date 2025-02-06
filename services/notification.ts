@@ -1,5 +1,6 @@
 import messaging from "@react-native-firebase/messaging";
 import { Models } from "react-native-appwrite";
+import * as Notifications from "expo-notifications";
 
 // Retrieve FCM token and request permission
 export const getFCMToken = async (setFcmToken?: (token: string) => void) => {
@@ -19,6 +20,12 @@ export const getFCMToken = async (setFcmToken?: (token: string) => void) => {
     }
   };
 
+  export const requestNotificationPermissions = async () => {
+    const { status } = await Notifications.requestPermissionsAsync();
+    if (status !== "granted") {
+      console.log("Notification permission not granted!");
+    }
+  };
 
 
   export const setupPushTarget = async (

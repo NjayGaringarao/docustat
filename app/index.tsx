@@ -5,8 +5,10 @@ import { color } from "@/constants/color";
 import image from "@/constants/image";
 import CustomButton from "@/components/CustomButton";
 import { router } from "expo-router";
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 export default function Index() {
+  const { isLoading } = useGlobalContext();
   return (
     <>
       <View className="flex-1 justify-center items-center">
@@ -70,6 +72,7 @@ export default function Index() {
                 handlePress={() => {
                   router.push("/(auth)/sign_in");
                 }}
+                isLoading={isLoading}
               />
               <CustomButton
                 title="Sign up"
@@ -78,6 +81,7 @@ export default function Index() {
                 handlePress={() => {
                   router.push("/(auth)/sign_up");
                 }}
+                isLoading={isLoading}
               />
             </View>
           </View>

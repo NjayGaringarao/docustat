@@ -48,36 +48,45 @@ export const getUserCredential = async (
   }
 };
 
-export const isEmailAvailable = async (email : string) => {
+export const isEmailAvailable = async (email: string) => {
   try {
     const result = await _listDocuments(
       env.DATABASE_PRIMARY,
       env.COLLECTION_CREDENTIAL,
-      [
-        Query.contains("email", email)
-      ]
-    )
+      [Query.contains("email", email)]
+    );
 
-    return !!result.total
+    if (result.total == 0) {
+      return true;
+    } else {
+      return false;
+    }
   } catch (error) {
     console.log(`database.isEmailAvailable : ${error}`);
     throw error;
   }
-}
+};
 
-export const isIDAvailable = async (user_id : string) => {
+export const isIDAvailable = async (user_id: string) => {
   try {
     const result = await _getDocument(
       env.DATABASE_PRIMARY,
       env.COLLECTION_CREDENTIAL,
       user_id
-    )
+    );
 
-    if (result) return true
+    if (result) return false;
   } catch (error) {
-    return false
+    if (
+      error ==
+      "AppwriteException: Document with the requested ID could not be found."
+    ) {
+      return true;
+    } else {
+      throw Error("There was an error checking the validity of your ID.");
+    }
   }
-}
+};
 
 //#endregion
 

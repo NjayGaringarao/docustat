@@ -24,7 +24,7 @@ import {
   NotificationType,
 } from "@/constants/models";
 import Toast from "react-native-toast-message";
-import { getFCMToken, setupPushTarget } from "@/services/notification";
+import { getFCMToken, requestNotificationPermissions, setupPushTarget } from "@/services/notification";
 import handleNotification from "./NotificationHandler";
 
 export const GlobalContext =
@@ -53,7 +53,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     try {
       setIsLoading(true);
 
-      // await requestNotificationPermissions();
+       await requestNotificationPermissions();
 
       const currentUser = await getCurrentUser();
 

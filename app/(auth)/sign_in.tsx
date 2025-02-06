@@ -7,6 +7,10 @@ import CustomButton from "@/components/CustomButton";
 import TextBox from "@/components/TextBox";
 import { Picker } from "@react-native-picker/picker";
 import { router } from "expo-router";
+import Toast from "react-native-toast-message";
+import { adminSignIn, studentSignIn } from "@/services/auth";
+import { useGlobalContext } from "@/context/GlobalProvider";
+import Loading from "@/components/Loading";
 
 interface IFormType {
   id: string;
@@ -14,6 +18,8 @@ interface IFormType {
 }
 
 export default function SignIn() {
+  const [isLoading, setIsLoading] = useState(false);
+  const { initializeGlobalState } = useGlobalContext();
   const [accountType, setAccountType] = useState<"student" | "admin">(
     "student"
   );
@@ -21,6 +27,44 @@ export default function SignIn() {
     id: "",
     password: "",
   });
+
+  const adminSignInHandle = async () => {
+    try {
+      await adminSignIn(form.id.trim(), form.password);
+      initializeGlobalState();
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Sign in Failed",
+        text2: `${error}`,
+      });
+      setIsLoading(false);
+    }
+  };
+
+  const studentSignInHandle = async () => {
+    try {
+      await studentSignIn(form.id.trim(), form.password);
+      initializeGlobalState();
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Sign in Failed",
+        text2: `${error}`,
+      });
+      setIsLoading(false);
+    }
+  };
+
+  const signInHandle = async () => {
+    setForm({ ...form, id: form.id.trim() });
+    setIsLoading(true);
+    if (accountType === "admin") {
+      await adminSignInHandle();
+    } else {
+      await studentSignInHandle();
+    }
+  };
 
   return (
     <>
@@ -116,12 +160,20 @@ export default function SignIn() {
                 title="Sign In"
                 textStyles="text-white"
                 containerStyles="bg-secondary h-11 w-full rounded-xl mt-4"
-                handlePress={() => {
-                  router.navigate("/(tabs)/home");
-                }}
+                handlePress={signInHandle}
+                isLoading={isLoading}
               />
             </View>
           </View>
+          {!!isLoading && (
+            <View className="absolute w-full h-full items-center justify-center">
+              <View className="absolute w-full h-full bg-white opacity-95" />
+              <Loading
+                loadingPrompt="Signing you in"
+                loadingColor={color.secondary}
+              />
+            </View>
+          )}
         </View>
       </View>
       <StatusBar backgroundColor={color.primary} style="auto" />

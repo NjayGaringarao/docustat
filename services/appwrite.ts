@@ -8,6 +8,7 @@ import {
   Storage,
   Functions,
   Messaging,
+  ExecutionMethod,
 } from "react-native-appwrite";
 
 const client = new Client();
@@ -283,5 +284,29 @@ export const _deleteDocument = async (
     console.log(`appwrite.deleteDocument : ${error}`);
     throw error;
   }
+};
+//#endregion
+
+//#region Functions
+
+export const _executeFunction = async (
+  FUNCTION_ID: string,
+  operation: string,
+  parameter: object
+) => {
+  const bodyRequest = {
+    operation: operation,
+    parameter: parameter,
+  };
+
+  const result = await appwriteService.functions.createExecution(
+    FUNCTION_ID,
+    JSON.stringify(bodyRequest),
+    false,
+    undefined,
+    ExecutionMethod.POST
+  );
+
+  return result;
 };
 //#endregion
