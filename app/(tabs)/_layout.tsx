@@ -1,10 +1,8 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
-import React, { useEffect, useState } from "react";
+import { View, Text } from "react-native";
+import React, { useState } from "react";
 import { Tabs } from "expo-router";
 import { color } from "@/constants/color";
-import image from "@/constants/image";
 import { StatusBar } from "expo-status-bar";
-import { Linking } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 const layout = () => {

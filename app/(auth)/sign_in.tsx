@@ -1,12 +1,11 @@
 import { Text, View, Image } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { color } from "@/constants/color";
 import image from "@/constants/image";
 import CustomButton from "@/components/CustomButton";
 import TextBox from "@/components/TextBox";
 import { Picker } from "@react-native-picker/picker";
-import { router } from "expo-router";
 import Toast from "react-native-toast-message";
 import { adminSignIn, studentSignIn } from "@/services/auth";
 import { useGlobalContext } from "@/context/GlobalProvider";

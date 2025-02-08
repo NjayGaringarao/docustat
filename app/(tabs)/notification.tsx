@@ -1,4 +1,4 @@
-import { View, Text, FlatList, Image } from "react-native";
+import { View, Text, FlatList } from "react-native";
 import React, { useEffect, useState } from "react";
 import { confirmAction, sortByDate } from "@/lib/commonUtil";
 import CustomButton from "@/components/CustomButton";

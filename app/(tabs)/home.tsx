@@ -5,10 +5,8 @@ import { RequestType } from "@/constants/models";
 import RequestItem from "@/components/home/RequestItem";
 import { RequestStatusType } from "@/constants/utils";
 import EmptyRequestListItem from "@/components/home/EmptyRequestListItem";
-import { generateDummyRequest } from "@/services/dummyData";
 import Loading from "@/components/Loading";
 import { color } from "@/constants/color";
-import { isLoading } from "expo-font";
 import { sortByDate } from "@/lib/commonUtil";
 import { useGlobalContext } from "@/context/GlobalProvider";
 
