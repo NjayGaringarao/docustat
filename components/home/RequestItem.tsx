@@ -8,7 +8,7 @@ import CustomButton from "../CustomButton";
 import { confirmAction } from "@/lib/commonUtil";
 
 interface RequestItemProps {
-  request: RequestType.Info;
+  request: RequestType;
   onPress?: () => void;
 }
 
@@ -29,7 +29,7 @@ const RequestItem: React.FC<RequestItemProps> = ({ request, onPress }) => {
     >
       {/* Header Section */}
       <View className="flex-row justify-between items-center mb-2 bg-secondary px-4 py-2">
-        <Text className="text-lg font-semibold text-white">
+        <Text className="text-lg font-semibold text-white flex-1">
           {request.document[0].concat(
             `${
               request.document.length > 1
@@ -38,6 +38,7 @@ const RequestItem: React.FC<RequestItemProps> = ({ request, onPress }) => {
             }`
           )}
         </Text>
+
         <MaterialIcons
           name={
             request.status === "pending"

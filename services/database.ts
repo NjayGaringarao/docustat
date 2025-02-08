@@ -4,7 +4,12 @@ import {
   RequestType,
   NotificationType,
 } from "@/constants/models";
-import { _getDocument, _listDocuments, _updateDocument } from "./appwrite";
+import {
+  _createDocument,
+  _getDocument,
+  _listDocuments,
+  _updateDocument,
+} from "./appwrite";
 import { env } from "@/constants/env";
 import {
   toUserCredential,
@@ -12,7 +17,7 @@ import {
   toUserNotificationList,
   toUserRequestList,
 } from "@/lib/dataTransferObject";
-import { Query } from "react-native-appwrite";
+import { ID, Query } from "react-native-appwrite";
 
 //#region User
 
@@ -168,14 +173,37 @@ export const getUserRequestList = async (
     return toUserRequestList(result);
   } catch (error) {
     console.log(`database.getUserRequestList : ${error}`);
-    if (
-      error ==
-      "AppwriteException: Document with the requested ID could not be found"
-    ) {
-      return [];
-    } else {
-      throw error;
-    }
+    throw error;
+  }
+};
+
+export const createUserRequest = async (
+  user_id: string,
+  document: string[],
+  purpose: string,
+  request_note: string
+) => {
+  try {
+    const result = await _createDocument(
+      env.DATABASE_PRIMARY,
+      env.COLLECTION_REQUEST,
+      ID.unique(),
+      {
+        document: document,
+        purpose: purpose,
+        request_note: request_note,
+        user_id: user_id,
+        status: "pending",
+        updated_at: new Date(),
+        created_at: new Date(),
+        remarks: "---",
+      }
+    );
+
+    return result;
+  } catch (error) {
+    console.log(`database.createUserRequest : ${error}`);
+    throw error;
   }
 };
 

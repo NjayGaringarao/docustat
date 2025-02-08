@@ -22,9 +22,9 @@ const CertGradeSemPicker: React.FC<CertGradeSemPickerProps> = ({
         mode="dropdown"
       >
         <Picker.Item label="" value="" />
-        <Picker.Item label="First" value="First" />
-        <Picker.Item label="Second" value="Second" />
-        <Picker.Item label="Midyear" value="Midyear" />
+        <Picker.Item label="First" value="first" />
+        <Picker.Item label="Second" value="second" />
+        <Picker.Item label="Midyear" value="midyear" />
       </Picker>
     </View>
   );
