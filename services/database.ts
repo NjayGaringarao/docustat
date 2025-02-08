@@ -4,7 +4,7 @@ import {
   RequestType,
   NotificationType,
 } from "@/constants/models";
-import { _getDocument, _listDocuments } from "./appwrite";
+import { _getDocument, _listDocuments, _updateDocument } from "./appwrite";
 import { env } from "@/constants/env";
 import {
   toUserCredential,
@@ -88,6 +88,69 @@ export const isIDAvailable = async (user_id: string) => {
   }
 };
 
+interface IFormUpdateUserInfo {
+  firstName?: string;
+  lastName?: string;
+  middleName?: string;
+  sex?: string;
+  birthdate?: Date;
+  civil_status?: string;
+  address?: string;
+  zipCode?: string;
+  contact_number?: string;
+  department?: string;
+  dept_prog?: string;
+  year_level?: string;
+  year_graduated?: Date;
+}
+export const updateUserInfo = async (
+  user_id: string,
+  role: string,
+  form: IFormUpdateUserInfo
+) => {
+  try {
+    const userInfo = await _updateDocument(
+      env.DATABASE_PRIMARY,
+      env.COLLECTION_USER,
+      user_id,
+      {
+        name: [form.firstName, form.middleName, form.lastName],
+        sex: form.sex,
+        birthdate: form.birthdate?.toISOString(),
+        civil_status: form.civil_status,
+        address: [form.address, form.zipCode],
+        contact_number: form.contact_number,
+      }
+    );
+
+    if (role == "admin") {
+      await _updateDocument(
+        env.DATABASE_PRIMARY,
+        env.COLLECTION_ADMIN_INFO,
+        user_id,
+        {
+          department: form.department,
+        }
+      );
+    } else {
+      await _updateDocument(
+        env.DATABASE_PRIMARY,
+        env.COLLECTION_STUDENT_INFO,
+        user_id,
+        {
+          year_level: form.year_level,
+          dept_prog: form.dept_prog,
+        }
+      );
+    }
+
+    return userInfo;
+  } catch (error) {
+    console.log(`database.updateUserInfo : ${error}`);
+    throw Error("There was an error updating user information.");
+  }
+};
+
 //#endregion
 
 //#region Request
@@ -105,7 +168,14 @@ export const getUserRequestList = async (
     return toUserRequestList(result);
   } catch (error) {
     console.log(`database.getUserRequestList : ${error}`);
-    throw error;
+    if (
+      error ==
+      "AppwriteException: Document with the requested ID could not be found"
+    ) {
+      return [];
+    } else {
+      throw error;
+    }
   }
 };
 

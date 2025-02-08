@@ -3,13 +3,13 @@ import { View, Text, TouchableOpacity, Platform } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 type YearPickerProps = {
-  value: Date;
+  value?: Date;
   onChange: (value: Date) => void;
   containerStyle?: string;
 };
 
 const YearPicker: React.FC<YearPickerProps> = ({
-  value = new Date(),
+  value,
   onChange,
   containerStyle,
 }) => {
@@ -21,7 +21,7 @@ const YearPicker: React.FC<YearPickerProps> = ({
 
   const handleYearChange = (event: any, selectedDate?: Date) => {
     setShowPicker(false);
-    if (selectedDate) {
+    if (selectedDate && value) {
       // Update only the year, keeping the month and day the same
       const updatedDate = new Date(value);
       updatedDate.setFullYear(selectedDate.getFullYear());
@@ -32,12 +32,14 @@ const YearPicker: React.FC<YearPickerProps> = ({
   return (
     <View className={`justify-center ${containerStyle}`}>
       <TouchableOpacity onPress={() => setShowPicker(true)} className="p-2">
-        <Text className="text-lg">{value.getFullYear() || "Select Year"}</Text>
+        <Text className="text-lg">
+          {value ? value.getFullYear() : "Select Year"}
+        </Text>
       </TouchableOpacity>
 
       {showPicker && (
         <DateTimePicker
-          value={value}
+          value={value ? value : new Date()}
           mode="date"
           display={Platform.OS === "ios" ? "spinner" : "default"}
           onChange={handleYearChange}

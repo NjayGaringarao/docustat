@@ -22,9 +22,9 @@ const CivilStatusPicker: React.FC<CivilStatusPickerProps> = ({
         mode="dropdown"
       >
         <Picker.Item label="Unset" value="" />
-        <Picker.Item label="Single" value="Single" />
-        <Picker.Item label="Married" value="Married" />
-        <Picker.Item label="Widowed" value="Widowed" />
+        <Picker.Item label="Single" value="single" />
+        <Picker.Item label="Married" value="married" />
+        <Picker.Item label="Widowed" value="widowed" />
       </Picker>
     </View>
   );

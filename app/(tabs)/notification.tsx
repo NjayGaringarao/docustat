@@ -8,11 +8,13 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useGlobalSearchParams } from "expo-router";
 import NotificationItem from "@/components/notification/notificationItem";
 import EmptyRequestListItem from "@/components/home/EmptyRequestListItem";
+import { useGlobalContext } from "@/context/GlobalProvider";
+import Loading from "@/components/Loading";
 
 const Notification = () => {
   const searchParams = useGlobalSearchParams();
-  // const { refreshUserRecord, userNotification, isInternetConnection } =
-  //   useGlobalContext();
+  const { refreshUserRecord, userNotificationList, isInternetConnection } =
+    useGlobalContext();
   const [notificationList, setNotificationList] = useState<NotificationType[]>(
     []
   );
@@ -60,19 +62,19 @@ const Notification = () => {
   };
 
   const setupHandle = () => {
-    // setNotificationList(sortByDate(userNotification));
+    setNotificationList(sortByDate(userNotificationList));
     setIsRefreshing(false);
   };
 
   const onRefreshHandle = () => {
-    // if (!isInternetConnection) return;
+    if (!isInternetConnection) return;
     setIsRefreshing(true);
-    // refreshUserRecord({ notification: true });
+    refreshUserRecord({ notificationList: true });
   };
 
-  // useEffect(() => {
-  //   setupHandle();
-  // }, [userNotification]);
+  useEffect(() => {
+    setupHandle();
+  }, [userNotificationList]);
 
   useEffect(() => {
     if (selectedNotification.length === 0) setIsSelectionOn(false);
@@ -82,12 +84,11 @@ const Notification = () => {
     if (!searchParams) return;
     if (searchParams.isRefresh == "true") {
       setIsRefreshing(true);
-      // refreshUserRecord({
-      //   info: true,
-      //   line: true,
-      //   post: true,
-      //   notification: true,
-      // });
+      refreshUserRecord({
+        info: true,
+        requestList: true,
+        notificationList: true,
+      });
     }
   }, [searchParams]);
 
@@ -105,37 +106,46 @@ const Notification = () => {
         </CustomButton>
       </View>
       <View className="flex-1 mx-2 mb-4 px-2 py-4 rounded-xl bg-panel ">
-        <FlatList
-          data={notificationList}
-          className="flex-1 mb-2"
-          keyExtractor={(notification, index) => index.toString()}
-          renderItem={({ item }) => {
-            const isSelected = selectedNotification.some(
-              (selectedNotification) => selectedNotification.id === item.id
-            );
+        {!isRefreshing ? (
+          <FlatList
+            data={notificationList}
+            className="flex-1 mb-2"
+            keyExtractor={(notification, index) => index.toString()}
+            renderItem={({ item }) => {
+              const isSelected = selectedNotification.some(
+                (selectedNotification) => selectedNotification.id === item.id
+              );
 
-            return (
-              <NotificationItem
-                notification={item}
-                isSelected={isSelected}
-                refreshUserRecord={(e) => {}}
-                onLongPress={() => {
-                  setIsSelectionOn(true);
-                  handleSelectNotification(item);
-                }}
-                handleSelectNotification={(e: NotificationType) => {
-                  handleSelectNotification(e);
-                }}
-                isSelectionOn={isSelectionOn}
-              />
-            );
-          }}
-          ListEmptyComponent={
-            <EmptyRequestListItem message="You don't have a notification." />
-          }
-          onRefresh={onRefreshHandle}
-          refreshing={isRefreshing}
-        />
+              return (
+                <NotificationItem
+                  notification={item}
+                  isSelected={isSelected}
+                  refreshUserRecord={(e) => {}}
+                  onLongPress={() => {
+                    setIsSelectionOn(true);
+                    handleSelectNotification(item);
+                  }}
+                  handleSelectNotification={(e: NotificationType) => {
+                    handleSelectNotification(e);
+                  }}
+                  isSelectionOn={isSelectionOn}
+                />
+              );
+            }}
+            ListEmptyComponent={
+              <EmptyRequestListItem message="You don't have a notification." />
+            }
+            onRefresh={onRefreshHandle}
+            refreshing={isRefreshing}
+          />
+        ) : (
+          <View className="flex-1 items-center justify-center rounded-xl mx-2 my-4 gap-4 bg-panel">
+            <Loading
+              loadingPrompt="Please wait"
+              loadingColor={color.secondary}
+            />
+          </View>
+        )}
         {isSelectionOn && (
           <View className="h-auto py-2 flex-row w-full justify-between items-center px-2 bg-panel">
             <Text className="text-base self-center">

@@ -133,8 +133,14 @@ export const getCurrentUser = async () => {
     const res = await appwriteService.account.get();
     return res;
   } catch (error) {
-    console.log(`appwrite.getCurrentUser : ${error}`);
-    throw error;
+    if (
+      (error = "AppwriteException: User (role: guests) missing scope (account)")
+    ) {
+      throw "No Account Currently Logged in";
+    } else {
+      console.log(`appwrite.getCurrentUser : ${error}`);
+      throw Error("Something went wrong getting login Information");
+    }
   }
 };
 

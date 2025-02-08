@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView } from "react-native";
 import TextBox from "@/components/TextBox";
 import CustomButton from "@/components/CustomButton";
-import { UserType, UserCredentialType } from "@/constants/models";
 import SexPicker from "@/components/profile/SexPicker";
 import BirthDatePicker from "@/components/profile/BirthDatePicker";
 import CivilStatusPicker from "@/components/profile/CivilStatusPicker";
@@ -14,101 +13,214 @@ import AdminDepPicker from "@/components/signup/AdminDepPicker";
 import { confirmAction } from "@/lib/commonUtil";
 import Loading from "@/components/Loading";
 import { color } from "@/constants/color";
-import {
-  generateDummyStudent,
-  generateDummyStudentCredentials,
-} from "@/services/dummyData";
+import { useGlobalContext } from "@/context/GlobalProvider";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import Toast from "react-native-toast-message";
+import { updateUserInfo } from "@/services/database";
 
 interface FormType {
-  name: string[];
-  sex: string;
-  birthdate: Date;
-  civil_status: string;
-  address: [string, string];
-  department: string;
-  dept_prog: string;
-  year_level: string;
-  year_graduated: Date;
+  firstName?: string;
+  lastName?: string;
+  middleName?: string;
+  sex?: string;
+  birthdate?: Date;
+  civil_status?: string;
+  address?: string;
+  zipCode?: string;
+  contact_number?: string;
+  department?: string;
+  dept_prog?: string;
+  year_level?: string;
+  year_graduated?: Date;
 }
 
 const profile = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [_userInfo, _setUserInfo] = useState<UserType>();
-  const [userCredential, setUserCredential] = useState<UserCredentialType>();
-
-  const [form, setForm] = useState<FormType>(Object);
+  const { userInfo, userCredential, refreshUserRecord } = useGlobalContext();
+  const [isLoading, setIsLoading] = useState(false);
+  const [form, setForm] = useState<FormType>();
 
   const resetHandle = () => {
     setForm({
-      name: [_userInfo?.name[0]!, _userInfo?.name[1]!, _userInfo?.name[2]!],
-      sex: _userInfo?.sex!,
-      birthdate: _userInfo?.birthdate || new Date(0),
-      civil_status: _userInfo?.civil_status!,
-      address: [_userInfo?.address[0]!, _userInfo?.address[1]!],
-      department: _userInfo?.admin_info?.department || "",
-      dept_prog: _userInfo?.student_info?.dept_prog || "",
-      year_level: _userInfo?.student_info?.year_level || "",
-      year_graduated: _userInfo?.alumni_info?.year_graduated || new Date(0),
-    });
-    setUserCredential({
-      id: "",
-      email: "",
-      role: "",
+      firstName: userInfo.name[0],
+      middleName: userInfo.name[1],
+      lastName: userInfo.name[2],
+      sex: userInfo.sex,
+      birthdate: userInfo.birthdate,
+      civil_status: userInfo.civil_status,
+      address: userInfo.address[0],
+      zipCode: userInfo.address[1],
+      contact_number: userInfo.contact_number,
+      department: userInfo.admin_info?.department,
+      dept_prog: userInfo.student_info?.dept_prog,
+      year_level: userInfo.student_info?.year_level,
+      year_graduated: userInfo.alumni_info?.year_graduated,
     });
   };
 
   const verifyInput = () => {
+    if (!form) return false;
+    if (!form.firstName?.length || !form.lastName?.length) {
+      Toast.show({
+        type: "error",
+        text1: "Incomplete Name",
+        text2: "Please fill out first and last name.",
+      });
+      return false;
+    } else if (!form.sex) {
+      Toast.show({
+        type: "error",
+        text1: "Unset Sex",
+        text2: "Please set your sex.",
+      });
+      return false;
+    } else if (!form.birthdate) {
+      Toast.show({
+        type: "error",
+        text1: "Unset Birthdate",
+        text2: "Please set your birthdate.",
+      });
+      return false;
+    } else if (
+      new Date().getTime() - new Date(form.birthdate).getTime() <
+      12 * 365.25 * 24 * 60 * 60 * 1000
+    ) {
+      Toast.show({
+        type: "error",
+        text1: "Invalid Age due to Birthdate",
+        text2: "Age should not be less than 12 years old",
+      });
+      return false;
+    } else if (!form.civil_status) {
+      Toast.show({
+        type: "error",
+        text1: "Unset Civil Status",
+        text2: "Please set your civil status.",
+      });
+      return false;
+    } else if (!(form.address && form.address.length > 10)) {
+      Toast.show({
+        type: "error",
+        text1: "Incomplete Address",
+        text2: "Please provide your complete address.",
+      });
+      return false;
+    } else if (!(form.zipCode && form.zipCode.length === 4)) {
+      Toast.show({
+        type: "error",
+        text1: "Invalid Zip Code",
+        text2: "Please provide the correct zip code for your address.",
+      });
+      return false;
+    } else if (!(form.contact_number && form.contact_number.length > 10)) {
+      Toast.show({
+        type: "error",
+        text1: "Invalid Contact Number",
+        text2: "Please provide a valid mobile number.",
+      });
+      return false;
+    }
+
+    if (userCredential.role === "admin") {
+      if (!form.department) {
+        Toast.show({
+          type: "error",
+          text1: "Unset Department",
+          text2: "Please set the department to which you belong.",
+        });
+        return false;
+      }
+    } else {
+      if (!form.dept_prog) {
+        Toast.show({
+          type: "error",
+          text1: "Unset Department - Program",
+          text2: "Please set the Department - Program you are enrolled in.",
+        });
+        return false;
+      } else if (!form.year_level) {
+        Toast.show({
+          type: "error",
+          text1: "Unset Year Level",
+          text2: "Please set your current year level.",
+        });
+        return false;
+      }
+    }
+
     return true;
   };
 
   const saveHandle = async () => {
-    setIsSubmitting(true);
+    setIsLoading(true);
     if (!verifyInput()) {
-      setIsSubmitting(false);
+      setIsLoading(false);
       return;
     }
 
     if (
-      await confirmAction(
+      !(await confirmAction(
         "Confirm Changes",
         "Do you want to apply the changes you've made?"
-      )
+      ))
     ) {
-      setIsSubmitting(false);
+      setIsLoading(false);
       return;
+    }
+
+    try {
+      if (form) {
+        await updateUserInfo(userInfo.id, userCredential.role, form);
+      } else {
+        throw Error("There was a system error.");
+      }
+      Toast.show({
+        type: "success",
+        text1: "Update Success",
+        text2: "Successfully updated user information",
+      });
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Failed",
+        text2: `${error}`,
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    if (_userInfo)
-      setForm({
-        name: _userInfo.name || [],
-        sex: _userInfo.sex!,
-        birthdate: _userInfo.birthdate || new Date(0),
-        civil_status: _userInfo.civil_status!,
-        address: [_userInfo.address[0], _userInfo.address[1]],
-        department: _userInfo.admin_info?.department || "",
-        dept_prog: _userInfo.student_info?.dept_prog || "",
-        year_level: _userInfo.student_info?.year_level || "",
-        year_graduated: _userInfo.alumni_info?.year_graduated || new Date(0),
-      });
-  }, [_userInfo]);
+    resetHandle();
+    setIsLoading(false);
+  }, [userInfo]);
 
-  useEffect(() => {
-    const queryUser = async () => {
-      _setUserInfo(await generateDummyStudent());
-      setUserCredential(await generateDummyStudentCredentials());
-    };
+  const refreshUserInfoHandle = () => {
+    setIsLoading(true);
+    refreshUserRecord({ info: true });
+  };
 
-    queryUser();
-  }, []);
-
-  if (form && userCredential) {
+  if (!form || !userCredential) {
     return (
+      <View className="flex-1 items-center justify-center rounded-xl mx-2 my-4 gap-4 bg-panel">
+        <Loading loadingPrompt="Please wait" loadingColor={color.secondary} />
+      </View>
+    );
+  }
+
+  return (
+    <>
       <View className="flex-1 px-2 py-4 gap-4 bg-background">
-        <Text className="font-black text-secondary text-3xl -mb-2">
-          PROFILE
-        </Text>
+        <View className=" justify-between items-center flex-row">
+          <Text className="font-black text-secondary text-3xl -mb-2">
+            PROFILE
+          </Text>
+          <CustomButton
+            handlePress={refreshUserInfoHandle}
+            containerStyles="bg-transparent"
+          >
+            <FontAwesome name="refresh" size={28} color={color.secondary} />
+          </CustomButton>
+        </View>
         <ScrollView
           className="flex-1 bg-panel rounded-xl px-2 py-4"
           contentContainerStyle={{
@@ -121,36 +233,30 @@ const profile = () => {
           <Text className="text-lg text-uBlack font-semibold">Name</Text>
           <View className="w-full px-4 mx-2 gap-2 border-l border-secondary">
             <TextBox
-              title="Last"
-              textValue={form.name[0]}
-              placeholder="Unset"
-              handleChangeText={(e) =>
-                setForm({ ...form, name: [e, form.name[1], form.name[2]] })
-              }
+              title="Last Name"
+              textValue={form.lastName!}
+              placeholder="Enter your last name"
+              handleChangeText={(e) => setForm({ ...form, lastName: e })}
               containerStyles="w-full "
               titleTextStyles="text-uGray text-base font-semibold"
               textInputStyles="text-base text-uBlack"
               boxStyles="w-full bg-white rounded-xl "
             />
             <TextBox
-              title="First"
-              textValue={form.name[1]}
-              placeholder="Unset"
-              handleChangeText={(e) =>
-                setForm({ ...form, name: [form.name[0], e, form.name[2]] })
-              }
+              title="First Name"
+              textValue={form.firstName!}
+              placeholder="Enter your first name"
+              handleChangeText={(e) => setForm({ ...form, firstName: e })}
               containerStyles="w-full "
               titleTextStyles="text-uGray text-base font-semibold"
               textInputStyles="text-base text-uBlack"
               boxStyles="w-full bg-white rounded-xl "
             />
             <TextBox
-              title="Middle"
-              textValue={form.name[2]}
-              placeholder="Unset"
-              handleChangeText={(e) =>
-                setForm({ ...form, name: [form.name[0], form.name[1], e] })
-              }
+              title="Middle Name"
+              textValue={form.middleName!}
+              placeholder="Enter your middle name"
+              handleChangeText={(e) => setForm({ ...form, middleName: e })}
               containerStyles="w-full "
               titleTextStyles="text-uGray text-base font-semibold"
               textInputStyles="text-base text-uBlack"
@@ -165,7 +271,7 @@ const profile = () => {
                 Sex
               </Text>
               <SexPicker
-                value={form.sex}
+                value={form.sex!}
                 onChange={(e) => setForm({ ...form, sex: e })}
                 containerStyle="flex-1 border-b border-secondary h-10"
               />
@@ -189,7 +295,7 @@ const profile = () => {
               </Text>
 
               <CivilStatusPicker
-                value={form.civil_status}
+                value={form.civil_status!}
                 onChange={(e) => setForm({ ...form, civil_status: e })}
                 containerStyle="flex-1 border-b border-secondary h-10"
               />
@@ -198,26 +304,35 @@ const profile = () => {
 
           {/* Address Fields */}
           <Text className="text-lg text-uBlack font-semibold mt-4">
-            Address
+            Contact Information
           </Text>
           <View className="w-full px-4 mx-2 gap-2 border-l border-secondary">
             <Text className="text-base text-uGray font-semibold -mb-1">
               Complete Address
             </Text>
             <ParagraphBox
-              value={form.address[0]}
+              value={form.address!}
               placeholder="112 Magsaysay st. San Pablo, Castillejos, Zambales"
               handleChangeText={(e) =>
-                setForm({ ...form, address: [form.address[0], e] })
+                setForm({ ...form, address: e.toUpperCase() })
               }
               containerStyles="bg-white rounded-lg h-20 "
             />
             <TextBox
-              textValue={form.address[1]}
+              textValue={form.zipCode!}
               title="Zip Code"
               placeholder="2208"
+              handleChangeText={(e) => setForm({ ...form, zipCode: e })}
+              titleTextStyles="text-uGray text-base font-semibold"
+              textInputStyles="text-base text-uBlack"
+              boxStyles="w-full bg-white rounded-xl "
+            />
+            <TextBox
+              textValue={form.contact_number!}
+              title="Contact Number"
+              placeholder="09123456789"
               handleChangeText={(e) =>
-                setForm({ ...form, address: [form.address[1], e] })
+                setForm({ ...form, contact_number: e.toUpperCase() })
               }
               titleTextStyles="text-uGray text-base font-semibold"
               textInputStyles="text-base text-uBlack"
@@ -236,7 +351,7 @@ const profile = () => {
                   Department
                 </Text>
                 <AdminDepPicker
-                  value={form.department}
+                  value={form.department || ""}
                   onChange={(e) => setForm({ ...form, department: e })}
                   containerStyle="rounded-xl bg-white"
                 />
@@ -253,7 +368,7 @@ const profile = () => {
                   Department - Program
                 </Text>
                 <DeptProgPicker
-                  value={form.dept_prog}
+                  value={form.dept_prog!}
                   onChange={(value) => setForm({ ...form, dept_prog: value })}
                   containerStyle="rounded-xl bg-white"
                 />
@@ -261,7 +376,7 @@ const profile = () => {
                   Year Level
                 </Text>
                 <YearLevelPicker
-                  value={form.year_level}
+                  value={form.year_level!}
                   onChange={(value) => setForm({ ...form, year_level: value })}
                   containerStyle="rounded-xl bg-white"
                 />
@@ -336,10 +451,12 @@ const profile = () => {
           </View>
 
           {/* Created At */}
-          <Text className="text-lg text-uBlack mt-8 mb-14 font-semibold">
-            You are Docustat member since:{" "}
-            {_userInfo?.created_at.toISOString().slice(0, 10)}
-          </Text>
+          <View className="w-11/12 self-center mt-8 mb-14 py-4 items-center justify-center rounded-xl bg-background">
+            <Text className="text-lg text-uBlack font-semibold">
+              Docustat member since:{" "}
+              {userInfo?.created_at.toISOString().slice(0, 10)}
+            </Text>
+          </View>
         </ScrollView>
 
         <View className="flex-row gap-2 justify-end items-center">
@@ -347,7 +464,7 @@ const profile = () => {
             title="Save Changes"
             handlePress={saveHandle}
             containerStyles="flex-1 bg-secondary"
-            isLoading={isSubmitting}
+            isLoading={isLoading}
           />
           <CustomButton
             title="Reset"
@@ -357,14 +474,14 @@ const profile = () => {
           />
         </View>
       </View>
-    );
-  } else {
-    return (
-      <View className="flex-1 items-center justify-center rounded-xl mx-2 my-4 gap-4 bg-panel">
-        <Loading loadingPrompt="Please wait" loadingColor={color.secondary} />
-      </View>
-    );
-  }
+      {!!isLoading && (
+        <View className="absolute w-full h-full items-center justify-center">
+          <View className="absolute w-full h-full bg-white opacity-95" />
+          <Loading loadingPrompt="Please wait" loadingColor={color.secondary} />
+        </View>
+      )}
+    </>
+  );
 };
 
 export default profile;

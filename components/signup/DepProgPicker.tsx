@@ -17,10 +17,10 @@ const DeptProgPicker: React.FC<DeptProgPickerProps> = ({
     <View className={`justify-center h-10 ${containerStyle}`}>
       <Picker selectedValue={value} onValueChange={onChange}>
         <Picker.Item label="Choose Department - Program" value="" />
-        <Picker.Item label="CCIT - BSCS" value="CCIT - BSCS" />
-        <Picker.Item label="CTE - BSED" value="CTE - BSED" />
-        <Picker.Item label="CTE - BEED" value="CTE - BEED" />
-        <Picker.Item label="CBAPA - BSBA" value="CBAPA - BSBA" />
+        <Picker.Item label="CCIT - BSCS" value="ccit-bscs" />
+        <Picker.Item label="CTE - BSED" value="cte-bsed" />
+        <Picker.Item label="CTE - BEED" value="cte-beed" />
+        <Picker.Item label="CBAPA - BSBA" value="cbapa-bsba" />
       </Picker>
     </View>
   );

@@ -22,8 +22,8 @@ const SexPicker: React.FC<SexPickerProps> = ({
         mode="dropdown"
       >
         <Picker.Item label="Unset" value="" />
-        <Picker.Item label="Male" value="Male" />
-        <Picker.Item label="Female" value="Female" />
+        <Picker.Item label="Male" value="male" />
+        <Picker.Item label="Female" value="female" />
       </Picker>
     </View>
   );

@@ -10,8 +10,10 @@ import Loading from "@/components/Loading";
 import { color } from "@/constants/color";
 import { isLoading } from "expo-font";
 import { sortByDate } from "@/lib/commonUtil";
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 const home = () => {
+  const { userRequestList, refreshUserRecord } = useGlobalContext();
   const [activeTab, setActiveTab] = useState<RequestStatusType>("pending");
   const [pendingList, setPendingList] = useState<RequestType[]>([]);
   const [processingList, setProcessingList] = useState<RequestType[]>([]);
@@ -19,29 +21,30 @@ const home = () => {
   const [completeList, setCompleteList] = useState<RequestType[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const queryData = async () => {
-    const query = await generateDummyRequest();
+  const sortList = async () => {
     setPendingList(
-      sortByDate(query.filter((item) => item.status === "pending"))
+      sortByDate(userRequestList.filter((item) => item.status === "pending"))
     );
     setProcessingList(
-      sortByDate(query.filter((item) => item.status === "processing"))
+      sortByDate(userRequestList.filter((item) => item.status === "processing"))
     );
-    setPickupList(sortByDate(query.filter((item) => item.status === "pickup")));
+    setPickupList(
+      sortByDate(userRequestList.filter((item) => item.status === "pickup"))
+    );
     setCompleteList(
-      sortByDate(query.filter((item) => item.status === "complete"))
+      sortByDate(userRequestList.filter((item) => item.status === "complete"))
     );
+    setIsRefreshing(false);
   };
 
   const onRefreshFeedHandle = useCallback(async () => {
     setIsRefreshing(true);
-    await queryData();
-    setIsRefreshing(false);
+    refreshUserRecord({ requestList: true });
   }, []);
 
   useEffect(() => {
-    queryData();
-  }, []);
+    sortList();
+  }, [userRequestList]);
 
   return (
     <View className="flex-1 px-2 py-4 gap-4 bg-background">

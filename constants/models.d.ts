@@ -1,11 +1,12 @@
 export interface UserType {
   id: string;
-  name: string[];
+  name: [string, string?, string];
   avatar_url: string;
   sex?: string;
   birthdate?: Date;
   civil_status?: string;
-  address: string[];
+  address: [string?, string?];
+  contact_number?: string;
   admin_info?: {
     department: string;
   };
