@@ -63,7 +63,7 @@ const layout = () => {
         />
 
         <Tabs.Screen
-          name="transaction"
+          name="newRequest"
           options={{
             title: "Add",
             tabBarIcon: ({ focused }) => (

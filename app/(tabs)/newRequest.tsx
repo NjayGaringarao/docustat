@@ -10,7 +10,7 @@ import CustomButton from "@/components/CustomButton";
 import { confirmAction } from "@/lib/commonUtil";
 import { color } from "@/constants/color";
 
-const transaction = () => {
+const newRequest = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
     academic_year: "",
@@ -263,4 +263,4 @@ const transaction = () => {
   );
 };
 
-export default transaction;
+export default newRequest;
