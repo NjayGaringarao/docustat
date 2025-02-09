@@ -66,7 +66,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
             await getUserNotificationList(currentUser.$id)
           );
         });
-        const [info, userCredential, userRequest, notifications] =
+        const [_info, _userCredential, _userRequestList, _notificationsList] =
           await Promise.all([
             getUserInfo(currentUser.$id),
             getUserCredential(currentUser.$id),
@@ -74,13 +74,19 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
             getUserNotificationList(currentUser.$id),
           ]);
 
-        setUserInfo(info);
-        setUserCredential(userCredential);
-        setUserRequestList(userRequest);
-        setUserNotificationList(notifications);
+        setUserInfo(_info);
+        setUserCredential(_userCredential);
+        setUserRequestList(_userRequestList);
+        setUserNotificationList(_notificationsList);
 
         if (currentUser) {
-          router.replace("/home");
+
+          if (userCredential.role == "admin") {
+            router.replace("/(tabsAdmin)/home");
+          } else {
+
+            router.replace("/(tabs)/home");
+          }
         } else {
           router.replace("/(auth)/sign_in");
         }
