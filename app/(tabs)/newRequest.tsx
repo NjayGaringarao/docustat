@@ -115,7 +115,7 @@ const newRequest = () => {
 
     if (checkbox.cert_grade)
       documents.push(
-        `Certificate of Grade/Units Earned [${cert_grade.sem.toUpperCase()} sem of A.Y. ${
+        `Certificate of Grade/Units Earned\n[${cert_grade.sem.toUpperCase()} sem of A.Y. ${
           cert_grade.ay
         }]`
       );

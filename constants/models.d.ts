@@ -2,6 +2,7 @@ export interface UserType {
   id: string;
   name: [string, string?, string];
   avatar_url: string;
+  picture_id: string;
   sex?: string;
   birthdate?: Date;
   civil_status?: string;

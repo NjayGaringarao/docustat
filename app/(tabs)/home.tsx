@@ -51,8 +51,13 @@ const home = () => {
         containerStyle="rounded-xl bg-panel"
         setActiveTab={setActiveTab}
         activeTab={activeTab}
+        itemCount={{
+          pending: pendingList.length,
+          processing: processingList.length,
+          pickup: pickupList.length,
+        }}
       />
-      <View className="flex-1 bg-panel rounded-xl">
+      <View className="flex-1 rounded-xl overflow-hidden">
         {activeTab === "pending" && !isRefreshing ? (
           <FlatList
             data={pendingList}

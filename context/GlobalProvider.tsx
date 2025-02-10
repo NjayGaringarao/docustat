@@ -81,7 +81,8 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
         if (currentUser) {
 
-          if (userCredential.role == "admin") {
+          console.log("User role:",_userCredential.role)
+          if (_userCredential.role == "admin") {
             router.replace("/(tabsAdmin)/home");
           } else {
 

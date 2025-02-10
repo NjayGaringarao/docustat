@@ -15,6 +15,7 @@ import {
   toUserCredential,
   toUserInfo,
   toUserNotificationList,
+  toUserRequest,
   toUserRequestList,
 } from "@/lib/dataTransferObject";
 import { ID, Query } from "react-native-appwrite";
@@ -160,6 +161,20 @@ export const updateUserInfo = async (
 
 //#region Request
 
+export const getRequestList = async (): Promise<RequestType[]> => {
+  try {
+    const result = await _listDocuments(
+      env.DATABASE_PRIMARY,
+      env.COLLECTION_REQUEST
+    );
+
+    return toUserRequestList(result);
+  } catch (error) {
+    console.log(`database.getRequestList : ${error}`);
+    throw error;
+  }
+}
+
 export const getUserRequestList = async (
   user_id: string
 ): Promise<RequestType[]> => {
@@ -173,6 +188,21 @@ export const getUserRequestList = async (
     return toUserRequestList(result);
   } catch (error) {
     console.log(`database.getUserRequestList : ${error}`);
+    throw error;
+  }
+};
+
+export const getRequest = async (request_id: string): Promise<RequestType> => {
+  try {
+    const result = await _getDocument(
+      env.DATABASE_PRIMARY,
+      env.COLLECTION_REQUEST,
+      request_id
+    );
+
+    return toUserRequest(result);
+  } catch (error) {
+    console.log(`database.getRequest : ${error}`);
     throw error;
   }
 };

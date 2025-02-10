@@ -13,6 +13,7 @@ export const toUserInfo = (document: Models.Document): UserType => {
     id: document.$id,
     name: document.name,
     avatar_url: document.avatar_url,
+    picture_id: document.picture_id,
     address: document.address,
     sex: document.sex,
     birthdate: document.birthdate ? new Date(document.birthdate) : undefined,
@@ -47,7 +48,7 @@ export const toUserRequest = (document: Models.Document): RequestType => {
     status: document.status,
     remarks: document.remarks,
     updated_at: new Date(document.updated_at),
-    created_at: new Date(document.created_At),
+    created_at: new Date(document.created_at),
   };
 };
 

@@ -10,12 +10,18 @@ interface ITabBar {
   containerStyle?: string;
   setActiveTab: (e: RequestStatusType) => void;
   activeTab: RequestStatusType;
+  itemCount: {
+    pending: number;
+    processing: number;
+    pickup: number;
+  };
 }
 
 const TransactionTabBar = ({
   containerStyle,
   setActiveTab,
   activeTab,
+  itemCount,
 }: ITabBar) => {
   return (
     <View
@@ -24,7 +30,7 @@ const TransactionTabBar = ({
       {/* Pending Tab */}
       <TouchableOpacity
         onPress={() => setActiveTab("pending")}
-        className="flex-1 items-center justify-center"
+        className="items-center justify-center"
       >
         <MaterialIcons
           name="pending-actions"
@@ -40,12 +46,19 @@ const TransactionTabBar = ({
         >
           Pending
         </Text>
+        {!!(itemCount.pending > 0) && (
+          <View className="absolute -top-2 -right-4 w-7 bg-primary items-center justify center rounded-full">
+            <Text className="text-base font-black text-uBlack">
+              {itemCount.pending > 99 ? "99+" : itemCount.pending}
+            </Text>
+          </View>
+        )}
       </TouchableOpacity>
 
       {/* Processing Tab */}
       <TouchableOpacity
         onPress={() => setActiveTab("processing")}
-        className="flex-1 items-center justify-center"
+        className="items-center justify-center"
       >
         <FontAwesome
           name="spinner"
@@ -63,12 +76,19 @@ const TransactionTabBar = ({
         >
           Processing
         </Text>
+        {!!(itemCount.processing > 0) && (
+          <View className="absolute -top-2 -right-4 w-7 bg-primary items-center justify center rounded-full">
+            <Text className="text-base font-black text-uBlack">
+              {itemCount.processing > 99 ? "99+" : itemCount.processing}
+            </Text>
+          </View>
+        )}
       </TouchableOpacity>
 
       {/* Pickup Tab */}
       <TouchableOpacity
         onPress={() => setActiveTab("pickup")}
-        className="flex-1 items-center justify-center"
+        className="items-center justify-center"
       >
         <FontAwesome5
           name="inbox"
@@ -84,12 +104,19 @@ const TransactionTabBar = ({
         >
           For Pickup
         </Text>
+        {!!(itemCount.pickup > 0) && (
+          <View className="absolute -top-2 -right-4 w-7 bg-primary items-center justify center rounded-full">
+            <Text className="text-base font-black text-uBlack">
+              {itemCount.pickup > 99 ? "99+" : itemCount.pickup}
+            </Text>
+          </View>
+        )}
       </TouchableOpacity>
 
       {/* Fulfilled Tab */}
       <TouchableOpacity
         onPress={() => setActiveTab("complete")}
-        className="flex-1 items-center justify-center"
+        className="items-center justify-center"
       >
         <MaterialIcons
           name="assignment-turned-in"
@@ -105,6 +132,7 @@ const TransactionTabBar = ({
         >
           Complete
         </Text>
+        
       </TouchableOpacity>
     </View>
   );

@@ -25,7 +25,7 @@ const RequestItem: React.FC<RequestItemProps> = ({ request, onPress }) => {
   return (
     <TouchableOpacity
       onPress={onPress}
-      className="bg-white mx-4 my-2 rounded-lg shadow-sm overflow-hidden"
+      className="bg-white my-2 rounded-lg shadow-sm overflow-hidden"
     >
       {/* Header Section */}
       <View className="flex-row justify-between items-center mb-2 bg-secondary px-4 py-2">

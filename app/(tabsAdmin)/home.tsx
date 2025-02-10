@@ -2,16 +2,18 @@ import { View, Text, FlatList } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import TransactionTabBar from "@/components/home/TransactionTabBar";
 import { RequestType } from "@/constants/models";
-import RequestItem from "@/components/home/RequestItem";
+import RequestItem from "@/components/admin/RequestItem";
 import { RequestStatusType } from "@/constants/utils";
 import EmptyRequestListItem from "@/components/home/EmptyRequestListItem";
 import Loading from "@/components/Loading";
 import { color } from "@/constants/color";
-import { sortByDate } from "@/lib/commonUtil";
-import { useGlobalContext } from "@/context/GlobalProvider";
+import { sortByUpdatedAt } from "@/lib/commonUtil";
+import { getRequestList } from "@/services/database";
+import Toast from "react-native-toast-message";
+import { router } from "expo-router";
 
 const home = () => {
-  const { userRequestList, refreshUserRecord } = useGlobalContext();
+  const [requestList, setRequestList] = useState<RequestType[]>([]);
   const [activeTab, setActiveTab] = useState<RequestStatusType>("pending");
   const [pendingList, setPendingList] = useState<RequestType[]>([]);
   const [processingList, setProcessingList] = useState<RequestType[]>([]);
@@ -19,30 +21,57 @@ const home = () => {
   const [completeList, setCompleteList] = useState<RequestType[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
+  const queryRequestList = async () => {
+    try {
+      setIsRefreshing(true);
+      setRequestList(await getRequestList());
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Failed to fetch request list",
+      });
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
   const sortList = async () => {
     setPendingList(
-      sortByDate(userRequestList.filter((item) => item.status === "pending"))
+      sortByUpdatedAt(
+        requestList.filter((item) => item.status === "pending"),
+        true
+      )
     );
     setProcessingList(
-      sortByDate(userRequestList.filter((item) => item.status === "processing"))
+      sortByUpdatedAt(
+        requestList.filter((item) => item.status === "processing"),
+        true
+      )
     );
     setPickupList(
-      sortByDate(userRequestList.filter((item) => item.status === "pickup"))
+      sortByUpdatedAt(
+        requestList.filter((item) => item.status === "pickup"),
+        true
+      )
     );
     setCompleteList(
-      sortByDate(userRequestList.filter((item) => item.status === "complete"))
+      sortByUpdatedAt(requestList.filter((item) => item.status === "complete"))
     );
     setIsRefreshing(false);
   };
 
   const onRefreshFeedHandle = useCallback(async () => {
-    setIsRefreshing(true);
-    refreshUserRecord({ requestList: true });
+    queryRequestList();
   }, []);
 
   useEffect(() => {
     sortList();
-  }, [userRequestList]);
+  }, [requestList]);
+
+  useEffect(() => {
+    queryRequestList();
+  }, []);
 
   return (
     <View className="flex-1 px-2 py-4 gap-4 bg-background">
@@ -51,14 +80,19 @@ const home = () => {
         containerStyle="rounded-xl bg-panel"
         setActiveTab={setActiveTab}
         activeTab={activeTab}
+        itemCount={{
+          pending: pendingList.length,
+          processing: processingList.length,
+          pickup: pickupList.length,
+        }}
       />
-      <View className="flex-1 bg-panel rounded-xl">
+      <View className="flex-1 rounded-xl overflow-hidden">
         {activeTab === "pending" && !isRefreshing ? (
           <FlatList
             data={pendingList}
             renderItem={({ item }) => <RequestItem request={item} />}
             ListEmptyComponent={() => (
-              <EmptyRequestListItem message="You don't have pending request." />
+              <EmptyRequestListItem message="No pending request." />
             )}
             onRefresh={onRefreshFeedHandle}
             refreshing={isRefreshing}
@@ -68,7 +102,7 @@ const home = () => {
             data={processingList}
             renderItem={({ item }) => <RequestItem request={item} />}
             ListEmptyComponent={() => (
-              <EmptyRequestListItem message="You don't have a request that is on process." />
+              <EmptyRequestListItem message="No on-process request" />
             )}
             onRefresh={onRefreshFeedHandle}
             refreshing={isRefreshing}
@@ -78,7 +112,7 @@ const home = () => {
             data={pickupList}
             renderItem={({ item }) => <RequestItem request={item} />}
             ListEmptyComponent={() => (
-              <EmptyRequestListItem message="You don't have a document that is ready to pickup." />
+              <EmptyRequestListItem message="No for-pickup requests" />
             )}
             onRefresh={onRefreshFeedHandle}
             refreshing={isRefreshing}
@@ -88,13 +122,13 @@ const home = () => {
             data={completeList}
             renderItem={({ item }) => <RequestItem request={item} />}
             ListEmptyComponent={() => (
-              <EmptyRequestListItem message="You don't have a completed request yet." />
+              <EmptyRequestListItem message="No completed requests" />
             )}
             onRefresh={onRefreshFeedHandle}
             refreshing={isRefreshing}
           />
         ) : (
-          <View className="flex-1 items-center justify-center rounded-xl mx-2 my-4 gap-4 bg-panel">
+          <View className="flex-1 items-center justify-center rounded-xl my-4 gap-4 bg-panel">
             <Loading
               loadingPrompt="Please wait"
               loadingColor={color.secondary}
