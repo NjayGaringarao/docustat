@@ -35,6 +35,7 @@ export interface RequestType {
   user_id: string;
   status: string;
   remarks: string;
+  isSuccessful: boolean;
   updated_at: Date;
   created_at: Date;
 }

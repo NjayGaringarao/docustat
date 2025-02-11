@@ -47,6 +47,7 @@ export const toUserRequest = (document: Models.Document): RequestType => {
     user_id: document.user_id,
     status: document.status,
     remarks: document.remarks,
+    isSuccessful: document.isSuccessful,
     updated_at: new Date(document.updated_at),
     created_at: new Date(document.created_at),
   };

@@ -9,10 +9,12 @@ import Toast from "react-native-toast-message";
 import CustomButton from "@/components/CustomButton";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import UserInfoView from "@/components/UserInfoView";
+import StatusSetter from "@/components/admin/StatusSetter";
 
 const manageRequest = () => {
   const searchParams = useGlobalSearchParams();
   const [isLoading, setIsLoading] = useState(true);
+  const [isChanged, setIsChanged] = useState(false);
   const [id, setId] = useState<string>();
   const [request, setRequest] = useState<RequestType>();
   const [userInfo, setUserInfo] = useState<UserType>();
@@ -123,24 +125,7 @@ const manageRequest = () => {
           )}
 
           {/* Status */}
-          <View className="p-4 bg-panel rounded-2xl shadow-md flex-row justify-between items-center">
-            <Text className="text-lg font-semibold">Status</Text>
-            <View
-              className={`px-4 py-2 rounded-lg ${
-                request.status === "pending"
-                  ? "bg-pending"
-                  : request.status === "processing"
-                  ? "bg-processing"
-                  : request.status === "pickup"
-                  ? "bg-pickup"
-                  : "bg-complete"
-              }`}
-            >
-              <Text className="text-white font-semibold">
-                {request.status.toUpperCase()}
-              </Text>
-            </View>
-          </View>
+          <StatusSetter request={request} setIsChanged={setIsChanged} />
         </ScrollView>
 
         {/* Footer */}
@@ -149,6 +134,7 @@ const manageRequest = () => {
             title="Save Changes"
             handlePress={() => {}}
             containerStyles="bg-secondary"
+            isLoading={!isChanged || isLoading}
           ></CustomButton>
           <CustomButton
             title="Reset"
