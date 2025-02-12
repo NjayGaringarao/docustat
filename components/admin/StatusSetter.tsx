@@ -5,47 +5,91 @@ import CustomButton from "../CustomButton";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { color } from "@/constants/color";
 import ParagraphBox from "../ParagraphBox";
+import { updateRequestStatus } from "@/services/database";
+import Toast from "react-native-toast-message";
 
 interface IStatusSetter {
   request: RequestType;
   setIsChanged: React.Dispatch<React.SetStateAction<boolean>>;
+  refreshRequest: () => void;
+  resetRef?: React.MutableRefObject<() => void>;
+  saveRef?: React.MutableRefObject<() => void>;
 }
 
-const StatusSetter = ({ request, setIsChanged }: IStatusSetter) => {
+const StatusSetter = ({
+  request,
+  setIsChanged,
+  resetRef,
+  saveRef,
+  refreshRequest,
+}: IStatusSetter) => {
   const [status, setStatus] = useState<string>(request.status);
   const [remarks, setRemarks] = useState<string>(request.remarks);
-  const statuses = ["pending", "processing", "pickup", "complete"]; // Possible statuses
-  const currentIndex = statuses.indexOf(status);
   const [isSuccessful, setIsSuccessful] = useState(request.isSuccessful);
 
+  const statuses = ["pending", "processing", "pickup", "complete"];
+  const currentIndex = statuses.indexOf(status);
+
   const changeStatus = (direction: "left" | "right") => {
+    let newStatus = status;
     if (direction === "left" && currentIndex > 0) {
-      setStatus(statuses[currentIndex - 1]); // Move to the previous status
+      newStatus = statuses[currentIndex - 1];
     } else if (direction === "right" && currentIndex < statuses.length - 1) {
-      setStatus(statuses[currentIndex + 1]); // Move to the next status
+      newStatus = statuses[currentIndex + 1];
     }
 
-    if (status === "pending" || status === "processing") {
-      setRemarks("---");
-    }
-    if (
-      status === "pending" ||
-      status === "processing" ||
-      status === "pickup"
-    ) {
-      setIsSuccessful(request.isSuccessful);
+    setStatus(newStatus);
+
+    // Reset remarks and isSuccessful when status changes
+    if (newStatus === "pending" || newStatus === "processing") {
+      setRemarks("");
+      setIsSuccessful(request.isSuccessful); // Reset to original value
     }
   };
 
   const isChanged = () => {
     return (
-      status != request.status ||
-      remarks != request.remarks ||
-      isSuccessful != request.isSuccessful
+      status !== request.status ||
+      remarks !== request.remarks ||
+      isSuccessful !== request.isSuccessful
     );
   };
 
+  const reset = () => {
+    setStatus(request.status);
+    setRemarks(request.remarks);
+    setIsSuccessful(request.isSuccessful);
+    setIsChanged(false);
+  };
+
+  const saveChanges = async () => {
+    try {
+      await updateRequestStatus(request.id, status, remarks, isSuccessful);
+      Toast.show({
+        type: "success",
+        text1: "Success",
+        text2: "Request Updated successfully!",
+      });
+      refreshRequest();
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "There was an error updating the status.",
+      });
+    }
+  };
+
+  // This will allow parent component to trigger reset and saveChanges
   useEffect(() => {
+    if (resetRef) {
+      resetRef.current = reset;
+    }
+
+    if (saveRef) {
+      saveRef.current = saveChanges;
+    }
+
     setIsChanged(isChanged());
   }, [status, remarks, isSuccessful]);
 
@@ -107,38 +151,35 @@ const StatusSetter = ({ request, setIsChanged }: IStatusSetter) => {
         </View>
       </View>
 
-      {status == "pickup" && (
-        <View className="gap-2 mt-4 items-start">
+      {/* Remarks when status is 'pickup' or 'complete' */}
+      {["pickup", "complete"].includes(status) && (
+        <View className="gap-2 mt-4 items-start w-full">
           <Text className="text-lg font-semibold">Status Remarks</Text>
           <ParagraphBox
             value={remarks}
-            placeholder={"Please bring 2 valid ID"}
+            placeholder={
+              status === "pickup"
+                ? "Please bring 2 valid ID"
+                : "Claimed by John Doe"
+            }
             handleChangeText={(e) => setRemarks(e)}
             containerStyles="rounded-xl bg-white min-h-40"
           />
         </View>
       )}
 
-      {status == "complete" && (
-        <View className="gap-2 mt-4 items-start w-full">
-          <Text className="text-lg font-semibold">Status Remarks</Text>
-          <ParagraphBox
-            value={remarks}
-            placeholder={"Claimed by John Doe"}
-            handleChangeText={(e) => setRemarks(e)}
-            containerStyles="rounded-xl bg-white min-h-40"
+      {/* Switch for 'complete' status */}
+      {status === "complete" && (
+        <View className="flex-row items-center gap-2 place-self-end">
+          <Switch
+            trackColor={{ false: color.failed, true: color.success }}
+            thumbColor={color.white}
+            onValueChange={() => setIsSuccessful((prev) => !prev)}
+            value={isSuccessful}
           />
-          <View className="flex-row items-center gap-2 place-self-end">
-            <Switch
-              trackColor={{ false: color.failed, true: color.success }}
-              thumbColor={color.white}
-              onValueChange={() => setIsSuccessful((prev) => !prev)}
-              value={isSuccessful}
-            />
-            <Text className="text-lg font-semibold">
-              {`Transaction ${isSuccessful ? "Successful" : "Failed"}`}
-            </Text>
-          </View>
+          <Text className="text-lg font-semibold">
+            {`Transaction ${isSuccessful ? "Successful" : "Failed"}`}
+          </Text>
         </View>
       )}
     </View>

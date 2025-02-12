@@ -226,7 +226,8 @@ export const createUserRequest = async (
         status: "pending",
         updated_at: new Date(),
         created_at: new Date(),
-        remarks: "---",
+        remarks: "",
+        isSuccessful : true
       }
     );
 
@@ -236,6 +237,26 @@ export const createUserRequest = async (
     throw error;
   }
 };
+
+export const updateRequestStatus = async ( request_id: string, status: string, remarks: string, isSuccessful: boolean) => {
+  try {
+    const result = await _updateDocument(
+      env.DATABASE_PRIMARY,
+      env.COLLECTION_REQUEST,
+      request_id,
+      {
+        status: status,
+        remarks: remarks,
+        isSuccessful: isSuccessful,
+        updated_at: new Date(),
+      }
+    );
+    return result;
+  } catch (error) {
+    console.log(`database.updateRequestStatus : ${error}`);
+    throw error;
+  }
+}
 
 //#endregion
 

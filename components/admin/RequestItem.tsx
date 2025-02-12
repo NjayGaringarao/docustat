@@ -90,7 +90,7 @@ const RequestItem: React.FC<RequestItemProps> = ({ request }) => {
                 : request.status === "processing"
                 ? "bg-processing"
                 : request.status === "pickup"
-                ? "bg-pickup"
+                ? "bg-forPickup"
                 : "bg-complete"
             }`} // does not work when plug directly to to classname
           >

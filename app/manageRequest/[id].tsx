@@ -1,5 +1,5 @@
 import { View, Text, ScrollView } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { router, useGlobalSearchParams } from "expo-router";
 import Loading from "@/components/Loading";
 import { color } from "@/constants/color";
@@ -18,6 +18,8 @@ const manageRequest = () => {
   const [id, setId] = useState<string>();
   const [request, setRequest] = useState<RequestType>();
   const [userInfo, setUserInfo] = useState<UserType>();
+  const resetRef = useRef<() => void>(() => {});
+  const saveRef = useRef<() => void>(() => {});
 
   const fetchRequest = async (id: string) => {
     try {
@@ -125,21 +127,27 @@ const manageRequest = () => {
           )}
 
           {/* Status */}
-          <StatusSetter request={request} setIsChanged={setIsChanged} />
+          <StatusSetter
+            request={request}
+            setIsChanged={setIsChanged}
+            resetRef={resetRef}
+            saveRef={saveRef}
+            refreshRequest={() => (id ? fetchRequest(id) : {})}
+          />
         </ScrollView>
 
         {/* Footer */}
         <View className="w-full flex-row items-center justify-end bg-primary px-4 py-4 gap-2">
           <CustomButton
             title="Save Changes"
-            handlePress={() => {}}
+            handlePress={() => saveRef.current?.()}
             containerStyles="bg-secondary"
             isLoading={!isChanged || isLoading}
           ></CustomButton>
           <CustomButton
             title="Reset"
             textStyles="text-secondary"
-            handlePress={() => {}}
+            handlePress={() => resetRef.current?.()}
             containerStyles="bg-transparent border-secondary border"
           ></CustomButton>
         </View>
