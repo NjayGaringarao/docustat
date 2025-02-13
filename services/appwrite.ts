@@ -164,15 +164,14 @@ export const listSession = async () => {
   }
 };
 
-export const createPushTarget = async (sessionId: string, fcmToken: string) => {
+export const createPushTarget = async (session_id: string, fcmToken: string) => {
   try {
     const target = await appwriteService.account.createPushTarget(
-      sessionId,
+      session_id,
       fcmToken
     );
     return target;
   } catch (error) {
-    console.log(`appwrite.createTarget : ${error}`);
     throw error;
   }
 };

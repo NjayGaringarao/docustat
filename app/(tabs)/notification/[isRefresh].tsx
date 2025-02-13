@@ -10,11 +10,16 @@ import NotificationItem from "@/components/notification/notificationItem";
 import EmptyRequestListItem from "@/components/home/EmptyRequestListItem";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import Loading from "@/components/Loading";
+import { deleteNotification } from "@/services/notification";
 
 const Notification = () => {
   const searchParams = useGlobalSearchParams();
-  const { refreshUserRecord, userNotificationList, isInternetConnection } =
-    useGlobalContext();
+  const {
+    refreshUserRecord,
+    initializeGlobalState,
+    userNotificationList,
+    isInternetConnection,
+  } = useGlobalContext();
   const [notificationList, setNotificationList] = useState<NotificationType[]>(
     []
   );
@@ -49,7 +54,7 @@ const Notification = () => {
     setIsRefreshing(true);
 
     try {
-      // await deleteNotification(selectedNotification);
+      await deleteNotification(selectedNotification);
       setSelectedNotification([]);
     } catch {
       console.log(
@@ -84,11 +89,7 @@ const Notification = () => {
     if (!searchParams) return;
     if (searchParams.isRefresh == "true") {
       setIsRefreshing(true);
-      refreshUserRecord({
-        info: true,
-        requestList: true,
-        notificationList: true,
-      });
+      initializeGlobalState();
     }
   }, [searchParams]);
 

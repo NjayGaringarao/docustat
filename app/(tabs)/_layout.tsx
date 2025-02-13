@@ -92,7 +92,7 @@ const layout = () => {
           }}
         />
         <Tabs.Screen
-          name="notification"
+          name="notification/[isRefresh]"
           options={{
             title: "Notification",
             tabBarIcon: ({ focused }) => (

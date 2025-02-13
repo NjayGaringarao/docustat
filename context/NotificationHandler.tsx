@@ -1,4 +1,5 @@
 import { getCurrentUser } from "@/services/appwrite";
+import { getUserCredential } from "@/services/user";
 import messaging from "@react-native-firebase/messaging";
 import * as Notifications from "expo-notifications";
 import { router } from "expo-router";
@@ -18,7 +19,12 @@ const handleNotification = (refreshNotificationHandler: () => void) => {
     const user = await getCurrentUser();
 
     if (user) {
-      router.navigate("/(tabs)/notification");
+      const userCredential = await getUserCredential(user.$id);
+      if (userCredential.role == "student") {
+        router.navigate("/(tabs)/notification/true");
+      } else {
+        router.navigate("/(tabsAdmin)/home");
+      }
     } else {
       router.navigate("/");
     }
@@ -35,7 +41,13 @@ const handleNotification = (refreshNotificationHandler: () => void) => {
         );
         const user = await getCurrentUser();
 
-        if (user && user.emailVerification) {
+        if (user) {
+          const userCredential = await getUserCredential(user.$id);
+          if (userCredential.role == "student") {
+            router.navigate("/(tabs)/notification/true");
+          } else {
+            router.navigate("/(tabsAdmin)/home");
+          }
         } else {
           router.navigate("/");
         }

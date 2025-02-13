@@ -3,7 +3,7 @@ import { GlobalContextInterface, RefreshUserRecordType } from "./context";
 import { defaultValue, emptyUserCredential, emptyUserInfo } from "./values";
 import { router } from "expo-router";
 import { useNetInfo } from "@react-native-community/netinfo";
-import { getCurrentUser } from "@/services/appwrite";
+import { getCurrentUser, getSession } from "@/services/appwrite";
 import React, {
   createContext,
   useContext,
@@ -61,7 +61,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
       if (currentUser) {
         setUser(currentUser);
         const fcm = await getFCMToken(setFcmToken);
-        if (fcm) await setupPushTarget(currentUser, fcm);
+        if (fcm) await setupPushTarget(await getSession(), fcm);
         handleNotification(async () => {
           setUserNotificationList(
             await getUserNotificationList(currentUser.$id)

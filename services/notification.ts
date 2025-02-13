@@ -2,7 +2,7 @@ import messaging from "@react-native-firebase/messaging";
 import { Models, Query } from "react-native-appwrite";
 import * as Notifications from "expo-notifications";
 import { NotificationType } from "@/constants/models";
-import { _listDocuments } from "./appwrite";
+import { _deleteDocument, _listDocuments, createPushTarget, getCurrentUser, updatePushTarget } from "./appwrite";
 import { env } from "@/constants/env";
 import { toUserNotificationList } from "@/lib/dataTransferObject";
 
@@ -33,10 +33,20 @@ export const getFCMToken = async (setFcmToken?: (token: string) => void) => {
 
 
   export const setupPushTarget = async (
-    user: Models.User<Models.Preferences>,
+    currentSession: Models.Session,
     fcmToken: string
   ) => {
-    // TODO : Implement later
+    try {
+      try {
+        await createPushTarget(currentSession.$id, fcmToken)
+      } catch (error) {
+        if (error == "AppwriteException: A target with the same ID already exists") {
+          await updatePushTarget(currentSession.$id, fcmToken)
+        }
+      }
+    } catch (error) {
+      console.log(`notification.setupPushTarget : ${error}`);
+    }
 }
 
 export const getUserNotificationList = async (
@@ -53,5 +63,23 @@ export const getUserNotificationList = async (
   } catch (error) {
     console.log(`notification.getUserNotificationList : ${error}`);
     throw error;
+  }
+};
+
+export const deleteNotification = async (
+  notification: NotificationType[]
+) => {
+  for (let i = 0; notification.length > i; i++) {
+    try {
+      await _deleteDocument(
+        env.DATABASE_PRIMARY,
+        env.COLLECTION_NOTIFICATION,
+        notification[i].id
+      );
+    } catch (error) {
+      console.error(
+        `notificationServices.deleteNotification : ${error}`
+      );
+    }
   }
 };
