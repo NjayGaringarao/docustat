@@ -1,19 +1,23 @@
 import { View, Text } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Tabs } from "expo-router";
 import { color } from "@/constants/color";
 import { StatusBar } from "expo-status-bar";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { NotificationType } from "@/constants/models";
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 const layout = () => {
-  //   const { userNotification } = useGlobalContext();
+  const { userNotificationList } = useGlobalContext();
   const [totalUnread, setTotalUnread] = useState(0);
 
-  //   useEffect(() => {
-  //     setTotalUnread(
-  //       userNotification.filter((notif) => notif.isViewed === false).length
-  //     );
-  //   }, [userNotification]);
+  useEffect(() => {
+    setTotalUnread(
+      userNotificationList.filter(
+        (notif: NotificationType) => notif.isViewed === false
+      ).length
+    );
+  }, [userNotificationList]);
 
   return (
     <>

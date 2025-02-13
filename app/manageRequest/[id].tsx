@@ -4,12 +4,13 @@ import { router, useGlobalSearchParams } from "expo-router";
 import Loading from "@/components/Loading";
 import { color } from "@/constants/color";
 import { RequestType, UserType } from "@/constants/models";
-import { getRequest, getUserInfo } from "@/services/database";
 import Toast from "react-native-toast-message";
 import CustomButton from "@/components/CustomButton";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import UserInfoView from "@/components/UserInfoView";
 import StatusSetter from "@/components/admin/StatusSetter";
+import { getRequest } from "@/services/request";
+import { getUserInfo } from "@/services/user";
 
 const manageRequest = () => {
   const searchParams = useGlobalSearchParams();

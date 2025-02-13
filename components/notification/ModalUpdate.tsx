@@ -29,6 +29,7 @@ const ModalLinePost = ({
         user_id: "user_002",
         status: "processing",
         remarks: "---",
+        isSuccessful: false,
         updated_at: new Date(),
         created_at: new Date(),
       });

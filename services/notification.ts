@@ -1,6 +1,10 @@
 import messaging from "@react-native-firebase/messaging";
-import { Models } from "react-native-appwrite";
+import { Models, Query } from "react-native-appwrite";
 import * as Notifications from "expo-notifications";
+import { NotificationType } from "@/constants/models";
+import { _listDocuments } from "./appwrite";
+import { env } from "@/constants/env";
+import { toUserNotificationList } from "@/lib/dataTransferObject";
 
 // Retrieve FCM token and request permission
 export const getFCMToken = async (setFcmToken?: (token: string) => void) => {
@@ -33,4 +37,21 @@ export const getFCMToken = async (setFcmToken?: (token: string) => void) => {
     fcmToken: string
   ) => {
     // TODO : Implement later
+}
+
+export const getUserNotificationList = async (
+  user_id: string
+): Promise<NotificationType[]> => {
+  try {
+    const result = await _listDocuments(
+      env.DATABASE_PRIMARY,
+      env.COLLECTION_NOTIFICATION,
+      [Query.contains("user_id", user_id)]
+    );
+
+    return toUserNotificationList(result);
+  } catch (error) {
+    console.log(`database.getUserNotificationList : ${error}`);
+    throw error;
   }
+};

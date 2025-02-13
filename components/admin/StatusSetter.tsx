@@ -5,7 +5,7 @@ import CustomButton from "../CustomButton";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { color } from "@/constants/color";
 import ParagraphBox from "../ParagraphBox";
-import { updateRequestStatus } from "@/services/database";
+import { updateRequestStatus } from "@/services/request";
 import Toast from "react-native-toast-message";
 
 interface IStatusSetter {

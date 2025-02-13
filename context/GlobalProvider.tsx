@@ -3,12 +3,6 @@ import { GlobalContextInterface, RefreshUserRecordType } from "./context";
 import { defaultValue, emptyUserCredential, emptyUserInfo } from "./values";
 import { router } from "expo-router";
 import { useNetInfo } from "@react-native-community/netinfo";
-import {
-  getUserCredential,
-  getUserInfo,
-  getUserNotificationList,
-  getUserRequestList,
-} from "@/services/database";
 import { getCurrentUser } from "@/services/appwrite";
 import React, {
   createContext,
@@ -24,8 +18,15 @@ import {
   NotificationType,
 } from "@/constants/models";
 import Toast from "react-native-toast-message";
-import { getFCMToken, requestNotificationPermissions, setupPushTarget } from "@/services/notification";
+import {
+  getFCMToken,
+  getUserNotificationList,
+  requestNotificationPermissions,
+  setupPushTarget,
+} from "@/services/notification";
 import handleNotification from "./NotificationHandler";
+import { getUserCredential, getUserInfo } from "@/services/user";
+import { getUserRequestList } from "@/services/request";
 
 export const GlobalContext =
   createContext<GlobalContextInterface>(defaultValue);
@@ -53,7 +54,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     try {
       setIsLoading(true);
 
-       await requestNotificationPermissions();
+      await requestNotificationPermissions();
 
       const currentUser = await getCurrentUser();
 
@@ -80,12 +81,10 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
         setUserNotificationList(_notificationsList);
 
         if (currentUser) {
-
-          console.log("User role:",_userCredential.role)
+          console.log("User role:", _userCredential.role);
           if (_userCredential.role == "admin") {
             router.replace("/(tabsAdmin)/home");
           } else {
-
             router.replace("/(tabs)/home");
           }
         } else {

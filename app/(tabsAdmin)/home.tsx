@@ -8,7 +8,7 @@ import EmptyRequestListItem from "@/components/home/EmptyRequestListItem";
 import Loading from "@/components/Loading";
 import { color } from "@/constants/color";
 import { sortByUpdatedAt } from "@/lib/commonUtil";
-import { getRequestList } from "@/services/database";
+import { getRequestList } from "@/services/request";
 import Toast from "react-native-toast-message";
 import { router } from "expo-router";
 

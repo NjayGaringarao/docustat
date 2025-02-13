@@ -16,7 +16,7 @@ import {
   _listDocuments,
   generateAvatar,
 } from "@/services/appwrite";
-import { isEmailAvailable, isIDAvailable } from "@/services/database";
+import { isEmailAvailable, isIDAvailable } from "@/services/user";
 import Loading from "@/components/Loading";
 import {
   createAdminAccount,

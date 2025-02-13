@@ -10,7 +10,7 @@ import CustomButton from "@/components/CustomButton";
 import { confirmAction } from "@/lib/commonUtil";
 import { color } from "@/constants/color";
 import Toast from "react-native-toast-message";
-import { createUserRequest } from "@/services/database";
+import { createUserRequest } from "@/services/request";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import Loading from "@/components/Loading";
 import { router } from "expo-router";

@@ -16,7 +16,7 @@ import { color } from "@/constants/color";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Toast from "react-native-toast-message";
-import { updateUserInfo } from "@/services/database";
+import { updateUserInfo } from "@/services/user";
 
 interface FormType {
   firstName?: string;
