@@ -64,7 +64,13 @@ const StatusSetter = ({
 
   const saveChanges = async () => {
     try {
-      await updateRequestStatus(request.id, status, remarks, isSuccessful);
+      await updateRequestStatus({
+        request_id: request.id,
+        status: status,
+        remarks: remarks,
+        isSuccessful: isSuccessful,
+        user_id: request.user_id,
+      });
       Toast.show({
         type: "success",
         text1: "Success",

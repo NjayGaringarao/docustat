@@ -92,14 +92,14 @@ export const updateRequestStatus = async (param : IUpdateRequestStatus) => {
   try {
       const result = await _executeFunction(
         env.FUNCTION_ACCOUNT,
-        "createStudentAccount",
+        "updateRequest",
         param
       );
       if (result.responseStatusCode != 200) {
         throw Error("a");
       }
     } catch (error) {
-      console.log("reequest.updateRequestStatus : ", error);
-      throw Error("There was a problem creating your account.");
+      console.log("request.updateRequestStatus : ", error);
+      throw Error("There was a problem updating a request.");
     }
 }
