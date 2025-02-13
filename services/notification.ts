@@ -51,7 +51,7 @@ export const getUserNotificationList = async (
 
     return toUserNotificationList(result);
   } catch (error) {
-    console.log(`database.getUserNotificationList : ${error}`);
+    console.log(`notification.getUserNotificationList : ${error}`);
     throw error;
   }
 };

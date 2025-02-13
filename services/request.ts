@@ -1,5 +1,5 @@
 import { RequestType } from "@/constants/models";
-import { _createDocument, _getDocument, _listDocuments, _updateDocument } from "./appwrite";
+import { _createDocument, _executeFunction, _getDocument, _listDocuments, _updateDocument } from "./appwrite";
 import { env } from "@/constants/env";
 import { toUserRequest, toUserRequestList } from "@/lib/dataTransferObject";
 import { ID, Query } from "react-native-appwrite";
@@ -13,7 +13,7 @@ export const getRequestList = async (): Promise<RequestType[]> => {
 
     return toUserRequestList(result);
   } catch (error) {
-    console.log(`database.getRequestList : ${error}`);
+    console.log(`request.getRequestList : ${error}`);
     throw error;
   }
 }
@@ -30,7 +30,7 @@ export const getUserRequestList = async (
 
     return toUserRequestList(result);
   } catch (error) {
-    console.log(`database.getUserRequestList : ${error}`);
+    console.log(`request.getUserRequestList : ${error}`);
     throw error;
   }
 };
@@ -45,7 +45,7 @@ export const getRequest = async (request_id: string): Promise<RequestType> => {
 
     return toUserRequest(result);
   } catch (error) {
-    console.log(`database.getRequest : ${error}`);
+    console.log(`request.getRequest : ${error}`);
     throw error;
   }
 };
@@ -76,27 +76,30 @@ export const createUserRequest = async (
 
     return result;
   } catch (error) {
-    console.log(`database.createUserRequest : ${error}`);
+    console.log(`request.createUserRequest : ${error}`);
     throw error;
   }
 };
 
-export const updateRequestStatus = async ( request_id: string, status: string, remarks: string, isSuccessful: boolean) => {
+interface IUpdateRequestStatus {
+  request_id: string
+  status: string,
+  remarks: string
+  isSuccessful: boolean
+  user_id: string
+} 
+export const updateRequestStatus = async (param : IUpdateRequestStatus) => {
   try {
-    const result = await _updateDocument(
-      env.DATABASE_PRIMARY,
-      env.COLLECTION_REQUEST,
-      request_id,
-      {
-        status: status,
-        remarks: remarks,
-        isSuccessful: isSuccessful,
-        updated_at: new Date(),
+      const result = await _executeFunction(
+        env.FUNCTION_ACCOUNT,
+        "createStudentAccount",
+        param
+      );
+      if (result.responseStatusCode != 200) {
+        throw Error("a");
       }
-    );
-    return result;
-  } catch (error) {
-    console.log(`database.updateRequestStatus : ${error}`);
-    throw error;
-  }
+    } catch (error) {
+      console.log("reequest.updateRequestStatus : ", error);
+      throw Error("There was a problem creating your account.");
+    }
 }

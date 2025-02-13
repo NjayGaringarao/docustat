@@ -14,7 +14,7 @@ export const getUserInfo = async (user_id: string): Promise<UserType> => {
 
     return toUserInfo(result);
   } catch (error) {
-    console.log(`database.getUserInfo : ${error}`);
+    console.log(`user.getUserInfo : ${error}`);
     throw error;
   }
 };
@@ -31,7 +31,7 @@ export const getUserCredential = async (
 
     return toUserCredential(result);
   } catch (error) {
-    console.log(`database.getUserCredential : ${error}`);
+    console.log(`user.getUserCredential : ${error}`);
     throw error;
   }
 };
@@ -50,7 +50,7 @@ export const isEmailAvailable = async (email: string) => {
       return false;
     }
   } catch (error) {
-    console.log(`database.isEmailAvailable : ${error}`);
+    console.log(`user.isEmailAvailable : ${error}`);
     throw error;
   }
 };
@@ -134,7 +134,7 @@ export const updateUserInfo = async (
 
     return userInfo;
   } catch (error) {
-    console.log(`database.updateUserInfo : ${error}`);
+    console.log(`user.updateUserInfo : ${error}`);
     throw Error("There was an error updating user information.");
   }
 };
