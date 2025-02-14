@@ -53,7 +53,7 @@ const manageRequest = () => {
     }
   }, [searchParams]);
 
-  if (request && userInfo && !isLoading) {
+  if (request && userInfo) {
     return (
       <View className="flex-1 bg-background">
         {/* Header */}
@@ -153,13 +153,15 @@ const manageRequest = () => {
             containerStyles="bg-transparent border-secondary border"
           ></CustomButton>
         </View>
-      </View>
-    );
-  } else {
-    return (
-      <View className="absolute w-full h-full items-center justify-center">
-        <View className="absolute w-full h-full bg-white opacity-95" />
-        <Loading loadingPrompt="Please wait" loadingColor={color.secondary} />
+        {isLoading && (
+          <View className="absolute w-full h-full items-center justify-center">
+            <View className="absolute w-full h-full bg-white opacity-95" />
+            <Loading
+              loadingPrompt="Please wait"
+              loadingColor={color.secondary}
+            />
+          </View>
+        )}
       </View>
     );
   }

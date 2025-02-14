@@ -43,16 +43,18 @@ const StatusSetter = ({
 
     setStatus(newStatus);
 
-    // Reset remarks and isSuccessful when status changes
-    if (newStatus === "pickup" && request.status === "pickup") {
-      setRemarks(request.status);
-    } else if (newStatus === "complete" && request.status === "complete") {
-      setRemarks(request.status);
+    // Reset remarks and isSuccessful properly
+    if (newStatus === request.status) {
+      setRemarks(request.remarks);
+      setIsSuccessful(request.isSuccessful);
     } else {
-      setRemarks("");
+      if (newStatus == "pickup") {
+        setRemarks("Please bring one valid ID.");
+      } else {
+        setRemarks("Pickup by the owner.");
+      }
+      setIsSuccessful(false);
     }
-
-    setIsSuccessful(request.isSuccessful);
   };
 
   const isChanged = () => {
@@ -93,7 +95,15 @@ const StatusSetter = ({
         text1: "Success",
         text2: "Request Updated successfully!",
       });
-      refreshRequest();
+
+      request = {
+        ...request,
+        status: status,
+        remarks: remarks,
+        isSuccessful: isSuccessful,
+      };
+
+      setIsChanged(false);
     } catch (error) {
       Toast.show({
         type: "error",
