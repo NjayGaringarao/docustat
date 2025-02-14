@@ -7,10 +7,14 @@ import { RequestType } from "@/constants/models";
 import Toast from "react-native-toast-message";
 import CustomButton from "@/components/CustomButton";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { getRequest } from "@/services/request";
+import { deleteRequest, getRequest } from "@/services/request";
 import StatusView from "@/components/home/StatusView";
+import { useGlobalContext } from "@/context/GlobalProvider";
+import UserInfoView from "@/components/UserInfoView";
+import { confirmAction } from "@/lib/commonUtil";
 
 const viewRequest = () => {
+  const { userInfo, refreshUserRecord } = useGlobalContext();
   const searchParams = useGlobalSearchParams();
   const [isLoading, setIsLoading] = useState(true);
   const [id, setId] = useState<string>();
@@ -33,6 +37,42 @@ const viewRequest = () => {
     }
   };
 
+  const deleteHandle = async () => {
+    try {
+      if (
+        !(await confirmAction(
+          "Confirm Delete",
+          "Do you want to delete this request?"
+        ))
+      )
+        return;
+
+      setIsLoading(true);
+      const _request = await getRequest(request?.id!);
+
+      if (_request.status != "pending")
+        throw Error("The request is not pending and cannot be deleted.");
+
+      await deleteRequest(request?.id!);
+      refreshUserRecord({ requestList: true });
+      Toast.show({
+        type: "success",
+        text1: "Request Deleted",
+        text2:
+          "Your request is succesfully deleted and will not be process anymore.",
+      });
+      router.back();
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Failed to delete",
+        text2: `${error}`,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (id) {
       fetchRequest(id);
@@ -45,7 +85,7 @@ const viewRequest = () => {
     }
   }, [searchParams]);
 
-  if (request) {
+  if (request && userInfo) {
     return (
       <View className="flex-1 bg-background">
         {/* Header */}
@@ -71,6 +111,7 @@ const viewRequest = () => {
             gap: 16,
           }}
         >
+          <UserInfoView userInfo={userInfo} />
           {/* Request Info */}
           <View className="p-4 bg-background rounded-2xl shadow-md">
             <Text className="text-lg font-semibold mb-2">
@@ -120,6 +161,16 @@ const viewRequest = () => {
           {/* Status */}
           <StatusView request={request} />
         </ScrollView>
+        {/* Footer */}
+        <View className="w-full flex-row items-center justify-end bg-primary px-4 py-4 gap-2">
+          <CustomButton
+            title="Delete Request"
+            textStyles="text-secondary"
+            handlePress={deleteHandle}
+            containerStyles="bg-transparent border-secondary border"
+            isLoading={isLoading || request.status != "pending"}
+          ></CustomButton>
+        </View>
 
         {isLoading && (
           <View className="absolute w-full h-full items-center justify-center">

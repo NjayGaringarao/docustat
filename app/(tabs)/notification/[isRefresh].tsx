@@ -5,7 +5,7 @@ import CustomButton from "@/components/CustomButton";
 import { NotificationType } from "@/constants/models";
 import { color } from "@/constants/color";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { useGlobalSearchParams } from "expo-router";
+import { Href, router, useGlobalSearchParams } from "expo-router";
 import NotificationItem from "@/components/notification/notificationItem";
 import EmptyRequestListItem from "@/components/home/EmptyRequestListItem";
 import { useGlobalContext } from "@/context/GlobalProvider";
@@ -114,6 +114,12 @@ const Notification = () => {
     setIsModalVisible(false);
   };
 
+  const handleOnNavigate = (href: Href) => {
+    setOnViewNotification(undefined);
+    setIsModalVisible(false);
+    router.push(href);
+  };
+
   return (
     <View className="flex-1 bg-background">
       <View className="flex-row justify-between items-center mx-2">
@@ -191,6 +197,7 @@ const Notification = () => {
           notification={onViewNotification}
           isVisible={isModalVisible}
           handleOnClose={handleClose}
+          handleOnNavigate={handleOnNavigate}
         />
       )}
       {isRefreshing && (

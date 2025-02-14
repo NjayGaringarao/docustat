@@ -1,5 +1,5 @@
 import { RequestType } from "@/constants/models";
-import { _createDocument, _executeFunction, _getDocument, _listDocuments, _updateDocument } from "./appwrite";
+import { _createDocument, _deleteDocument, _executeFunction, _getDocument, _listDocuments, _updateDocument } from "./appwrite";
 import { env } from "@/constants/env";
 import { toUserRequest, toUserRequestList } from "@/lib/dataTransferObject";
 import { ID, Query } from "react-native-appwrite";
@@ -46,6 +46,21 @@ export const getRequest = async (request_id: string): Promise<RequestType> => {
     return toUserRequest(result);
   } catch (error) {
     console.log(`request.getRequest : ${error}`);
+    throw error;
+  }
+};
+
+export const deleteRequest = async (request_id: string) => {
+  try {
+    const result = await _deleteDocument(
+      env.DATABASE_PRIMARY,
+      env.COLLECTION_REQUEST,
+      request_id
+    );
+
+    return result
+  } catch (error) {
+    console.log(`request.deleteRequest : ${error}`);
     throw error;
   }
 };

@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  Modal,
-  TouchableOpacity,
-  FlatList,
-  ScrollView,
-} from "react-native";
+import { View, Text, Modal, TouchableOpacity, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import { NotificationType, RequestType } from "@/constants/models";
 import Octicons from "@expo/vector-icons/Octicons";
@@ -18,17 +11,20 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import CustomButton from "../CustomButton";
+import { Href } from "expo-router";
 
 interface IModalRequestNotification {
   notification: NotificationType;
   isVisible: boolean;
   handleOnClose: () => void;
+  handleOnNavigate: (href: Href) => void;
 }
 
 const ModalRequestNotification = ({
   notification,
   isVisible,
   handleOnClose,
+  handleOnNavigate,
 }: IModalRequestNotification) => {
   const [request, setRequest] = useState<RequestType>();
   const [isLoading, setIsLoading] = useState(false);
@@ -238,13 +234,17 @@ const ModalRequestNotification = ({
           )}
 
           {/* OK Button */}
-          <View className="w-full justify-items-end mt-6">
-            <CustomButton
-              title="View Request"
-              handlePress={handleOnClose}
-              containerStyles="bg-secondary"
-            />
-          </View>
+          {request && (
+            <View className="w-full justify-items-end mt-6">
+              <CustomButton
+                title="View Request"
+                handlePress={() =>
+                  handleOnNavigate(`/viewRequest/${request.id}`)
+                }
+                containerStyles="bg-secondary"
+              />
+            </View>
+          )}
         </View>
       </View>
     </Modal>
