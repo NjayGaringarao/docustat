@@ -148,6 +148,10 @@ export default function RootLayout() {
             name="manageRequest/[id]"
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="viewRequest/[id]"
+            options={{ headerShown: false }}
+          />
         </Stack>
       </GlobalProvider>
       <Toast config={toastConfig} />
