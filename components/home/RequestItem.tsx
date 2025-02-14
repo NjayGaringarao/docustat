@@ -114,7 +114,7 @@ const RequestItem: React.FC<RequestItemProps> = ({ request }) => {
             >
               {request.remarks.length > 0
                 ? request.remarks
-                : "This transaction is succesful"}
+                : "This transaction is successful."}
             </Text>
           </View>
         ) : null}

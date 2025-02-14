@@ -4,8 +4,6 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Entypo from "@expo/vector-icons/Entypo";
 import { color } from "@/constants/color";
 import { RequestType } from "@/constants/models";
-import CustomButton from "../CustomButton";
-import { confirmAction } from "@/lib/commonUtil";
 import { router } from "expo-router";
 
 interface RequestItemProps {
@@ -103,20 +101,18 @@ const RequestItem: React.FC<RequestItemProps> = ({ request }) => {
         {request.status === "complete" ? (
           <View className="w-full flex-row justify-end">
             <Entypo
-              name={request.remarks === "Document Claimed" ? "check" : "cross"}
+              name={request.isSuccessful ? "check" : "cross"}
               size={24}
-              color={
-                request.remarks === "Document Claimed"
-                  ? color.success
-                  : color.failed
-              }
+              color={request.isSuccessful ? color.success : color.failed}
             />
             <Text
               className={`text-base text-uGray font-semibold ${
                 request.remarks === "complete"
               }`}
             >
-              {request.remarks}
+              {request.remarks.length > 0
+                ? request.remarks
+                : "This transaction is successful."}
             </Text>
           </View>
         ) : null}
