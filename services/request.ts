@@ -91,15 +91,18 @@ interface IUpdateRequestStatus {
 export const updateRequestStatus = async (param : IUpdateRequestStatus) => {
   try {
       const result = await _executeFunction(
-        env.FUNCTION_ACCOUNT,
+        env.FUNCTION_REQUEST,
         "updateRequest",
         param
       );
+      
       if (result.responseStatusCode != 200) {
         throw Error("a");
       }
     } catch (error) {
       console.log("request.updateRequestStatus : ", error);
-      throw Error("There was a problem updating a request.");
+      if (error === "a") {
+        throw Error("There was a problem updating a request.");
+      }
     }
 }

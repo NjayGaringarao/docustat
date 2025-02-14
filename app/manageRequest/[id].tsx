@@ -82,7 +82,7 @@ const manageRequest = () => {
           <UserInfoView userInfo={userInfo} />
 
           {/* Request Info */}
-          <View className="p-4 bg-panel rounded-2xl shadow-md">
+          <View className="p-4 bg-background rounded-2xl shadow-md">
             <Text className="text-lg font-semibold mb-2">
               Request Information
             </Text>
@@ -101,7 +101,7 @@ const manageRequest = () => {
           </View>
 
           {/* Document List */}
-          <View className="p-4 bg-panel rounded-2xl shadow-md">
+          <View className="p-4 bg-background rounded-2xl shadow-md">
             <Text className="text-lg font-semibold mb-2">
               Requested Documents
             </Text>
@@ -119,7 +119,7 @@ const manageRequest = () => {
 
           {/* Request Note */}
           {request.request_note.length > 0 && (
-            <View className="p-4 bg-panel rounded-2xl shadow-md">
+            <View className="p-4 bg-background rounded-2xl shadow-md">
               <Text className="text-lg font-semibold mb-2">Request Note</Text>
               <Text className="text-sm italic text-uGray">
                 "{request.request_note}"
@@ -134,6 +134,7 @@ const manageRequest = () => {
             resetRef={resetRef}
             saveRef={saveRef}
             refreshRequest={() => (id ? fetchRequest(id) : {})}
+            setIsLoading={setIsLoading}
           />
         </ScrollView>
 

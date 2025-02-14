@@ -7,21 +7,24 @@ import { color } from "@/constants/color";
 import ParagraphBox from "../ParagraphBox";
 import { updateRequestStatus } from "@/services/request";
 import Toast from "react-native-toast-message";
+import { confirmAction } from "@/lib/commonUtil";
 
 interface IStatusSetter {
   request: RequestType;
   setIsChanged: React.Dispatch<React.SetStateAction<boolean>>;
   refreshRequest: () => void;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   resetRef?: React.MutableRefObject<() => void>;
   saveRef?: React.MutableRefObject<() => void>;
 }
 
 const StatusSetter = ({
   request,
-  setIsChanged,
   resetRef,
   saveRef,
+  setIsChanged,
   refreshRequest,
+  setIsLoading,
 }: IStatusSetter) => {
   const [status, setStatus] = useState<string>(request.status);
   const [remarks, setRemarks] = useState<string>(request.remarks);
@@ -41,10 +44,15 @@ const StatusSetter = ({
     setStatus(newStatus);
 
     // Reset remarks and isSuccessful when status changes
-    if (newStatus === "pending" || newStatus === "processing") {
+    if (newStatus === "pickup" && request.status === "pickup") {
+      setRemarks(request.status);
+    } else if (newStatus === "complete" && request.status === "complete") {
+      setRemarks(request.status);
+    } else {
       setRemarks("");
-      setIsSuccessful(request.isSuccessful); // Reset to original value
     }
+
+    setIsSuccessful(request.isSuccessful);
   };
 
   const isChanged = () => {
@@ -63,7 +71,16 @@ const StatusSetter = ({
   };
 
   const saveChanges = async () => {
+    if (
+      !(await confirmAction(
+        "Confirm Update",
+        "This will notify the client. Do you want to proceed?"
+      ))
+    )
+      return;
+
     try {
+      setIsLoading(true);
       await updateRequestStatus({
         request_id: request.id,
         status: status,
@@ -83,6 +100,8 @@ const StatusSetter = ({
         text1: "Error",
         text2: "There was an error updating the status.",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -100,16 +119,16 @@ const StatusSetter = ({
   }, [status, remarks, isSuccessful]);
 
   return (
-    <View className="p-4 bg-panel rounded-2xl shadow-md items-center mb-20">
+    <View className="p-4 bg-background rounded-2xl shadow-md items-center mb-20">
       <View className="w-full flex-row justify-between items-center">
-        <Text className="text-lg font-semibold">STATUS</Text>
-        <View className="flex-row gap-2 items-center">
+        <Text className="text-uBlack text-lg font-black">STATUS</Text>
+        <View className="flex-row items-center">
           {/* Left Button */}
           <CustomButton
             handlePress={() => changeStatus("left")}
             containerStyles={`${
               currentIndex === 0 ? "bg-gray-300" : "bg-primary"
-            } p-2 rounded-lg`}
+            } rounded-none rounded-l-lg`}
             isLoading={currentIndex === 0}
           >
             <AntDesign
@@ -121,7 +140,7 @@ const StatusSetter = ({
 
           {/* Status Indicator */}
           <View
-            className={`w-32 py-2 items-center rounded-lg ${
+            className={`w-32 py-2 items-center ${
               status === "pending"
                 ? "bg-pending"
                 : status === "processing"
@@ -143,7 +162,7 @@ const StatusSetter = ({
               currentIndex === statuses.length - 1
                 ? "bg-gray-300"
                 : "bg-primary"
-            } p-2 rounded-lg`}
+            } p-2 rounded-none rounded-r-lg `}
             isLoading={currentIndex === statuses.length - 1}
           >
             <AntDesign
@@ -176,7 +195,7 @@ const StatusSetter = ({
 
       {/* Switch for 'complete' status */}
       {status === "complete" && (
-        <View className="flex-row items-center gap-2 place-self-end">
+        <View className="flex-row w-full mt-2 gap-2">
           <Switch
             trackColor={{ false: color.failed, true: color.success }}
             thumbColor={color.white}
