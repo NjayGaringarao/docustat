@@ -7,12 +7,12 @@ import { RequestType } from "@/constants/models";
 import CustomButton from "../CustomButton";
 import { confirmAction } from "@/lib/commonUtil";
 
-interface RequestItemProps {
+interface IRequestItem {
   request: RequestType;
   onPress?: () => void;
 }
 
-const RequestItem: React.FC<RequestItemProps> = ({ request, onPress }) => {
+const RequestItem = ({ request, onPress }: IRequestItem) => {
   const deleteHandle = async () => {
     if (
       !(await confirmAction(

@@ -21,18 +21,6 @@ const ModalLinePost = ({
   const queryData = async () => {
     setIsLoading(true);
     try {
-      setRequest({
-        id: "2",
-        document: ["Good Moral Certificate"],
-        purpose: "Scholarship Application",
-        request_note: "Needs to be ready by next week.",
-        user_id: "user_002",
-        status: "processing",
-        remarks: "---",
-        isSuccessful: false,
-        updated_at: new Date(),
-        created_at: new Date(),
-      });
     } catch {}
     setIsLoading(false);
   };

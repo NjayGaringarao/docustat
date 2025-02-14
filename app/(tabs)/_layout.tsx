@@ -105,7 +105,7 @@ const layout = () => {
                   color={color.secondary}
                 />
                 {!!(totalUnread > 0) && (
-                  <View className="absolute -top-2 -right-2 w-5 bg-panel items-center justify center rounded-full">
+                  <View className="absolute -top-2 -right-2 w-5 h-5 bg-secondary items-center justify center rounded-full">
                     <Text className="text-sm font-black text-primary">
                       {totalUnread > 99 ? "99+" : totalUnread}
                     </Text>

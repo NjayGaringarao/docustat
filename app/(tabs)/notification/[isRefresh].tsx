@@ -10,7 +10,12 @@ import NotificationItem from "@/components/notification/notificationItem";
 import EmptyRequestListItem from "@/components/home/EmptyRequestListItem";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import Loading from "@/components/Loading";
-import { deleteNotification } from "@/services/notification";
+import {
+  deleteNotification,
+  setNotificationViewed,
+} from "@/services/notification";
+import ModalRequestNotification from "@/components/notification/ModalRequestNotification";
+import { isLoading } from "expo-font";
 
 const Notification = () => {
   const searchParams = useGlobalSearchParams();
@@ -27,7 +32,10 @@ const Notification = () => {
   const [selectedNotification, setSelectedNotification] = useState<
     NotificationType[]
   >([]);
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(true);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [onViewNotification, setOnViewNotification] =
+    useState<NotificationType>();
 
   const handleSelectNotification = (notification: NotificationType) => {
     setSelectedNotification((prev) =>
@@ -93,6 +101,20 @@ const Notification = () => {
     }
   }, [searchParams]);
 
+  const handleOnOpen = async (notification: NotificationType) => {
+    if (!notification.isViewed) {
+      await setNotificationViewed(notification.id);
+      onRefreshHandle();
+    }
+    setIsModalVisible(true);
+    setOnViewNotification(notification);
+  };
+
+  const handleClose = async () => {
+    setOnViewNotification(undefined);
+    setIsModalVisible(false);
+  };
+
   return (
     <View className="flex-1 bg-background">
       <View className="flex-row justify-between items-center mx-2">
@@ -106,8 +128,8 @@ const Notification = () => {
           <FontAwesome name="refresh" size={24} color={color.secondary} />
         </CustomButton>
       </View>
-      <View className="flex-1 mx-2 mb-4 px-2 py-4 rounded-xl bg-panel ">
-        {!isRefreshing ? (
+      <View className="flex-1 mx-2 mb-4 rounded-xl ">
+        {!isRefreshing && (
           <FlatList
             data={notificationList}
             className="flex-1 mb-2"
@@ -121,7 +143,6 @@ const Notification = () => {
                 <NotificationItem
                   notification={item}
                   isSelected={isSelected}
-                  refreshUserRecord={(e) => {}}
                   onLongPress={() => {
                     setIsSelectionOn(true);
                     handleSelectNotification(item);
@@ -130,6 +151,7 @@ const Notification = () => {
                     handleSelectNotification(e);
                   }}
                   isSelectionOn={isSelectionOn}
+                  handleOnOpen={handleOnOpen}
                 />
               );
             }}
@@ -139,38 +161,50 @@ const Notification = () => {
             onRefresh={onRefreshHandle}
             refreshing={isRefreshing}
           />
-        ) : (
-          <View className="flex-1 items-center justify-center rounded-xl mx-2 my-4 gap-4 bg-panel">
+        )}
+      </View>
+      {isSelectionOn && (
+        <View className="h-auto py-2 flex-row w-full justify-between items-center px-2 bg-panel">
+          <Text className="text-lg self-center font-semibold">
+            Selected: {selectedNotification.length}
+          </Text>
+          <View className="flex-row w-fit place-self-end gap-2">
+            <CustomButton
+              title="Delete"
+              handlePress={deleteNotificationHandle}
+              containerStyles="w-24 bg-secondary"
+            />
+            <CustomButton
+              title="Cancel"
+              handlePress={() => {
+                setSelectedNotification([]);
+                setIsSelectionOn(false);
+              }}
+              containerStyles="border-2 border-secondary h-10 w-24 bg-transparent"
+              textStyles="text-secondary"
+            />
+          </View>
+        </View>
+      )}
+
+      {isModalVisible && onViewNotification && (
+        <ModalRequestNotification
+          notification={onViewNotification}
+          isVisible={isModalVisible}
+          handleOnClose={handleClose}
+        />
+      )}
+      {isRefreshing && (
+        <View className="absolute h-full w-full items-center justify-center">
+          <View className=" absolute h-full w-full bg-background opacity-90 " />
+          <View className="items-center justify-center">
             <Loading
               loadingPrompt="Please wait"
               loadingColor={color.secondary}
             />
           </View>
-        )}
-        {isSelectionOn && (
-          <View className="h-auto py-2 flex-row w-full justify-between items-center px-2 bg-panel">
-            <Text className="text-base self-center">
-              Selected: {selectedNotification.length}
-            </Text>
-            <View className="flex-row w-fit place-self-end">
-              <CustomButton
-                title="Delete"
-                handlePress={deleteNotificationHandle}
-                containerStyles="w-24"
-              />
-              <CustomButton
-                title="Cancel"
-                handlePress={() => {
-                  setSelectedNotification([]);
-                  setIsSelectionOn(false);
-                }}
-                containerStyles="border-2 border-primary h-10 w-24 bg-transparent"
-                textStyles="text-primary"
-              />
-            </View>
-          </View>
-        )}
-      </View>
+        </View>
+      )}
     </View>
   );
 };

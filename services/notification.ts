@@ -2,7 +2,7 @@ import messaging from "@react-native-firebase/messaging";
 import { Models, Query } from "react-native-appwrite";
 import * as Notifications from "expo-notifications";
 import { NotificationType } from "@/constants/models";
-import { _deleteDocument, _listDocuments, createPushTarget, getCurrentUser, updatePushTarget } from "./appwrite";
+import { _deleteDocument, _listDocuments, _updateDocument, createPushTarget, getCurrentUser, updatePushTarget } from "./appwrite";
 import { env } from "@/constants/env";
 import { toUserNotificationList } from "@/lib/dataTransferObject";
 
@@ -63,6 +63,23 @@ export const getUserNotificationList = async (
   } catch (error) {
     console.log(`notification.getUserNotificationList : ${error}`);
     throw error;
+  }
+};
+
+export const setNotificationViewed = async (notification_id: string) => {
+  try {
+    return await _updateDocument(
+      env.DATABASE_PRIMARY,
+      env.COLLECTION_NOTIFICATION,
+      notification_id,
+      {
+        isViewed: true,
+      }
+    );
+  } catch (error) {
+    console.error(
+      `notificationServices.ts => setNotificationViewed :: ERROR : ${error}`
+    );
   }
 };
 
