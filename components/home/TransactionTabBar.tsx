@@ -47,8 +47,12 @@ const TransactionTabBar = ({
           Pending
         </Text>
         {!!(itemCount.pending > 0) && (
-          <View className="absolute -top-2 -right-4 w-7 bg-primary items-center justify center rounded-full">
-            <Text className="text-base font-black text-uBlack">
+          <View
+            className={`absolute -top-2 -right-4 w-7 ${
+              activeTab === "pending" ? "bg-secondary" : "bg-uGrayLight"
+            } items-center justify center rounded-full`}
+          >
+            <Text className="text-base font-black text-background">
               {itemCount.pending > 99 ? "99+" : itemCount.pending}
             </Text>
           </View>
@@ -77,7 +81,11 @@ const TransactionTabBar = ({
           Processing
         </Text>
         {!!(itemCount.processing > 0) && (
-          <View className="absolute -top-2 -right-4 w-7 bg-primary items-center justify center rounded-full">
+          <View
+            className={`absolute -top-2 -right-4 w-7 ${
+              activeTab === "processing" ? "bg-secondary" : "bg-uGrayLight"
+            } items-center justify center rounded-full`}
+          >
             <Text className="text-base font-black text-uBlack">
               {itemCount.processing > 99 ? "99+" : itemCount.processing}
             </Text>
@@ -105,7 +113,11 @@ const TransactionTabBar = ({
           For Pickup
         </Text>
         {!!(itemCount.pickup > 0) && (
-          <View className="absolute -top-2 -right-4 w-7 bg-primary items-center justify center rounded-full">
+          <View
+            className={`absolute -top-2 -right-4 w-7 ${
+              activeTab === "pickup" ? "bg-secondary" : "bg-uGrayLight"
+            } items-center justify center rounded-full`}
+          >
             <Text className="text-base font-black text-uBlack">
               {itemCount.pickup > 99 ? "99+" : itemCount.pickup}
             </Text>
@@ -132,7 +144,6 @@ const TransactionTabBar = ({
         >
           Complete
         </Text>
-        
       </TouchableOpacity>
     </View>
   );

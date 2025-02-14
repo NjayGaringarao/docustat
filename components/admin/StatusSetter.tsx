@@ -138,7 +138,7 @@ const StatusSetter = ({
             handlePress={() => changeStatus("left")}
             containerStyles={`${
               currentIndex === 0 ? "bg-gray-300" : "bg-primary"
-            } rounded-none rounded-l-lg`}
+            } rounded-r-none rounded-l-lg`}
             isLoading={currentIndex === 0}
           >
             <AntDesign
@@ -172,7 +172,7 @@ const StatusSetter = ({
               currentIndex === statuses.length - 1
                 ? "bg-gray-300"
                 : "bg-primary"
-            } p-2 rounded-none rounded-r-lg `}
+            } p-2 rounded-l-none rounded-r-lg `}
             isLoading={currentIndex === statuses.length - 1}
           >
             <AntDesign

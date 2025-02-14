@@ -46,9 +46,11 @@ const home = () => {
 
   return (
     <View className="flex-1 px-2 py-4 gap-4 bg-background">
-      <Text className="font-black text-secondary text-3xl -mb-2">HOME</Text>
+      <Text className="font-black text-secondary text-3xl -mb-2">
+        TRANSACTION
+      </Text>
       <TransactionTabBar
-        containerStyle="rounded-xl bg-panel"
+        containerStyle="rounded-xl border-b"
         setActiveTab={setActiveTab}
         activeTab={activeTab}
         itemCount={{
@@ -99,7 +101,7 @@ const home = () => {
             refreshing={isRefreshing}
           />
         ) : (
-          <View className="flex-1 items-center justify-center rounded-xl mx-2 my-4 gap-4 bg-panel">
+          <View className="flex-1 items-center justify-center rounded-xl mx-2 my-4 gap-4 bg-background">
             <Loading
               loadingPrompt="Please wait"
               loadingColor={color.secondary}

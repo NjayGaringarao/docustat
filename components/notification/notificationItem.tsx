@@ -1,11 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { NotificationType } from "@/constants/models";
 import AdaptiveTime from "@/components/AdaptiveTime";
-import { RefreshUserRecordType } from "@/context/context";
-import ModalUpdate from "./ModalUpdate";
-import { setNotificationViewed } from "@/services/notification";
-import ModalRequestNotification from "./ModalRequestNotification";
 
 interface NotificationItemProps {
   notification: NotificationType;

@@ -9,7 +9,7 @@ export const color = {
   success: "#10B981",
   failed: "#dc2626",
   white: "#fff",
-  pending: "#d1d5db", 
+  pending: "#9ca3af", 
   processing: "#3b82f6", 
   forPickup: "#f97316", 
   complete: "#22c55e",

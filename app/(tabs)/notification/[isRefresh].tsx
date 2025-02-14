@@ -15,7 +15,6 @@ import {
   setNotificationViewed,
 } from "@/services/notification";
 import ModalRequestNotification from "@/components/notification/ModalRequestNotification";
-import { isLoading } from "expo-font";
 
 const Notification = () => {
   const searchParams = useGlobalSearchParams();
@@ -180,7 +179,7 @@ const Notification = () => {
                 setSelectedNotification([]);
                 setIsSelectionOn(false);
               }}
-              containerStyles="border-2 border-secondary h-10 w-24 bg-transparent"
+              containerStyles="border border-secondary h-10 w-24 bg-transparent"
               textStyles="text-secondary"
             />
           </View>

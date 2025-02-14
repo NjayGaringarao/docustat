@@ -18,9 +18,9 @@ const RequestItem: React.FC<RequestItemProps> = ({ request }) => {
       className="bg-background my-4 rounded-lg shadow-lg overflow-hidden"
     >
       {/* Header Section */}
-      <View className="flex-row justify-between items-center mb-2 bg-secondary px-4 py-2">
+      <View className="flex-row justify-between items-center mb-2 bg-primary px-4 py-2">
         <View className="flex-1 flex-row justify-start">
-          <Text className="text-lg font-semibold text-white">
+          <Text className="text-lg font-semibold text-secondary">
             {request.purpose}
           </Text>
         </View>
@@ -36,7 +36,7 @@ const RequestItem: React.FC<RequestItemProps> = ({ request }) => {
               : "check-circle"
           }
           size={24}
-          color={color.white}
+          color={color.secondary}
         />
       </View>
       <View className="p-4">

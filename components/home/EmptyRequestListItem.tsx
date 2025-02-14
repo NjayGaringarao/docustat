@@ -11,7 +11,7 @@ const EmptyRequestListItem: React.FC<EmptyRequestListItemProps> = ({
   message = "No requests available.",
 }) => {
   return (
-    <View className="flex items-center justify-center p-6 bg-white mx-4 my-2 rounded-lg shadow-sm">
+    <View className="flex items-center justify-center p-6 bg-background mx-4 my-4 rounded-lg shadow-xl">
       {/* Icon Section */}
       <MaterialIcons
         name="hourglass-empty"
