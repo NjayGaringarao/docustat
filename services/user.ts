@@ -1,8 +1,16 @@
 import { UserCredentialType, UserType } from "@/constants/models";
-import { _getDocument, _listDocuments, _updateDocument } from "./appwrite";
+import {
+  _deleteFile,
+  _getDocument,
+  _listDocuments,
+  _updateDocument,
+  _updateFile,
+  _uploadFile,
+} from "./appwrite";
 import { env } from "@/constants/env";
 import { toUserCredential, toUserInfo } from "@/lib/dataTransferObject";
-import { Query } from "react-native-appwrite";
+import { Models, Query } from "react-native-appwrite";
+import { ImagePickerAsset } from "expo-image-picker";
 
 export const getUserInfo = async (user_id: string): Promise<UserType> => {
   try {
@@ -136,5 +144,66 @@ export const updateUserInfo = async (
   } catch (error) {
     console.log(`user.updateUserInfo : ${error}`);
     throw Error("There was an error updating user information.");
+  }
+};
+
+export const updateUserInformation = async (
+  user_id: string,
+  form: {
+    firstName: string;
+    middleName?: string;
+    lastName: string;
+    sex?: string;
+    birthdate?: Date;
+    civil_status?: string;
+  },
+  newProfilePicture?: ImagePickerAsset
+) => {
+  let pictureFile: Models.File | undefined = undefined;
+  try {
+    if (newProfilePicture) {
+      pictureFile = await _uploadFile(env.BUCKET_IMAGE, {
+        name: newProfilePicture.fileName!,
+        type: newProfilePicture.mimeType!,
+        size: newProfilePicture.fileSize!,
+        uri: newProfilePicture.uri!,
+      });
+
+      const execution = await _updateDocument(
+        env.DATABASE_PRIMARY,
+        env.COLLECTION_USER,
+        user_id,
+        {
+          name: [form.firstName, form.middleName, form.lastName],
+          birthdate : form.birthdate,
+          civil_status : form.civil_status,
+          sex: form.sex,
+          picture_id : pictureFile.$id
+        }
+      );
+
+      await _updateFile(env.BUCKET_IMAGE, pictureFile.$id, {
+        name: `User Image ${user_id}`,
+      });
+
+      return execution;
+    } else {
+      return await _updateDocument(
+        env.DATABASE_PRIMARY,
+        env.COLLECTION_USER,
+        user_id,
+        {
+          name: [form.firstName, form.middleName, form.lastName],
+          birthdate : form.birthdate,
+          civil_status : form.civil_status,
+          sex: form.sex,
+        }
+      );
+    }
+  } catch (error) {
+    console.log(`ERROR : (user.updateUserInformation) :: ${error}`);
+
+    await _deleteFile(env.BUCKET_IMAGE, pictureFile?.$id!).catch();
+    throw error;
   }
 };

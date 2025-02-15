@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { View, Text, ScrollView } from "react-native";
 import TextBox from "@/components/TextBox";
 import CustomButton from "@/components/CustomButton";
@@ -17,6 +17,9 @@ import { useGlobalContext } from "@/context/GlobalProvider";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Toast from "react-native-toast-message";
 import { updateUserInfo } from "@/services/user";
+import ProfilePicturePicker from "@/components/ProfilePicturePicker";
+import { ImagePickerAsset } from "expo-image-picker";
+import PersonalInformation from "@/components/settings/PersonalInformation";
 
 interface FormType {
   firstName?: string;
@@ -38,6 +41,10 @@ const profile = () => {
   const { userInfo, userCredential, refreshUserRecord } = useGlobalContext();
   const [isLoading, setIsLoading] = useState(false);
   const [form, setForm] = useState<FormType>();
+  const [newProfilePicture, setNewProfilePicture] = useState<
+    ImagePickerAsset | undefined
+  >();
+  const profilePickerRef = useRef<{ clear: () => void }>(null);
 
   const resetHandle = () => {
     setForm({
@@ -150,6 +157,10 @@ const profile = () => {
     return true;
   };
 
+  const clearProfilePicture = () => {
+    profilePickerRef.current?.clear();
+  };
+
   const saveHandle = async () => {
     setIsLoading(true);
     if (!verifyInput()) {
@@ -194,11 +205,6 @@ const profile = () => {
     setIsLoading(false);
   }, [userInfo]);
 
-  const refreshUserInfoHandle = () => {
-    setIsLoading(true);
-    refreshUserRecord({ info: true });
-  };
-
   if (!form || !userCredential) {
     return (
       <View className="flex-1 items-center justify-center rounded-xl mx-2 my-4 gap-4 bg-panel">
@@ -209,144 +215,74 @@ const profile = () => {
 
   return (
     <>
-      <View className="flex-1 px-2 py-4 gap-4 bg-background">
-        <View className=" justify-between items-center flex-row">
-          <Text className="font-black text-secondary text-3xl -mb-2">
-            PROFILE
-          </Text>
-          <CustomButton
-            handlePress={refreshUserInfoHandle}
-            containerStyles="bg-transparent"
-          >
-            <FontAwesome name="refresh" size={28} color={color.secondary} />
-          </CustomButton>
-        </View>
+      <View className="flex-1 py-4 gap-4 bg-background">
         <ScrollView
-          className="flex-1 bg-panel rounded-xl px-2 py-4"
+          className="flex-1 px-2 bg-background overflow-x-visible"
           contentContainerStyle={{
             alignItems: "flex-start",
             flexDirection: "column",
-            gap: 8,
+            gap: 16,
           }}
         >
           {/* Name Fields */}
-          <Text className="text-lg text-uBlack font-semibold">Name</Text>
-          <View className="w-full px-4 mx-2 gap-2 border-l border-secondary">
-            <TextBox
-              title="Last Name"
-              textValue={form.lastName!}
-              placeholder="Enter your last name"
-              handleChangeText={(e) => setForm({ ...form, lastName: e })}
-              containerStyles="w-full "
-              titleTextStyles="text-uGray text-base font-semibold"
-              textInputStyles="text-base text-uBlack"
-              boxStyles="w-full bg-white rounded-xl "
-            />
-            <TextBox
-              title="First Name"
-              textValue={form.firstName!}
-              placeholder="Enter your first name"
-              handleChangeText={(e) => setForm({ ...form, firstName: e })}
-              containerStyles="w-full "
-              titleTextStyles="text-uGray text-base font-semibold"
-              textInputStyles="text-base text-uBlack"
-              boxStyles="w-full bg-white rounded-xl "
-            />
-            <TextBox
-              title="Middle Name"
-              textValue={form.middleName!}
-              placeholder="Enter your middle name"
-              handleChangeText={(e) => setForm({ ...form, middleName: e })}
-              containerStyles="w-full "
-              titleTextStyles="text-uGray text-base font-semibold"
-              textInputStyles="text-base text-uBlack"
-              boxStyles="w-full bg-white rounded-xl "
-            />
+          <View className="w-full">
+            <PersonalInformation />
           </View>
-
           {/* Sex and Birthdate */}
-          <View className="w-full px-4 mx-2 gap-4 flex-row mt-2">
-            <View className="flex-1">
-              <Text className="text-lg text-uBlack font-semibold -mb-2">
-                Sex
-              </Text>
-              <SexPicker
-                value={form.sex!}
-                onChange={(e) => setForm({ ...form, sex: e })}
-                containerStyle="flex-1 border-b border-secondary h-10"
-              />
-            </View>
-            <View className="flex-1">
-              <Text className="text-lg text-uBlack font-semibold -mb-2">
-                Birthdate
-              </Text>
-              <BirthDatePicker
-                value={form.birthdate}
-                onChange={(e) => setForm({ ...form, birthdate: e })}
-                containerStyle="flex-1 border-b border-secondary h-10"
-              />
-            </View>
-          </View>
-
-          <View className="w-full px-4 mx-2 gap-4 flex-row mt-2">
-            <View className="w-1/2">
-              <Text className="text-lg text-uBlack font-semibold ">
-                Civil Status
-              </Text>
-
-              <CivilStatusPicker
-                value={form.civil_status!}
-                onChange={(e) => setForm({ ...form, civil_status: e })}
-                containerStyle="flex-1 border-b border-secondary h-10"
-              />
-            </View>
-          </View>
-
-          {/* Address Fields */}
-          <Text className="text-lg text-uBlack font-semibold mt-4">
-            Contact Information
-          </Text>
-          <View className="w-full px-4 mx-2 gap-2 border-l border-secondary">
-            <Text className="text-base text-uGray font-semibold -mb-1">
-              Complete Address
+          <View className=" w-full px-4 py-4 rounded-xl bg-background shadow-lg shadow-black">
+            <Text className="text-xl text-uBlack font-black my-2">
+              II. PERSONAL DETAILS
             </Text>
-            <ParagraphBox
-              value={form.address!}
-              placeholder="112 Magsaysay st. San Pablo, Castillejos, Zambales"
-              handleChangeText={(e) =>
-                setForm({ ...form, address: e.toUpperCase() })
-              }
-              containerStyles="bg-white rounded-lg h-20 "
-            />
-            <TextBox
-              textValue={form.zipCode!}
-              title="Zip Code"
-              placeholder="2208"
-              handleChangeText={(e) => setForm({ ...form, zipCode: e })}
-              titleTextStyles="text-uGray text-base font-semibold"
-              textInputStyles="text-base text-uBlack"
-              boxStyles="w-full bg-white rounded-xl "
-            />
-            <TextBox
-              textValue={form.contact_number!}
-              title="Contact Number"
-              placeholder="09123456789"
-              handleChangeText={(e) =>
-                setForm({ ...form, contact_number: e.toUpperCase() })
-              }
-              titleTextStyles="text-uGray text-base font-semibold"
-              textInputStyles="text-base text-uBlack"
-              boxStyles="w-full bg-white rounded-xl "
-            />
+          </View>
+
+          {/* Contact Fields */}
+          <View className=" w-full px-4 py-4 rounded-xl bg-background shadow-lg shadow-black">
+            <Text className="text-xl text-uBlack font-black my-2">
+              III. CONTACT INFORMATION
+            </Text>
+            <View className="w-full px-4 mx-2 gap-2">
+              <Text className="text-base text-uGray font-semibold -mb-1">
+                Complete Address
+              </Text>
+              <ParagraphBox
+                value={form.address!}
+                placeholder="112 Magsaysay st. San Pablo, Castillejos, Zambales"
+                handleChangeText={(e) =>
+                  setForm({ ...form, address: e.toUpperCase() })
+                }
+                containerStyles="bg-white rounded-lg h-20 "
+              />
+              <TextBox
+                textValue={form.zipCode!}
+                title="Zip Code"
+                placeholder="2208"
+                handleChangeText={(e) => setForm({ ...form, zipCode: e })}
+                titleTextStyles="text-uGray text-base font-semibold"
+                textInputStyles="text-base text-uBlack"
+                boxStyles="w-full bg-white rounded-xl "
+              />
+              <TextBox
+                textValue={form.contact_number!}
+                title="Contact Number"
+                placeholder="09123456789"
+                handleChangeText={(e) =>
+                  setForm({ ...form, contact_number: e.toUpperCase() })
+                }
+                titleTextStyles="text-uGray text-base font-semibold"
+                textInputStyles="text-base text-uBlack"
+                boxStyles="w-full bg-white rounded-xl "
+              />
+            </View>
           </View>
 
           {/* Role-Specific Fields */}
           {userCredential.role === "admin" && (
-            <>
-              <Text className="text-lg text-uBlack font-semibold mt-4">
-                Admin Information
+            <View className=" w-full px-4 py-4 rounded-xl bg-background shadow-lg shadow-black">
+              <Text className="text-xl text-uBlack font-black my-2">
+                IV. ADMIN INFORMATION
               </Text>
-              <View className="w-full px-4 mx-2 gap-2 border-l border-secondary">
+
+              <View className="w-full px-4 mx-2 gap-2">
                 <Text className="text-base text-uBlack font-semibold">
                   Department
                 </Text>
@@ -356,14 +292,14 @@ const profile = () => {
                   containerStyle="rounded-xl bg-white"
                 />
               </View>
-            </>
+            </View>
           )}
           {userCredential.role === "student" && (
-            <>
-              <Text className="text-lg text-uBlack font-semibold mt-4">
-                Student Information
+            <View className=" w-full px-4 py-4 rounded-xl bg-background shadow-lg shadow-black">
+              <Text className="text-xl text-uBlack font-black my-2">
+                IV. STUDENT INFORMATION
               </Text>
-              <View className="w-full px-4 mx-2 gap-2 border-l border-secondary">
+              <View className="w-full px-4 mx-2 gap-2">
                 <Text className="text-base text-uGray font-semibold -mb-1">
                   Department - Program
                 </Text>
@@ -381,14 +317,15 @@ const profile = () => {
                   containerStyle="rounded-xl bg-white"
                 />
               </View>
-            </>
+            </View>
           )}
           {userCredential.role === "alumni" && (
-            <>
-              <Text className="text-lg text-uBlack font-semibold mt-4">
-                Alumni Information
+            <View className=" w-full px-4 py-4 rounded-xl bg-background shadow-lg shadow-black">
+              <Text className="text-xl text-uBlack font-black my-2">
+                IV. ALUMNI INFORMATION
               </Text>
-              <View className="w-full px-4 mx-2 gap-2 border-l border-secondary">
+
+              <View className="w-full px-4 mx-2 gap-2">
                 <Text className="text-base text-uGray font-semibold -mb-1">
                   Year Graduated
                 </Text>
@@ -398,46 +335,19 @@ const profile = () => {
                   containerStyle="flex-1 border-b border-secondary h-10"
                 />
               </View>
-            </>
+            </View>
           )}
 
           {/* Credentials */}
-          <Text className="text-lg text-uBlack font-semibold mt-4">
-            Login Credentials
-          </Text>
-          <View className="w-full px-4 mx-2 gap-2 border-l border-secondary">
-            <TextBox
-              title="Role"
-              textValue={userCredential.role.toUpperCase()}
-              placeholder="Unset"
-              handleChangeText={() => {}}
-              containerStyles="w-full "
-              titleTextStyles="text-uGray text-base font-semibold"
-              textInputStyles="text-base text-uBlack"
-              boxStyles="w-full bg-white rounded-xl "
-              isDisabled
-            />
-            <TextBox
-              title="Email"
-              textValue={userCredential.email}
-              placeholder="Unset"
-              handleChangeText={() => {}}
-              isDisabled
-              containerStyles="w-full "
-              titleTextStyles="text-uGray text-base font-semibold"
-              textInputStyles="text-base text-uBlack"
-              boxStyles="w-full bg-white rounded-xl "
-              isPassword
-            />
+          <View className=" w-full px-4 py-4 rounded-xl bg-background shadow-lg shadow-black mb-8">
+            <Text className="text-xl text-uBlack font-black my-2">
+              V. LOGIN CREDENTIALS
+            </Text>
 
-            {userCredential.role != "alumni" ? (
+            <View className="w-full px-4 mx-2 gap-2">
               <TextBox
-                title={
-                  userCredential.role === "admin"
-                    ? "Employee ID"
-                    : "Student Number"
-                }
-                textValue={userCredential.id}
+                title="Role"
+                textValue={userCredential.role.toUpperCase()}
                 placeholder="Unset"
                 handleChangeText={() => {}}
                 containerStyles="w-full "
@@ -445,21 +355,43 @@ const profile = () => {
                 textInputStyles="text-base text-uBlack"
                 boxStyles="w-full bg-white rounded-xl "
                 isDisabled
+              />
+              <TextBox
+                title="Email"
+                textValue={userCredential.email}
+                placeholder="Unset"
+                handleChangeText={() => {}}
+                isDisabled
+                containerStyles="w-full "
+                titleTextStyles="text-uGray text-base font-semibold"
+                textInputStyles="text-base text-uBlack"
+                boxStyles="w-full bg-white rounded-xl "
                 isPassword
               />
-            ) : null}
-          </View>
 
-          {/* Created At */}
-          <View className="w-11/12 self-center mt-8 mb-14 py-4 items-center justify-center rounded-xl bg-background">
-            <Text className="text-lg text-uBlack font-semibold">
-              Docustat member since:{" "}
-              {userInfo?.created_at.toISOString().slice(0, 10)}
-            </Text>
+              {userCredential.role != "alumni" ? (
+                <TextBox
+                  title={
+                    userCredential.role === "admin"
+                      ? "Employee ID"
+                      : "Student Number"
+                  }
+                  textValue={userCredential.id}
+                  placeholder="Unset"
+                  handleChangeText={() => {}}
+                  containerStyles="w-full "
+                  titleTextStyles="text-uGray text-base font-semibold"
+                  textInputStyles="text-base text-uBlack"
+                  boxStyles="w-full bg-white rounded-xl "
+                  isDisabled
+                  isPassword
+                />
+              ) : null}
+            </View>
           </View>
         </ScrollView>
 
-        <View className="flex-row gap-2 justify-end items-center">
+        <View className="flex-row gap-2 justify-end items-center mx-2">
           <CustomButton
             title="Save Changes"
             handlePress={saveHandle}

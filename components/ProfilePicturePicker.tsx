@@ -89,12 +89,26 @@ const ProfilePicturePicker = forwardRef(
           className={`bg-panel ${containerStyle}`}
         >
           <Image className={imageStyle} source={{ uri: imageSource }} />
-          <TouchableOpacity
-            className="absolute -top-2 -right-2 bg-primary rounded-lg overflow-hidden shadow shadow-black"
-            onPress={pickImagehandle}
-          >
-            <FontAwesome5 name="exchange-alt" size={24} color={color.uBlack} />
-          </TouchableOpacity>
+          <View className="absolute top-0 -right-3">
+            {!!newProfilePicture && (
+              <TouchableOpacity
+                className="w-8 h-8 justify-center items-center bg-gray-400 border-2 border-gray-400 rounded-lg overflow-hidden"
+                onPress={clearHandle}
+              >
+                <Ionicons name="close" size={24} color="black" />
+              </TouchableOpacity>
+            )}
+            <TouchableOpacity
+              className="w-8 h-8 justify-center items-center bg-primary rounded-lg overflow-hidden shadow shadow-black"
+              onPress={pickImagehandle}
+            >
+              <FontAwesome5
+                name="exchange-alt"
+                size={24}
+                color={color.uBlack}
+              />
+            </TouchableOpacity>
+          </View>
         </TouchableOpacity>
 
         {isImagePreviewVisible && (
@@ -126,15 +140,6 @@ const ProfilePicturePicker = forwardRef(
               </CustomButton>
             </View>
           </Modal>
-        )}
-
-        {!!newProfilePicture && (
-          <TouchableOpacity
-            className="absolute top-2 -right-2 bg-gray-400 border-2 border-gray-400 rounded-full overflow-hidden"
-            onPress={clearHandle}
-          >
-            <Ionicons name="close" size={24} color="black" />
-          </TouchableOpacity>
         )}
       </>
     );
