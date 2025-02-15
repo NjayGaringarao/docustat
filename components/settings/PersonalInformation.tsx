@@ -120,7 +120,7 @@ const PersonalInformation = () => {
   }, [form, newProfilePicture]);
 
   return (
-    <View>
+    <View className="w-full">
       <View className="w-full px-4 py-4 rounded-xl bg-background shadow-lg shadow-black mt-1">
         <Text className="text-xl text-uBlack font-black">
           I. PERSONAL INFORMATION

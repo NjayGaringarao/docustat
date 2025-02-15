@@ -14,7 +14,7 @@ export interface GlobalContextInterface {
   setUserCredential: Dispatch<SetStateAction<UserCredentialType>>;
   setUserRequestList: Dispatch<SetStateAction<RequestType[]>>;
   setUserNotificationList: Dispatch<SetStateAction<NotificationType.Info[]>>;
-  refreshUserRecord: (update: RefreshUserRecordType) => void;
+  refreshUserRecord: (update: RefreshUserRecordType) => Promise<void>;
   resetGlobalState: () => void;
   initializeGlobalState: () => Promise<void>;
   user: Models.User<Models.Preferences> | null;

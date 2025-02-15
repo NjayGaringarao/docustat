@@ -20,6 +20,7 @@ import { updateUserInfo } from "@/services/user";
 import ProfilePicturePicker from "@/components/ProfilePicturePicker";
 import { ImagePickerAsset } from "expo-image-picker";
 import PersonalInformation from "@/components/settings/PersonalInformation";
+import ContactInformation from "@/components/settings/ContactInformation";
 
 interface FormType {
   firstName?: string;
@@ -215,197 +216,137 @@ const profile = () => {
 
   return (
     <>
-      <View className="flex-1 py-4 gap-4 bg-background">
-        <ScrollView
-          className="flex-1 px-2 bg-background overflow-x-visible"
-          contentContainerStyle={{
-            alignItems: "flex-start",
-            flexDirection: "column",
-            gap: 16,
-          }}
-        >
-          {/* Name Fields */}
-          <View className="w-full">
-            <PersonalInformation />
-          </View>
-          {/* Sex and Birthdate */}
-          <View className=" w-full px-4 py-4 rounded-xl bg-background shadow-lg shadow-black">
-            <Text className="text-xl text-uBlack font-black my-2">
-              II. PERSONAL DETAILS
-            </Text>
-          </View>
+      <ScrollView
+        className="flex-1 px-2 py-4 bg-background"
+        contentContainerStyle={{
+          alignItems: "flex-start",
+          flexDirection: "column",
+          gap: 16,
+        }}
+      >
+        {/* Name Fields */}
 
-          {/* Contact Fields */}
+        <PersonalInformation />
+
+        {/* Contact Fields */}
+        <ContactInformation />
+
+        {/* Role-Specific Fields */}
+        {userCredential.role === "admin" && (
           <View className=" w-full px-4 py-4 rounded-xl bg-background shadow-lg shadow-black">
             <Text className="text-xl text-uBlack font-black my-2">
-              III. CONTACT INFORMATION
+              IV. ADMIN INFORMATION
+            </Text>
+
+            <View className="w-full px-4 mx-2 gap-2">
+              <Text className="text-base text-uBlack font-semibold">
+                Department
+              </Text>
+              <AdminDepPicker
+                value={form.department || ""}
+                onChange={(e) => setForm({ ...form, department: e })}
+                containerStyle="rounded-xl bg-white"
+              />
+            </View>
+          </View>
+        )}
+        {userCredential.role === "student" && (
+          <View className=" w-full px-4 py-4 rounded-xl bg-background shadow-lg shadow-black">
+            <Text className="text-xl text-uBlack font-black my-2">
+              IV. STUDENT INFORMATION
             </Text>
             <View className="w-full px-4 mx-2 gap-2">
               <Text className="text-base text-uGray font-semibold -mb-1">
-                Complete Address
+                Department - Program
               </Text>
-              <ParagraphBox
-                value={form.address!}
-                placeholder="112 Magsaysay st. San Pablo, Castillejos, Zambales"
-                handleChangeText={(e) =>
-                  setForm({ ...form, address: e.toUpperCase() })
-                }
-                containerStyles="bg-white rounded-lg h-20 "
+              <DeptProgPicker
+                value={form.dept_prog!}
+                onChange={(value) => setForm({ ...form, dept_prog: value })}
+                containerStyle="rounded-xl bg-white"
               />
-              <TextBox
-                textValue={form.zipCode!}
-                title="Zip Code"
-                placeholder="2208"
-                handleChangeText={(e) => setForm({ ...form, zipCode: e })}
-                titleTextStyles="text-uGray text-base font-semibold"
-                textInputStyles="text-base text-uBlack"
-                boxStyles="w-full bg-white rounded-xl "
-              />
-              <TextBox
-                textValue={form.contact_number!}
-                title="Contact Number"
-                placeholder="09123456789"
-                handleChangeText={(e) =>
-                  setForm({ ...form, contact_number: e.toUpperCase() })
-                }
-                titleTextStyles="text-uGray text-base font-semibold"
-                textInputStyles="text-base text-uBlack"
-                boxStyles="w-full bg-white rounded-xl "
+              <Text className="text-base text-uGray font-semibold -mb-1">
+                Year Level
+              </Text>
+              <YearLevelPicker
+                value={form.year_level!}
+                onChange={(value) => setForm({ ...form, year_level: value })}
+                containerStyle="rounded-xl bg-white"
               />
             </View>
           </View>
-
-          {/* Role-Specific Fields */}
-          {userCredential.role === "admin" && (
-            <View className=" w-full px-4 py-4 rounded-xl bg-background shadow-lg shadow-black">
-              <Text className="text-xl text-uBlack font-black my-2">
-                IV. ADMIN INFORMATION
-              </Text>
-
-              <View className="w-full px-4 mx-2 gap-2">
-                <Text className="text-base text-uBlack font-semibold">
-                  Department
-                </Text>
-                <AdminDepPicker
-                  value={form.department || ""}
-                  onChange={(e) => setForm({ ...form, department: e })}
-                  containerStyle="rounded-xl bg-white"
-                />
-              </View>
-            </View>
-          )}
-          {userCredential.role === "student" && (
-            <View className=" w-full px-4 py-4 rounded-xl bg-background shadow-lg shadow-black">
-              <Text className="text-xl text-uBlack font-black my-2">
-                IV. STUDENT INFORMATION
-              </Text>
-              <View className="w-full px-4 mx-2 gap-2">
-                <Text className="text-base text-uGray font-semibold -mb-1">
-                  Department - Program
-                </Text>
-                <DeptProgPicker
-                  value={form.dept_prog!}
-                  onChange={(value) => setForm({ ...form, dept_prog: value })}
-                  containerStyle="rounded-xl bg-white"
-                />
-                <Text className="text-base text-uGray font-semibold -mb-1">
-                  Year Level
-                </Text>
-                <YearLevelPicker
-                  value={form.year_level!}
-                  onChange={(value) => setForm({ ...form, year_level: value })}
-                  containerStyle="rounded-xl bg-white"
-                />
-              </View>
-            </View>
-          )}
-          {userCredential.role === "alumni" && (
-            <View className=" w-full px-4 py-4 rounded-xl bg-background shadow-lg shadow-black">
-              <Text className="text-xl text-uBlack font-black my-2">
-                IV. ALUMNI INFORMATION
-              </Text>
-
-              <View className="w-full px-4 mx-2 gap-2">
-                <Text className="text-base text-uGray font-semibold -mb-1">
-                  Year Graduated
-                </Text>
-                <YearPicker
-                  value={form.year_graduated}
-                  onChange={(e) => setForm({ ...form, birthdate: e })}
-                  containerStyle="flex-1 border-b border-secondary h-10"
-                />
-              </View>
-            </View>
-          )}
-
-          {/* Credentials */}
-          <View className=" w-full px-4 py-4 rounded-xl bg-background shadow-lg shadow-black mb-8">
+        )}
+        {userCredential.role === "alumni" && (
+          <View className=" w-full px-4 py-4 rounded-xl bg-background shadow-lg shadow-black">
             <Text className="text-xl text-uBlack font-black my-2">
-              V. LOGIN CREDENTIALS
+              IV. ALUMNI INFORMATION
             </Text>
 
             <View className="w-full px-4 mx-2 gap-2">
-              <TextBox
-                title="Role"
-                textValue={userCredential.role.toUpperCase()}
-                placeholder="Unset"
-                handleChangeText={() => {}}
-                containerStyles="w-full "
-                titleTextStyles="text-uGray text-base font-semibold"
-                textInputStyles="text-base text-uBlack"
-                boxStyles="w-full bg-white rounded-xl "
-                isDisabled
+              <Text className="text-base text-uGray font-semibold -mb-1">
+                Year Graduated
+              </Text>
+              <YearPicker
+                value={form.year_graduated}
+                onChange={(e) => setForm({ ...form, birthdate: e })}
+                containerStyle="flex-1 border-b border-secondary h-10"
               />
-              <TextBox
-                title="Email"
-                textValue={userCredential.email}
-                placeholder="Unset"
-                handleChangeText={() => {}}
-                isDisabled
-                containerStyles="w-full "
-                titleTextStyles="text-uGray text-base font-semibold"
-                textInputStyles="text-base text-uBlack"
-                boxStyles="w-full bg-white rounded-xl "
-                isPassword
-              />
-
-              {userCredential.role != "alumni" ? (
-                <TextBox
-                  title={
-                    userCredential.role === "admin"
-                      ? "Employee ID"
-                      : "Student Number"
-                  }
-                  textValue={userCredential.id}
-                  placeholder="Unset"
-                  handleChangeText={() => {}}
-                  containerStyles="w-full "
-                  titleTextStyles="text-uGray text-base font-semibold"
-                  textInputStyles="text-base text-uBlack"
-                  boxStyles="w-full bg-white rounded-xl "
-                  isDisabled
-                  isPassword
-                />
-              ) : null}
             </View>
           </View>
-        </ScrollView>
+        )}
 
-        <View className="flex-row gap-2 justify-end items-center mx-2">
-          <CustomButton
-            title="Save Changes"
-            handlePress={saveHandle}
-            containerStyles="flex-1 bg-secondary"
-            isLoading={isLoading}
-          />
-          <CustomButton
-            title="Reset"
-            textStyles="text-secondary"
-            handlePress={resetHandle}
-            containerStyles="w-24 border-secondary border bg-transparent"
-          />
+        {/* Credentials */}
+        <View className=" w-full px-4 py-4 rounded-xl bg-background shadow-lg shadow-black mb-8">
+          <Text className="text-xl text-uBlack font-black my-2">
+            V. LOGIN CREDENTIALS
+          </Text>
+
+          <View className="w-full px-4 mx-2 gap-2">
+            <TextBox
+              title="Role"
+              textValue={userCredential.role.toUpperCase()}
+              placeholder="Unset"
+              handleChangeText={() => {}}
+              containerStyles="w-full "
+              titleTextStyles="text-uGray text-base font-semibold"
+              textInputStyles="text-base text-uBlack"
+              boxStyles="w-full bg-white rounded-xl "
+              isDisabled
+            />
+            <TextBox
+              title="Email"
+              textValue={userCredential.email}
+              placeholder="Unset"
+              handleChangeText={() => {}}
+              isDisabled
+              containerStyles="w-full "
+              titleTextStyles="text-uGray text-base font-semibold"
+              textInputStyles="text-base text-uBlack"
+              boxStyles="w-full bg-white rounded-xl "
+              isPassword
+            />
+
+            {userCredential.role != "alumni" ? (
+              <TextBox
+                title={
+                  userCredential.role === "admin"
+                    ? "Employee ID"
+                    : "Student Number"
+                }
+                textValue={userCredential.id}
+                placeholder="Unset"
+                handleChangeText={() => {}}
+                containerStyles="w-full "
+                titleTextStyles="text-uGray text-base font-semibold"
+                textInputStyles="text-base text-uBlack"
+                boxStyles="w-full bg-white rounded-xl "
+                isDisabled
+                isPassword
+              />
+            ) : null}
+          </View>
         </View>
-      </View>
+      </ScrollView>
+
       {!!isLoading && (
         <View className="absolute w-full h-full items-center justify-center">
           <View className="absolute w-full h-full bg-white opacity-95" />

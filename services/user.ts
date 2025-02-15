@@ -175,10 +175,10 @@ export const updateUserInformation = async (
         user_id,
         {
           name: [form.firstName, form.middleName, form.lastName],
-          birthdate : form.birthdate,
-          civil_status : form.civil_status,
+          birthdate: form.birthdate,
+          civil_status: form.civil_status,
           sex: form.sex,
-          picture_id : pictureFile.$id
+          picture_id: pictureFile.$id,
         }
       );
 
@@ -194,16 +194,38 @@ export const updateUserInformation = async (
         user_id,
         {
           name: [form.firstName, form.middleName, form.lastName],
-          birthdate : form.birthdate,
-          civil_status : form.civil_status,
+          birthdate: form.birthdate,
+          civil_status: form.civil_status,
           sex: form.sex,
         }
       );
     }
   } catch (error) {
-    console.log(`ERROR : (user.updateUserInformation) :: ${error}`);
+    console.log(`user.updateUserInformation : ${error}`);
 
     await _deleteFile(env.BUCKET_IMAGE, pictureFile?.$id!).catch();
+    throw error;
+  }
+};
+
+export const updateContactInformation = async (
+  user_id: string,
+  address: [string?, string?],
+  contact_number?: string
+) => {
+  try {
+    const result = await _updateDocument(
+      env.DATABASE_PRIMARY,
+      env.COLLECTION_USER,
+      user_id,
+      {
+        address: address,
+        contact_number: contact_number,
+      }
+    );
+    return result;
+  } catch (error) {
+    console.log(`user.updateContactInformation : ${error}`);
     throw error;
   }
 };
