@@ -16,7 +16,7 @@ interface IForm {
   contact_number?: string;
 }
 
-const ContactInformation = () => {
+const Contact = () => {
   const { userInfo, isInternetConnection, refreshUserRecord } =
     useGlobalContext();
   const [form, setForm] = useState<IForm>();
@@ -155,4 +155,4 @@ const ContactInformation = () => {
   );
 };
 
-export default ContactInformation;
+export default Contact;

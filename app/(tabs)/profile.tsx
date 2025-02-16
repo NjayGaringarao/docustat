@@ -1,11 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { View, Text, ScrollView } from "react-native";
 import TextBox from "@/components/TextBox";
-import CustomButton from "@/components/CustomButton";
-import SexPicker from "@/components/profile/SexPicker";
-import BirthDatePicker from "@/components/profile/BirthDatePicker";
-import CivilStatusPicker from "@/components/profile/CivilStatusPicker";
-import ParagraphBox from "@/components/ParagraphBox";
 import YearLevelPicker from "@/components/signup/YearLevelPicker";
 import DeptProgPicker from "@/components/signup/DepProgPicker";
 import YearPicker from "@/components/profile/YearPicker";
@@ -14,13 +9,11 @@ import { confirmAction } from "@/lib/commonUtil";
 import Loading from "@/components/Loading";
 import { color } from "@/constants/color";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Toast from "react-native-toast-message";
 import { updateUserInfo } from "@/services/user";
-import ProfilePicturePicker from "@/components/ProfilePicturePicker";
 import { ImagePickerAsset } from "expo-image-picker";
-import PersonalInformation from "@/components/settings/PersonalInformation";
-import ContactInformation from "@/components/settings/ContactInformation";
+import Personal from "@/components/settings/Personal";
+import Contact from "@/components/settings/Contact";
 
 interface FormType {
   firstName?: string;
@@ -226,10 +219,10 @@ const profile = () => {
       >
         {/* Name Fields */}
 
-        <PersonalInformation />
+        <Personal />
 
         {/* Contact Fields */}
-        <ContactInformation />
+        <Contact />
 
         {/* Role-Specific Fields */}
         {userCredential.role === "admin" && (

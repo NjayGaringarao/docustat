@@ -1,6 +1,5 @@
 import { View, Text } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
-import { UserType } from "@/constants/models";
 import ProfilePicturePicker from "../ProfilePicturePicker";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { ImagePickerAsset } from "expo-image-picker";
@@ -24,7 +23,7 @@ interface IForm {
   civil_status?: string;
 }
 
-const PersonalInformation = () => {
+const Personal = () => {
   const { userInfo, refreshUserRecord, isInternetConnection } =
     useGlobalContext();
   const [isModified, setIsModified] = useState(false);
@@ -240,4 +239,4 @@ const PersonalInformation = () => {
   );
 };
 
-export default PersonalInformation;
+export default Personal;
