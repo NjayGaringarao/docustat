@@ -81,7 +81,7 @@ const DeleteAccount = () => {
           <CustomButton
             title="Delete Account"
             handlePress={DeleteAccountHandle}
-            containerStyles="bg-failed w-48 self-end"
+            containerStyles="bg-failed w-48 self-end bg-red-600"
             isLoading={
               !isInternetConnection || isLoading || password.length < 8
             }

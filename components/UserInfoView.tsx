@@ -112,14 +112,20 @@ const UserInfoView = ({
                 <Text className="w-1/2 pl-2">CURRENT ADDRESS</Text>
                 <Text className="flex-1">
                   {":\t".concat(
-                    `${userInfo.address[0]!} ${userInfo.address[1]!}`
+                    `${userInfo.address[0] ? userInfo.address[0] : "---"} ${
+                      userInfo.address[1] ? userInfo.address[1] : "---"
+                    }`
                   )}
                 </Text>
               </View>
               <View className="flex-row mt-1">
                 <Text className="w-1/2 pl-2">CONTACT NUMBER</Text>
                 <Text className="flex-1">
-                  {":\t".concat(`${userInfo.contact_number?.trim()}`)}
+                  {":\t".concat(
+                    `${
+                      userInfo.contact_number ? userInfo.contact_number : "---"
+                    }`
+                  )}
                 </Text>
               </View>
             </View>
