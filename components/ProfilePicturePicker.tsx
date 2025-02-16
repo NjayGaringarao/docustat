@@ -90,6 +90,7 @@ const ProfilePicturePicker = forwardRef(
         >
           <Image className={imageStyle} source={{ uri: imageSource }} />
           <View className="absolute top-0 -right-3">
+            {/** Floating Button */}
             {!!newProfilePicture && (
               <TouchableOpacity
                 className="w-8 h-8 justify-center items-center bg-gray-400 border-2 border-gray-400 rounded-lg overflow-hidden"
@@ -136,7 +137,7 @@ const ProfilePicturePicker = forwardRef(
                 handlePress={() => setIsImagePreviewVisible(false)}
                 containerStyles="absolute top-5 left-0 bg-transparent"
               >
-                <Ionicons name="arrow-back-sharp" size={24} color="black" />
+                <Ionicons name="arrow-back-sharp" size={24} color="white" />
               </CustomButton>
             </View>
           </Modal>
