@@ -4,6 +4,7 @@ import Personal from "@/components/settings/Personal";
 import Contact from "@/components/settings/Contact";
 import Role from "@/components/settings/Role";
 import LoginCredentials from "@/components/settings/LoginCredentials";
+import DeleteAccount from "@/components/settings/DeleteAccount";
 
 const profile = () => {
   return (
@@ -22,8 +23,9 @@ const profile = () => {
 
         <Role />
 
+        <LoginCredentials />
         <View className="w-full mb-8">
-          <LoginCredentials />
+          <DeleteAccount />
         </View>
       </ScrollView>
     </>

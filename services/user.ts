@@ -1,6 +1,7 @@
 import { UserCredentialType, UserType } from "@/constants/models";
 import {
   _deleteFile,
+  _executeFunction,
   _getDocument,
   _listDocuments,
   _updateDocument,
@@ -269,5 +270,28 @@ export const updateStudentInformation = async (
   } catch (error) {
     console.log(`user.updateStudentInformation : ${error}`);
     throw error;
+  }
+};
+
+export const deleteAccount = async (param: {
+  user_id: string;
+  password: string;
+}) => {
+  try {
+    const result = await _executeFunction(
+      env.FUNCTION_ACCOUNT,
+      "deleteUserAccount",
+      param
+    );
+
+    if (result.responseStatusCode != 200) {
+      throw Error("a");
+    }
+  } catch (error) {
+    if (error == "Error: a") {
+      throw Error("Incorrect password.");
+    } else {
+      console.log("user.deleteAccount : ", error);
+    }
   }
 };
