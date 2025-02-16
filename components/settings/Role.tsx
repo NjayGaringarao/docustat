@@ -110,7 +110,7 @@ const Role = () => {
         {userCredential.role === "admin" && (
           <>
             <Text className="text-xl text-uBlack font-black my-2">
-              IV. ADMIN INFORMATION
+              III. ADMIN INFORMATION
             </Text>
 
             <View className="w-full px-4 mx-2 gap-2">
@@ -128,7 +128,7 @@ const Role = () => {
         {userCredential.role === "student" && (
           <>
             <Text className="text-xl text-uBlack font-black my-2">
-              IV. STUDENT INFORMATION
+              III. STUDENT INFORMATION
             </Text>
             <View className="w-full px-4 mx-2 gap-2">
               <Text className="text-base text-uGray font-semibold -mb-1">

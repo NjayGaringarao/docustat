@@ -100,7 +100,7 @@ export const _createRecovery = async (
   }
 };
 
-export const _updatePassword = async (
+export const updatePassword = async (
   oldPassword: string,
   newPassword: string
 ) => {
@@ -111,7 +111,16 @@ export const _updatePassword = async (
     );
   } catch (error) {
     console.log(`appwrite._updatePassword : ${error}`);
-    throw error;
+    if (
+      error ==
+        "AppwriteException: Invalid `oldPassword` param: Password must be between 8 and 256 characters long." ||
+      error ==
+        "AppwriteException: Invalid credentials. Please check the email and password."
+    ) {
+      throw Error("Incorrect old password.");
+    } else {
+      throw Error("There was a problem updating your password");
+    }
   }
 };
 
@@ -164,7 +173,10 @@ export const listSession = async () => {
   }
 };
 
-export const createPushTarget = async (session_id: string, fcmToken: string) => {
+export const createPushTarget = async (
+  session_id: string,
+  fcmToken: string
+) => {
   try {
     const target = await appwriteService.account.createPushTarget(
       session_id,
@@ -357,8 +369,8 @@ export const _updateFile = async (
       data.permissions
     );
   } catch (error) {
-   console.log(`appwrite._updateFile : ${error}`);
-   throw error;
+    console.log(`appwrite._updateFile : ${error}`);
+    throw error;
   }
 };
 

@@ -65,7 +65,7 @@ const FormField: React.FC<TextBoxProps> = ({
           />
         </View>
         {!!isDisabled && (
-          <View className="absolute w-full h-full bg-panel opacity-50" />
+          <View className="absolute w-full h-full bg-secondary opacity-10 rounded-xl" />
         )}
         {isPassword && (
           <TouchableOpacity
