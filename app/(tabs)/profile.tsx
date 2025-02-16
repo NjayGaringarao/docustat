@@ -14,6 +14,7 @@ import { updateUserInfo } from "@/services/user";
 import { ImagePickerAsset } from "expo-image-picker";
 import Personal from "@/components/settings/Personal";
 import Contact from "@/components/settings/Contact";
+import Role from "@/components/settings/Role";
 
 interface FormType {
   firstName?: string;
@@ -217,75 +218,11 @@ const profile = () => {
           gap: 16,
         }}
       >
-        {/* Name Fields */}
-
         <Personal />
 
-        {/* Contact Fields */}
         <Contact />
 
-        {/* Role-Specific Fields */}
-        {userCredential.role === "admin" && (
-          <View className=" w-full px-4 py-4 rounded-xl bg-background shadow-lg shadow-black">
-            <Text className="text-xl text-uBlack font-black my-2">
-              IV. ADMIN INFORMATION
-            </Text>
-
-            <View className="w-full px-4 mx-2 gap-2">
-              <Text className="text-base text-uBlack font-semibold">
-                Department
-              </Text>
-              <AdminDepPicker
-                value={form.department || ""}
-                onChange={(e) => setForm({ ...form, department: e })}
-                containerStyle="rounded-xl bg-white"
-              />
-            </View>
-          </View>
-        )}
-        {userCredential.role === "student" && (
-          <View className=" w-full px-4 py-4 rounded-xl bg-background shadow-lg shadow-black">
-            <Text className="text-xl text-uBlack font-black my-2">
-              IV. STUDENT INFORMATION
-            </Text>
-            <View className="w-full px-4 mx-2 gap-2">
-              <Text className="text-base text-uGray font-semibold -mb-1">
-                Department - Program
-              </Text>
-              <DeptProgPicker
-                value={form.dept_prog!}
-                onChange={(value) => setForm({ ...form, dept_prog: value })}
-                containerStyle="rounded-xl bg-white"
-              />
-              <Text className="text-base text-uGray font-semibold -mb-1">
-                Year Level
-              </Text>
-              <YearLevelPicker
-                value={form.year_level!}
-                onChange={(value) => setForm({ ...form, year_level: value })}
-                containerStyle="rounded-xl bg-white"
-              />
-            </View>
-          </View>
-        )}
-        {userCredential.role === "alumni" && (
-          <View className=" w-full px-4 py-4 rounded-xl bg-background shadow-lg shadow-black">
-            <Text className="text-xl text-uBlack font-black my-2">
-              IV. ALUMNI INFORMATION
-            </Text>
-
-            <View className="w-full px-4 mx-2 gap-2">
-              <Text className="text-base text-uGray font-semibold -mb-1">
-                Year Graduated
-              </Text>
-              <YearPicker
-                value={form.year_graduated}
-                onChange={(e) => setForm({ ...form, birthdate: e })}
-                containerStyle="flex-1 border-b border-secondary h-10"
-              />
-            </View>
-          </View>
-        )}
+        <Role />
 
         {/* Credentials */}
         <View className=" w-full px-4 py-4 rounded-xl bg-background shadow-lg shadow-black mb-8">

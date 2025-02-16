@@ -229,3 +229,45 @@ export const updateContactInformation = async (
     throw error;
   }
 };
+
+export const updateAdminInformation = async (
+  user_id: string,
+  department: string
+) => {
+  try {
+    const result = await _updateDocument(
+      env.DATABASE_PRIMARY,
+      env.COLLECTION_ADMIN_INFO,
+      user_id,
+      {
+        department: department,
+      }
+    );
+    return result;
+  } catch (error) {
+    console.log(`user.updateAdminInformation : ${error}`);
+    throw error;
+  }
+};
+
+export const updateStudentInformation = async (
+  user_id: string,
+  dept_prog: string,
+  year_level: string
+) => {
+  try {
+    const result = await _updateDocument(
+      env.DATABASE_PRIMARY,
+      env.COLLECTION_STUDENT_INFO,
+      user_id,
+      {
+        dept_prog: dept_prog,
+        year_level: year_level,
+      }
+    );
+    return result;
+  } catch (error) {
+    console.log(`user.updateStudentInformation : ${error}`);
+    throw error;
+  }
+};
