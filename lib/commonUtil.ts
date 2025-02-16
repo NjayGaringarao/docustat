@@ -1,4 +1,5 @@
 import { Alert } from "react-native";
+import { MD5 } from "crypto-es/lib/md5";
 
 export const confirmAction = (title: string, message: string) => {
   return new Promise((resolve) => {
@@ -107,7 +108,6 @@ export const sortByDate = <T extends HasCreatedAt>(
   }
 };
 
-
 type HasUpdatedAt = {
   updated_at: Date;
 };
@@ -128,7 +128,7 @@ export const sortByUpdatedAt = <T extends HasUpdatedAt>(
     console.log(`ERROR (sortByUpdatedAt) :: ${error}`);
     throw error;
   }
-}
+};
 
 export const convertToBase64 = async (uri: string) => {
   try {
@@ -219,4 +219,8 @@ export const getHTMLImageRender = (
     </html>
   `;
   }
+};
+
+export const hashId = (id: string) => {
+  return MD5(id).toString();
 };

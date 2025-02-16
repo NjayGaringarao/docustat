@@ -1,4 +1,5 @@
 import { env } from "@/constants/env";
+import { hashId } from "@/lib/commonUtil";
 import {
   ID,
   Account,
@@ -124,7 +125,7 @@ export const updatePassword = async (
   }
 };
 
-export const signOutUser = async (session_id?: string) => {
+export const _signOutUser = async (session_id?: string) => {
   try {
     if (session_id) {
       return await appwriteService.account.deleteSession(session_id);
@@ -179,7 +180,7 @@ export const createPushTarget = async (
 ) => {
   try {
     const target = await appwriteService.account.createPushTarget(
-      session_id,
+      hashId(session_id),
       fcmToken
     );
     return target;
@@ -188,9 +189,9 @@ export const createPushTarget = async (
   }
 };
 
-export const deletePushTarget = async (targetId: string) => {
+export const deletePushTarget = async (session_id: string) => {
   try {
-    return appwriteService.account.deletePushTarget(targetId);
+    return appwriteService.account.deletePushTarget(hashId(session_id));
   } catch (error) {
     console.log(`appwrite.deletePushTarget : ${error}`);
     throw error;

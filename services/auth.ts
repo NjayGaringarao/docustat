@@ -1,5 +1,12 @@
 import { env } from "@/constants/env";
-import { _executeFunction, _getDocument, signInUser } from "./appwrite";
+import {
+  _executeFunction,
+  _getDocument,
+  _signOutUser,
+  deletePushTarget,
+  getSession,
+  signInUser,
+} from "./appwrite";
 
 interface ICreateStudentAccount {
   student_id: string;
@@ -134,6 +141,21 @@ export const adminSignIn = async (admin_id: string, password: string) => {
       console.log("auth.studentSignIn : ", error);
       throw Error("There was a problem signing in to your account.");
     }
+  }
+};
+
+export const signOutUser = async () => {
+  try {
+    const session = await getSession();
+    await deletePushTarget(session.$id);
+  } catch (error) {
+    console.log("auth.signOutUser : ", error);
+  }
+  try {
+    await _signOutUser();
+  } catch (error) {
+    console.log("auth.signOutUser : ", error);
+    throw Error("There is a problem logging out your account.");
   }
 };
 
