@@ -46,7 +46,9 @@ const UserInfoView = ({
           onPress={() => setIsOpen((value) => !value)}
           activeOpacity={0.8}
         >
-          <Text className="text-base text-primary">View Details</Text>
+          <Text className="text-lg font-semibold  text-primary">
+            View Details
+          </Text>
           <Ionicons
             name={isOpen ? "chevron-up" : "chevron-down"}
             size={18}
@@ -64,7 +66,7 @@ const UserInfoView = ({
                 <Text className="flex-1">{userInfo.name[2]!}</Text>
               </View>
               <View className="flex-row gap-2 items-start justify-start text-sm pl-4">
-                <Text>{"FIRST NAME\t\t\t:"}</Text>
+                <Text>{"FIRST NAME\t\t\t\t:"}</Text>
                 <Text className="flex-1">{userInfo.name[0]!}</Text>
               </View>
               <View className="flex-row gap-2 items-start justify-start text-sm pl-4">
@@ -82,7 +84,7 @@ const UserInfoView = ({
                 </Text>
               </View>
               <View className="flex-row gap-2 items-start justify-start text-sm pl-4 mt-2">
-                <Text>{"SEX\t\t\t\t\t\t\t\t\t\t\t:"}</Text>
+                <Text>{"SEX\t\t\t\t\t\t\t\t\t\t\t\t:"}</Text>
                 <Text className="flex-1">
                   {userInfo.sex ? userInfo.sex.toUpperCase() : "---"}
                 </Text>
