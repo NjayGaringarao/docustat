@@ -174,9 +174,9 @@ const newRequest = () => {
       <Text className="font-black text-secondary text-3xl -mb-2">
         NEW REQUEST
       </Text>
-      <View className="flex-1 rounded-xl overflow-hidden">
+      <View className="flex-1 rounded-xl overflow-hidden shadow-xl shadow-black">
         <ScrollView
-          className="flex-1 bg-panel px-2 py-4"
+          className="flex-1 bg-background px-2 py-4 "
           contentContainerStyle={{
             alignItems: "flex-start",
             flexDirection: "column",

@@ -86,7 +86,7 @@ const TransactionTabBar = ({
               activeTab === "processing" ? "bg-secondary" : "bg-uGrayLight"
             } items-center justify center rounded-full`}
           >
-            <Text className="text-base font-black text-uBlack">
+            <Text className="text-base font-black text-background">
               {itemCount.processing > 99 ? "99+" : itemCount.processing}
             </Text>
           </View>
@@ -118,7 +118,7 @@ const TransactionTabBar = ({
               activeTab === "pickup" ? "bg-secondary" : "bg-uGrayLight"
             } items-center justify center rounded-full`}
           >
-            <Text className="text-base font-black text-uBlack">
+            <Text className="text-base font-black text-background">
               {itemCount.pickup > 99 ? "99+" : itemCount.pickup}
             </Text>
           </View>
