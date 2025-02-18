@@ -1,9 +1,9 @@
 export const color = {
   primary: "#102542",
-  background: "#FBF5DD",
+  background: "#D5B59C",
   secondary: "#F87060",
   panel: "#928DAB",
-  uBlack: "#1f2937",
+  uBlack: "#454545",
   uGray: "#4b5563",
   uGrayLight: "#9ca3af",
   success: "#10B981",
