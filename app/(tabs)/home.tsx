@@ -47,7 +47,7 @@ const home = () => {
   return (
     <View className="flex-1 px-2 py-4 gap-4 bg-background">
       <Text className="font-black text-secondary text-3xl -mb-2">
-        TRANSACTION
+        Transaction
       </Text>
       <TransactionTabBar
         containerStyle="rounded-xl border-b"

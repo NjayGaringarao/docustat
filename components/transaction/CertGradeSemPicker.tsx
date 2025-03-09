@@ -21,7 +21,7 @@ const CertGradeSemPicker: React.FC<CertGradeSemPickerProps> = ({
         className="text-base"
         mode="dropdown"
       >
-        <Picker.Item label="" value="" />
+        <Picker.Item label="Select Semester" value="none" />
         <Picker.Item label="First" value="first" />
         <Picker.Item label="Second" value="second" />
         <Picker.Item label="Midyear" value="midyear" />

@@ -1,133 +1,108 @@
-import { View, Text, ScrollView, Alert } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  FlatList,
+} from "react-native";
 import React, { useState } from "react";
 import TextBox from "@/components/TextBox";
+import { color } from "@/constants/color";
+import { useGlobalContext } from "@/context/GlobalProvider";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import DocumentPickerModal from "@/components/transaction/DocumentPickerModal";
+import {
+  COGType,
+  RequestDocumentType,
+  RequestLetterType,
+} from "@/constants/utils";
+import Entypo from "@expo/vector-icons/Entypo";
 import ParagraphBox from "@/components/ParagraphBox";
-import Checkbox from "expo-checkbox";
-import RequestLetterPicker from "@/components/transaction/RequestLetterPicker";
-import CertGradeSemPicker from "@/components/transaction/CertGradeSemPicker";
-import CertGradeAyPicker from "@/components/transaction/CertGradeAyPicker";
 import CustomButton from "@/components/CustomButton";
 import { confirmAction } from "@/lib/commonUtil";
-import { color } from "@/constants/color";
-import Toast from "react-native-toast-message";
 import { createUserRequest } from "@/services/request";
-import { useGlobalContext } from "@/context/GlobalProvider";
-import Loading from "@/components/Loading";
+import Toast from "react-native-toast-message";
 import { router } from "expo-router";
+import Loading from "@/components/Loading";
 
 const newRequest = () => {
   const { userInfo, refreshUserRecord } = useGlobalContext();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [stageDocument, setStageDocument] = useState<RequestDocumentType[]>([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [form, setForm] = useState({
-    academic_year: "",
-    semester: "",
     purpose: "",
     request_note: "",
-    others: "",
   });
 
-  const [checkbox, setCheckbox] = useState({
-    tor: false,
-    request_letter: false,
-    cert_grade: false,
-    cert_enrollment: false,
-    ctc_tor: false,
-    ctc_cor: false,
-    others: false,
-  });
+  const isCOGType = (doc: any): doc is COGType =>
+    doc && typeof doc === "object" && "sem" in doc && "ay" in doc;
 
-  const [request_letter, setRequest_letter] = useState("");
-  const [cert_grade, setCert_grade] = useState({
-    sem: "",
-    ay: "",
-  });
+  const isRequestLetterType = (doc: any): doc is RequestLetterType =>
+    doc && typeof doc === "object" && "document_type" in doc;
+
+  const addDocument = (document: RequestDocumentType) => {
+    setStageDocument([...stageDocument, document]);
+  };
+
+  const removeDocument = (index: number) => {
+    setStageDocument((prev) => prev.filter((_, i) => i !== index));
+  };
 
   const clearHandle = () => {
-    setForm({
-      academic_year: "",
-      semester: "",
-      purpose: "",
-      request_note: "",
-      others: "",
-    });
-    setCheckbox({
-      tor: false,
-      request_letter: false,
-      cert_grade: false,
-      cert_enrollment: false,
-      ctc_tor: false,
-      ctc_cor: false,
-      others: false,
-    });
-    setRequest_letter("");
-    setCert_grade({
-      sem: "",
-      ay: "",
-    });
+    setStageDocument([]);
+    setForm({ purpose: "", request_note: "" });
   };
 
   const verifyInput = () => {
-    if (Object.values(checkbox).every((value) => value === false)) {
+    if (stageDocument.length === 0) {
       Toast.show({
         type: "error",
-        text1: "No Document",
-        text2: "Please select atleast one document to be requested.",
+        text1: "No Document Added",
+        text2: "Please add at least one document.",
       });
-    } else if (checkbox.request_letter && !request_letter.length) {
-      Toast.show({
-        type: "error",
-        text1: "Missing Field",
-        text2: "Please specify the document for\n'Request Letter'",
-      });
-
       return false;
-    } else if (
-      checkbox.cert_grade &&
-      (!cert_grade.sem.length || !cert_grade.ay.length)
-    ) {
-      Toast.show({
-        type: "error",
-        text1: "Missing Field",
-        text2:
-          "Please specify both Semester and Academic Year (A.Y.) for\n'Grade/Units Earned'",
-      });
-
-      return false;
-    } else if (!form.purpose.length) {
-      Toast.show({
-        type: "error",
-        text1: "Missing Field",
-        text2: "Please specify the 'Purpose'",
-      });
-    } else {
-      return true;
     }
+    if (form.purpose === "") {
+      Toast.show({
+        type: "error",
+        text1: "Purpose is Empty",
+        text2: "Please input the purpose of your request.",
+      });
+      return false;
+    }
+
+    return true;
   };
 
   const composeDocumentList = () => {
-    const documents: string[] = [];
+    const documentList: string[] = [];
 
-    if (checkbox.tor) documents.push("Official Transcript of Records");
+    stageDocument.forEach((document) => {
+      if (isRequestLetterType(document.document)) {
+        documentList.push(
+          `Request Letter for ${document.document.document_type} (${
+            document.copy
+          } ${document.copy > 1 ? "copies" : "copy"})`
+        );
+      }
+      if (isCOGType(document.document)) {
+        documentList.push(
+          `Certificate of Grade/Unit Earned for ${document.document.sem.toUpperCase()} Sem, A.Y.${
+            document.document.ay
+          } (${document.copy} ${document.copy > 1 ? "copies" : "copy"})`
+        );
+      }
+      if (typeof document.document === "string") {
+        documentList.push(
+          `${document.document} (${document.copy} ${
+            document.copy > 1 ? "copies" : "copy"
+          })`
+        );
+      }
+    });
 
-    if (checkbox.request_letter)
-      documents.push(`Request Letter for ${request_letter}`);
-
-    if (checkbox.cert_grade)
-      documents.push(
-        `Certificate of Grade/Units Earned\n[${cert_grade.sem.toUpperCase()} sem of A.Y. ${
-          cert_grade.ay
-        }]`
-      );
-
-    if (checkbox.cert_enrollment) documents.push(`Certificate of Enrollment`);
-
-    if (checkbox.ctc_tor)
-      documents.push(`CTC of Official Transcript of Records`);
-
-    if (checkbox.ctc_cor) documents.push(`CTC of Certificate of Registration`);
-
-    return documents;
+    return documentList;
   };
 
   const submitHandle = async () => {
@@ -142,18 +117,18 @@ const newRequest = () => {
       return;
 
     try {
-      setIsSubmitting(true);
-      const document = composeDocumentList();
+      setIsLoading(true);
+      const documentList = composeDocumentList();
       await createUserRequest(
         userInfo.id,
-        document,
+        documentList,
         form.purpose,
         form.request_note
       );
       clearHandle();
       Toast.show({
         type: "success",
-        text1: "Submit Succesful",
+        text1: "Submit Successful",
         text2: "Your Request is now pending. We will notify you for updates.",
       });
       refreshUserRecord({ requestList: true });
@@ -165,184 +140,182 @@ const newRequest = () => {
         text2: "There was an error submitting your request.",
       });
     } finally {
-      setIsSubmitting(false);
+      setIsLoading(false);
+    }
+  };
+
+  const renderDocument = (document: RequestDocumentType, index: number) => {
+    if (isCOGType(document.document)) {
+      return (
+        <View
+          key={index}
+          className="flex-row items-center justify-center bg-background gap-2 px-2 py-4 mb-2 rounded-lg shadow shadow-black"
+        >
+          <View className="w-10 justify-center items-center">
+            <Text className="text-lg text-uBlack">{document.copy}</Text>
+            <Text className="text-xs text-uBlack -mt-1">
+              {document.copy > 1 ? "Copies" : "Copy"}
+            </Text>
+          </View>
+          <View className="flex-1">
+            <Text className="text-lg text-uBlack font-semibold">
+              Certificate of Grade/Unit Earned
+            </Text>
+            <Text className="text-base -mt-1 font-light">
+              {`${document.document.sem.toUpperCase()} Sem, ${
+                document.document.ay
+              } A.Y.`}
+            </Text>
+          </View>
+          <TouchableOpacity onPress={() => removeDocument(index)}>
+            <Entypo name="cross" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
+      );
+    } else if (isRequestLetterType(document.document)) {
+      return (
+        <View
+          key={index}
+          className="flex-row items-center justify-center bg-background gap-2 px-2 py-4 mb-2 rounded-lg shadow shadow-black"
+        >
+          <View className="w-10 justify-center items-center">
+            <Text className="text-lg text-uBlack">{document.copy}</Text>
+            <Text className="text-xs text-uBlack -mt-1">
+              {document.copy > 1 ? "Copies" : "Copy"}
+            </Text>
+          </View>
+          <View className="flex-1">
+            <Text className="text-lg text-uBlack font-semibold">
+              Request Letter
+            </Text>
+            <Text className="text-base -mt-1 font-light">
+              {document.document.document_type}
+            </Text>
+          </View>
+          <TouchableOpacity onPress={() => removeDocument(index)}>
+            <Entypo name="cross" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
+      );
+    } else {
+      return (
+        <View
+          key={index}
+          className="flex-row items-center justify-center bg-background gap-2 px-2 py-4 mb-2 rounded-lg shadow shadow-black"
+        >
+          <View className="w-10 justify-center items-center">
+            <Text className="text-lg text-uBlack">{document.copy}</Text>
+            <Text className="text-xs text-uBlack -mt-1">
+              {document.copy > 1 ? "Copies" : "Copy"}
+            </Text>
+          </View>
+          <View className="flex-1">
+            <Text className="text-lg text-uBlack font-semibold">
+              {document.document}
+            </Text>
+          </View>
+          <TouchableOpacity onPress={() => removeDocument(index)}>
+            <Entypo name="cross" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
+      );
     }
   };
 
   return (
-    <View className="flex-1 px-2 py-4 gap-4 bg-background">
-      <Text className="font-black text-secondary text-3xl -mb-2">
-        NEW REQUEST
-      </Text>
-      <View className="flex-1 rounded-xl overflow-hidden shadow-xl shadow-black">
-        <ScrollView
-          className="flex-1 bg-background px-2 py-4 "
-          contentContainerStyle={{
-            alignItems: "flex-start",
-            flexDirection: "column",
-            gap: 8,
-          }}
-        >
-          <Text className="text-xl text-uBlack font-semibold">
-            Documents to be Requested (Please Check)
-          </Text>
-          <View className="px-4 mx-2 gap-2 border-l border-secondary">
-            <View className="flex-row items-center gap-2">
-              <Checkbox
-                value={checkbox.tor}
-                onValueChange={(e) => setCheckbox({ ...checkbox, tor: e })}
-                color={color.secondary}
-              />
-              <Text className="text-lg text-uBlack">
-                Official Transcript of Records
-              </Text>
-            </View>
-            <View className="flex-row items-center gap-2 w-full">
-              <Checkbox
-                value={checkbox.request_letter}
-                onValueChange={(e) =>
-                  setCheckbox({ ...checkbox, request_letter: e })
-                }
-                color={color.secondary}
-              />
-              <Text className="text-lg text-uBlack">Request Letter for</Text>
-              <RequestLetterPicker
-                value={request_letter}
-                onChange={setRequest_letter}
-                containerStyle="flex-1 border-b border-secondary"
-              />
-            </View>
-          </View>
-          <Text className="text-xl text-uBlack font-semibold">
-            Certifications
-          </Text>
-          <View className="px-4 mx-2 gap-2 border-l border-secondary w-full">
-            <View className="flex-row items-center gap-2">
-              <Checkbox
-                value={checkbox.cert_grade}
-                onValueChange={(e) =>
-                  setCheckbox({ ...checkbox, cert_grade: e })
-                }
-                color={color.secondary}
-              />
-              <Text className="text-lg text-uBlack">Grade/Units Earned</Text>
-            </View>
-            {checkbox.cert_grade ? (
-              <View className="items-center gap-2 w-10/12 self-end">
-                <View className="flex-row">
-                  <Text className="text-lg text-uBlack">{"Semester\t\t:"}</Text>
-                  <CertGradeSemPicker
-                    value={cert_grade.sem}
-                    onChange={(e) => setCert_grade({ ...cert_grade, sem: e })}
-                    containerStyle="flex-1 border-b border-secondary"
-                  />
-                </View>
-                <View className="flex-row">
-                  <Text className="text-lg text-uBlack">
-                    {"A.Y.\t\t\t\t\t\t\t\t:"}
-                  </Text>
-                  <CertGradeAyPicker
-                    value={cert_grade.ay}
-                    onChange={(e) => setCert_grade({ ...cert_grade, ay: e })}
-                    containerStyle="flex-1 border-b border-secondary"
-                  />
-                </View>
-              </View>
-            ) : null}
-
-            <View className="flex-row items-center gap-2">
-              <Checkbox
-                value={checkbox.cert_enrollment}
-                onValueChange={(e) =>
-                  setCheckbox({ ...checkbox, cert_enrollment: e })
-                }
-                color={color.secondary}
-              />
-              <Text className="text-lg text-uBlack">Enrollment</Text>
-            </View>
-          </View>
-          <Text className="text-xl text-uBlack font-semibold">
-            Certified True Copy of
-          </Text>
-          <View className="px-4 mx-2 gap-2 border-l border-secondary w-full">
-            <View className="flex-row items-center gap-2">
-              <Checkbox
-                value={checkbox.ctc_tor}
-                onValueChange={(e) => setCheckbox({ ...checkbox, ctc_tor: e })}
-                color={color.secondary}
-              />
-              <Text className="text-lg text-uBlack">
-                Official Transcript of Records
-              </Text>
-            </View>
-            <View className="flex-row items-center gap-2">
-              <Checkbox
-                value={checkbox.ctc_cor}
-                onValueChange={(e) => setCheckbox({ ...checkbox, ctc_cor: e })}
-                color={color.secondary}
-              />
-              <Text className="text-lg text-uBlack">
-                Certificate of Registration
-              </Text>
-            </View>
-          </View>
-          <Text className="text-xl text-uBlack font-semibold">Other</Text>
-          <View className="px-4 mx-2 gap-2 border-l border-secondary w-full">
-            <ParagraphBox
-              value={form.others}
-              placeholder="ex: Certificate of Participation"
-              handleChangeText={(e) => setForm({ ...form, others: e })}
-              containerStyles="bg-white rounded-xl h-24"
-            />
-          </View>
-          <Text className="text-xl text-uBlack font-semibold">Purpose</Text>
-          <View className="px-4 mx-2 gap-2 border-l border-secondary w-full">
-            <TextBox
-              textValue={form.purpose}
-              placeholder="ex: Scholarship Grant"
-              handleChangeText={(e) => setForm({ ...form, purpose: e })}
-              textInputStyles="text-base text-uBlack"
-              boxStyles="w-full bg-white rounded-xl "
-            />
-          </View>
-          <Text className="text-xl text-uBlack font-semibold">
-            Request Note
-          </Text>
-          <View className="px-4 mx-2 gap-2 border-l border-secondary w-full mb-8 max-h-40">
-            <ParagraphBox
-              value={form.request_note}
-              placeholder="ex: I need 2 copies of each document."
-              handleChangeText={(e) => setForm({ ...form, request_note: e })}
-              containerStyles="h-full bg-white rounded-lg max-h-40"
-            />
-          </View>
-        </ScrollView>
-        {!!isSubmitting && (
-          <View className="absolute w-full h-full items-center justify-center">
-            <View className="absolute w-full h-full bg-white opacity-90" />
-            <Loading
-              loadingPrompt="Submitting"
-              loadingColor={color.secondary}
-            />
-          </View>
-        )}
+    <View className="flex-1 bg-background">
+      <View className="flex-row justify-between items-center mx-2">
+        <Text className="font-black text-secondary text-3xl mt-4 mb-2">
+          Create Request
+        </Text>
       </View>
-
-      <View className="flex-row gap-2 justify-end items-center">
+      <ScrollView
+        className="flex-1 bg-background px-2 rounded-lg"
+        contentContainerStyle={{ gap: 12 }}
+      >
+        <View className="w-full px-4 py-2 bg-background rounded-lg shadow shadow-black">
+          <Text className="text-xl text-uBlack font-black mb-1">
+            I. Purpose
+          </Text>
+          <TextBox
+            textValue={form.purpose}
+            placeholder="ex : Scholarship"
+            handleChangeText={(e) => setForm({ ...form, purpose: e })}
+            titleTextStyles="text-uGray text-base font-semibold"
+            textInputStyles="text-base text-uBlack"
+            boxStyles="w-full bg-white rounded-xl"
+            containerStyles="pl-6 mb-2"
+          />
+        </View>
+        <View className="w-full px-4 py-2 bg-background rounded-lg shadow shadow-black">
+          <Text className="text-xl text-uBlack font-black mb-1">
+            II. Documents
+          </Text>
+          {/** Can not use Flatlist because it will cause an error:
+           *
+           *   (NOBRIDGE) ERROR  VirtualizedLists should never be nested
+           *   inside plain ScrollViews with the same orientation because
+           *   it can break windowing and other functionality - use
+           *   another VirtualizedList-backed container instead. [Component Stack]
+           */}
+          <View className="pl-6 pb-2">
+            {stageDocument.length > 0 ? (
+              stageDocument.map((item, index) => renderDocument(item, index))
+            ) : (
+              <View className="w-full h-20 my-2 border-uGray border border-dashed items-center justify-center">
+                <Text className="text-uGray text-lg font-semibold">
+                  No document added
+                </Text>
+              </View>
+            )}
+            <CustomButton
+              title="Add Document"
+              textStyles="text-uBlack text-xl font-semibold"
+              handlePress={() => setIsModalVisible(true)}
+            >
+              <MaterialIcons name="add-circle" size={24} color={color.uBlack} />
+            </CustomButton>
+          </View>
+        </View>
+        <View className="w-full px-4 py-2 bg-background rounded-lg shadow shadow-black">
+          <Text className="text-xl text-uBlack font-black mb-1">
+            III. Request Note
+          </Text>
+          <ParagraphBox
+            value={form.request_note}
+            placeholder="ex: I have an envelop."
+            handleChangeText={(e) => setForm({ ...form, request_note: e })}
+            containerStyles="bg-white rounded-lg h-28 max-h-40 mb-2 ml-6"
+          />
+        </View>
+      </ScrollView>
+      <View className="w-full p-2 flex-row justify-center items-center gap-2">
         <CustomButton
-          title="Submit"
+          title="Submit Request"
+          textStyles="text-white text-xl font-semibold"
           handlePress={submitHandle}
-          containerStyles="flex-1 bg-secondary"
-          isLoading={isSubmitting}
+          containerStyles="bg-secondary flex-1"
         />
         <CustomButton
           title="Clear"
-          textStyles="text-secondary"
+          textStyles="text-uBlack text-xl font-semibold"
           handlePress={clearHandle}
-          containerStyles="w-24 border-secondary border bg-transparent"
-          isLoading={isSubmitting}
+          containerStyles="bg-transparent w-24 border border-secondary"
         />
       </View>
+
+      <DocumentPickerModal
+        isVisible={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+        addDocument={addDocument}
+        stageDocument={stageDocument}
+      />
+      {!!isLoading && (
+        <View className="absolute w-full h-full items-center justify-center">
+          <View className="absolute w-full h-full bg-white opacity-90" />
+          <Loading loadingPrompt="Submitting" loadingColor={color.secondary} />
+        </View>
+      )}
     </View>
   );
 };

@@ -124,7 +124,7 @@ const Notification = () => {
     <View className="flex-1 bg-background">
       <View className="flex-row justify-between items-center mx-2">
         <Text className="font-black text-secondary text-3xl mt-4 mb-2">
-          NOTIFICATION
+          Notification
         </Text>
         <CustomButton
           handlePress={onRefreshHandle}

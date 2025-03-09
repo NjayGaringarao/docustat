@@ -21,13 +21,10 @@ const RequestLetterPicker: React.FC<RequestLetterPickerProps> = ({
         className="text-base"
         mode="dropdown"
       >
-        <Picker.Item label="" value="" />
+        <Picker.Item label="Select Document" value="none" />
         <Picker.Item label="TOR" value="TOR" />
         <Picker.Item label="Form 137" value="Form 137" />
-        <Picker.Item
-          label="other (please specify on the request note)"
-          value="other"
-        />
+        <Picker.Item label="other (please specify)" value="other" />
       </Picker>
     </View>
   );
