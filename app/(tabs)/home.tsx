@@ -9,6 +9,8 @@ import Loading from "@/components/Loading";
 import { color } from "@/constants/color";
 import { sortByDate } from "@/lib/commonUtil";
 import { useGlobalContext } from "@/context/GlobalProvider";
+import PickupItem from "@/components/admin/requestItem/PickupItem";
+import { router } from "expo-router";
 
 const home = () => {
   const { userRequestList, refreshUserRecord } = useGlobalContext();
@@ -83,7 +85,12 @@ const home = () => {
         ) : activeTab === "pickup" && !isRefreshing ? (
           <FlatList
             data={pickupList}
-            renderItem={({ item }) => <RequestItem request={item} />}
+            renderItem={({ item }) => (
+              <PickupItem
+                request={item}
+                onPress={() => router.push(`/viewRequest/${item.id}`)}
+              />
+            )}
             ListEmptyComponent={() => (
               <EmptyRequestListItem message="You don't have a document that is ready to pickup." />
             )}

@@ -34,6 +34,7 @@ export interface RequestType {
   request_note: string;
   user_id: string;
   status: string;
+  price: string;
   remarks: string;
   isSuccessful: boolean;
   updated_at: Date;

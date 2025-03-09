@@ -1,5 +1,12 @@
 import { RequestType } from "@/constants/models";
-import { _createDocument, _deleteDocument, _executeFunction, _getDocument, _listDocuments, _updateDocument } from "./appwrite";
+import {
+  _createDocument,
+  _deleteDocument,
+  _executeFunction,
+  _getDocument,
+  _listDocuments,
+  _updateDocument,
+} from "./appwrite";
 import { env } from "@/constants/env";
 import { toUserRequest, toUserRequestList } from "@/lib/dataTransferObject";
 import { ID, Query } from "react-native-appwrite";
@@ -16,7 +23,7 @@ export const getRequestList = async (): Promise<RequestType[]> => {
     console.log(`request.getRequestList : ${error}`);
     throw error;
   }
-}
+};
 
 export const getUserRequestList = async (
   user_id: string
@@ -58,7 +65,7 @@ export const deleteRequest = async (request_id: string) => {
       request_id
     );
 
-    return result
+    return result;
   } catch (error) {
     console.log(`request.deleteRequest : ${error}`);
     throw error;
@@ -85,7 +92,8 @@ export const createUserRequest = async (
         updated_at: new Date(),
         created_at: new Date(),
         remarks: "",
-        isSuccessful : true
+        price: "0.00",
+        isSuccessful: true,
       }
     );
 
@@ -97,27 +105,28 @@ export const createUserRequest = async (
 };
 
 interface IUpdateRequestStatus {
-  request_id: string
-  status: string,
-  remarks: string
-  isSuccessful: boolean
-  user_id: string
-} 
-export const updateRequestStatus = async (param : IUpdateRequestStatus) => {
-  try {
-      const result = await _executeFunction(
-        env.FUNCTION_REQUEST,
-        "updateRequest",
-        param
-      );
-      
-      if (result.responseStatusCode != 200) {
-        throw Error("a");
-      }
-    } catch (error) {
-      console.log("request.updateRequestStatus : ", error);
-      if (error === "a") {
-        throw Error("There was a problem updating a request.");
-      }
-    }
+  request_id: string;
+  status: string;
+  remarks: string;
+  price: string;
+  isSuccessful: boolean;
+  user_id: string;
 }
+export const updateRequestStatus = async (param: IUpdateRequestStatus) => {
+  try {
+    const result = await _executeFunction(
+      env.FUNCTION_REQUEST,
+      "updateRequest",
+      param
+    );
+
+    if (result.responseStatusCode != 200) {
+      throw Error("a");
+    }
+  } catch (error) {
+    console.log("request.updateRequestStatus : ", error);
+    if (error === "a") {
+      throw Error("There was a problem updating a request.");
+    }
+  }
+};

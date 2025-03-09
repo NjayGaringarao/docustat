@@ -8,6 +8,7 @@ import ParagraphBox from "../ParagraphBox";
 import { updateRequestStatus } from "@/services/request";
 import Toast from "react-native-toast-message";
 import { confirmAction } from "@/lib/commonUtil";
+import TextBox from "../TextBox";
 
 interface IStatusSetter {
   request: RequestType;
@@ -27,6 +28,7 @@ const StatusSetter = ({
   setIsLoading,
 }: IStatusSetter) => {
   const [status, setStatus] = useState<string>(request.status);
+  const [amount, setAmount] = useState<string>(request.price);
   const [remarks, setRemarks] = useState<string>(request.remarks);
   const [isSuccessful, setIsSuccessful] = useState(request.isSuccessful);
 
@@ -61,7 +63,8 @@ const StatusSetter = ({
     return (
       status !== request.status ||
       remarks !== request.remarks ||
-      isSuccessful !== request.isSuccessful
+      isSuccessful !== request.isSuccessful ||
+      amount !== request.price
     );
   };
 
@@ -87,6 +90,7 @@ const StatusSetter = ({
         request_id: request.id,
         status: status,
         remarks: remarks,
+        price: amount,
         isSuccessful: isSuccessful,
         user_id: request.user_id,
       });
@@ -126,7 +130,7 @@ const StatusSetter = ({
     }
 
     setIsChanged(isChanged());
-  }, [status, remarks, isSuccessful]);
+  }, [status, remarks, isSuccessful, amount]);
 
   return (
     <View className="p-4 bg-background rounded-2xl shadow-md items-center mb-20">
@@ -187,34 +191,71 @@ const StatusSetter = ({
       </View>
 
       {/* Remarks when status is 'pickup' or 'complete' */}
-      {["pickup", "complete"].includes(status) && (
-        <View className="gap-2 mt-4 items-start w-full">
-          <Text className="text-lg font-semibold">Status Remarks</Text>
-          <ParagraphBox
-            value={remarks}
-            placeholder={
-              status === "pickup"
-                ? "Please bring 2 valid ID"
-                : "Claimed by John Doe"
-            }
-            handleChangeText={(e) => setRemarks(e)}
-            containerStyles="rounded-xl bg-white min-h-40"
-          />
+      {status === "pickup" && (
+        <View className="gap-2 mt-6 items-start w-full">
+          <View className="w-full flex-row justify-between items-center gap-2">
+            <Text className="text-lg italic">Payment Upon Pickup</Text>
+            <View className="flex-1 flex-row items-center justify-end bg-white rounded-xl px-2">
+              <Text className="text-lg">PHP</Text>
+              <TextBox
+                textValue={amount}
+                handleChangeText={(e) => e.length < 9 && setAmount(e)}
+                placeholder="100.00"
+                keyboardType="numeric"
+                containerStyles="flex-1 h-11 bg-white rounded-xl"
+              />
+            </View>
+          </View>
+          <View>
+            <Text className="text-lg italic">Remarks</Text>
+            <ParagraphBox
+              value={remarks}
+              placeholder={"Please bring 2 valid ID"}
+              handleChangeText={(e) => setRemarks(e)}
+              containerStyles="rounded-xl bg-white min-h-20 max-h-40"
+            />
+          </View>
         </View>
       )}
 
       {/* Switch for 'complete' status */}
       {status === "complete" && (
-        <View className="flex-row w-full mt-2 gap-2">
-          <Switch
-            trackColor={{ false: color.failed, true: color.success }}
-            thumbColor={color.white}
-            onValueChange={() => setIsSuccessful((prev) => !prev)}
-            value={isSuccessful}
-          />
-          <Text className="text-lg font-semibold">
-            {`Transaction ${isSuccessful ? "Successful" : "Failed"}`}
-          </Text>
+        <View className="gap-2 mt-6 items-start w-full">
+          <View className="w-full flex-row justify-between items-center gap-2">
+            <Text className="text-lg italic">Payment Upon Pickup</Text>
+            <View className="flex-1 flex-row items-center justify-end bg-white rounded-xl overflow-hidden">
+              <View className="flex-1 flex-row items-center justify-center px-2">
+                <Text className="text-lg">PHP</Text>
+                <TextBox
+                  textValue={amount}
+                  handleChangeText={(e) => e.length < 9 && setAmount(e)}
+                  keyboardType="numeric"
+                  containerStyles="flex-1 h-11 bg-white rounded-xl"
+                />
+              </View>
+              <View className="absolute h-full w-full bg-gray-400 opacity-50" />
+            </View>
+          </View>
+          <View>
+            <Text className="text-lg italic">Remarks</Text>
+            <ParagraphBox
+              value={remarks}
+              placeholder={"Claimed by John Doe"}
+              handleChangeText={(e) => setRemarks(e)}
+              containerStyles="rounded-xl bg-white min-h-20 max-h-40"
+            />
+          </View>
+          <View className="flex-row w-full mt-2 gap-2">
+            <Switch
+              trackColor={{ false: color.failed, true: color.success }}
+              thumbColor={color.white}
+              onValueChange={() => setIsSuccessful((prev) => !prev)}
+              value={isSuccessful}
+            />
+            <Text className="text-lg font-semibold">
+              {`Transaction ${isSuccessful ? "Successful" : "Failed"}`}
+            </Text>
+          </View>
         </View>
       )}
     </View>

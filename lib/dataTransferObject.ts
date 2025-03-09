@@ -46,6 +46,7 @@ export const toUserRequest = (document: Models.Document): RequestType => {
     request_note: document.request_note,
     user_id: document.user_id,
     status: document.status,
+    price: document.price,
     remarks: document.remarks,
     isSuccessful: document.isSuccessful,
     updated_at: new Date(document.updated_at),

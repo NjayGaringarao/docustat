@@ -81,21 +81,21 @@ const newRequest = () => {
     stageDocument.forEach((document) => {
       if (isRequestLetterType(document.document)) {
         documentList.push(
-          `Request Letter for ${document.document.document_type} (${
+          `Request Letter for ${document.document.document_type}\n(${
             document.copy
           } ${document.copy > 1 ? "copies" : "copy"})`
         );
       }
       if (isCOGType(document.document)) {
         documentList.push(
-          `Certificate of Grade/Unit Earned for ${document.document.sem.toUpperCase()} Sem, A.Y.${
+          `Certificate of Grade/Unit Earned\n[${document.document.sem.toUpperCase()} Sem, A.Y.${
             document.document.ay
-          } (${document.copy} ${document.copy > 1 ? "copies" : "copy"})`
+          }]\n(${document.copy} ${document.copy > 1 ? "copies" : "copy"})`
         );
       }
       if (typeof document.document === "string") {
         documentList.push(
-          `${document.document} (${document.copy} ${
+          `${document.document}\n(${document.copy} ${
             document.copy > 1 ? "copies" : "copy"
           })`
         );

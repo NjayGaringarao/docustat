@@ -11,6 +11,7 @@ import { sortByUpdatedAt } from "@/lib/commonUtil";
 import { getRequestList } from "@/services/request";
 import Toast from "react-native-toast-message";
 import { router } from "expo-router";
+import PickupItem from "@/components/admin/requestItem/PickupItem";
 
 const home = () => {
   const [requestList, setRequestList] = useState<RequestType[]>([]);
@@ -112,7 +113,12 @@ const home = () => {
         ) : activeTab === "pickup" && !isRefreshing ? (
           <FlatList
             data={pickupList}
-            renderItem={({ item }) => <RequestItem request={item} />}
+            renderItem={({ item }) => (
+              <PickupItem
+                request={item}
+                onPress={() => router.push(`/manageRequest/${item.id}`)}
+              />
+            )}
             ListEmptyComponent={() => (
               <EmptyRequestListItem message="No for-pickup requests" />
             )}
