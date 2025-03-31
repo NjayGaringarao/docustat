@@ -58,20 +58,12 @@ const PickupItem: React.FC<PickupItemProps> = ({ request, onPress }) => {
             ))}
           </View>
 
-          <Text className="text-uGray ">
+          <Text className="text-uGray mt-2">
             Amount Payable :{" "}
             <Text className="font-bold text-uBlack">
               {"P ".concat(request.price)}
             </Text>
           </Text>
-          {request.request_note.length > 0 && (
-            <>
-              <Text className="text-uGray mt-2">Request Note : </Text>
-              <Text className="ml-2 italic text-uBlack text-sm">
-                {request.request_note}
-              </Text>
-            </>
-          )}
         </View>
         <View className="w-full flex-row justify-between items-center">
           <Text className="text-uGray">

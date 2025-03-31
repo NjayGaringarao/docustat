@@ -35,19 +35,23 @@ const StatusView = ({ request }: IStatusView) => {
       {["pickup", "complete"].includes(request.status) &&
         request.remarks.length > 0 && (
           <View className="gap-2 mt-4 items-start w-full">
-            <Text className="text-lg font-semibold">Status Remarks</Text>
-            <ScrollView
-              contentContainerStyle={{
-                paddingHorizontal: 8, // Equivalent to px-2
-                alignItems: "flex-start",
-                flexDirection: "row",
-              }}
-              className="max-h-96"
-            >
-              <Text className="h-full w-full text-uBlack text-base font-semibold">
+            <View className="gap-2 flex-row w-full">
+              <Text className="text-base font-medium text-uGray">
+                Admin Message :
+              </Text>
+              <Text className="flex-1 text-uBlack text-base font-semibold">
                 {request.remarks}
               </Text>
-            </ScrollView>
+            </View>
+
+            <View className="gap-2 flex-row w-full">
+              <Text className="text-base font-medium text-uGray">
+                Amount Payable :
+              </Text>
+              <Text className="flex-1 text-uBlack text-base font-semibold">
+                {"PHP ".concat(request.price)}
+              </Text>
+            </View>
           </View>
         )}
 
