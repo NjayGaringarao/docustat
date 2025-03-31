@@ -49,7 +49,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   >([]);
   const [isLoading, setIsLoading] = useState(true);
   const [fcmToken, setFcmToken] = useState<string>();
-
+  const [isRefreshAdminData, setIsRefreshAdminData] = useState(false);
   const initializeGlobalState = async () => {
     try {
       setIsLoading(true);
@@ -168,6 +168,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
         refreshUserRecord,
         resetGlobalState,
         initializeGlobalState,
+        setIsRefreshAdminData,
         user,
         userInfo,
         userCredential,
@@ -176,6 +177,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
         fcmToken,
         isLoading,
         isInternetConnection,
+        isRefreshAdminData,
       }}
     >
       {children}

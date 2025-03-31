@@ -15,6 +15,7 @@ export interface GlobalContextInterface {
   setUserRequestList: Dispatch<SetStateAction<RequestType[]>>;
   setUserNotificationList: Dispatch<SetStateAction<NotificationType.Info[]>>;
   refreshUserRecord: (update: RefreshUserRecordType) => Promise<void>;
+  setIsRefreshAdminData: Dispatch<SetStateAction<boolean>>;
   resetGlobalState: () => void;
   initializeGlobalState: () => Promise<void>;
   user: Models.User<Models.Preferences> | null;
@@ -22,6 +23,7 @@ export interface GlobalContextInterface {
   userCredential: UserCredentialType;
   userRequestList: RequestType[];
   userNotificationList: NotificationType.Info[];
+  isRefreshAdminData: boolean;
   fcmToken?: string;
   isLoading: boolean;
   isInternetConnection: boolean | null;

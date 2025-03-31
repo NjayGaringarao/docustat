@@ -11,9 +11,11 @@ import UserInfoView from "@/components/UserInfoView";
 import StatusSetter from "@/components/admin/StatusSetter";
 import { getRequest } from "@/services/request";
 import { getUserInfo } from "@/services/user";
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 const manageRequest = () => {
   const searchParams = useGlobalSearchParams();
+  const { setIsRefreshAdminData } = useGlobalContext();
   const [isLoading, setIsLoading] = useState(true);
   const [isChanged, setIsChanged] = useState(false);
   const [id, setId] = useState<string>();
@@ -53,13 +55,19 @@ const manageRequest = () => {
     }
   }, [searchParams]);
 
+  useEffect(() => {
+    return () => setIsRefreshAdminData(true);
+  }, []);
+
   if (request && userInfo) {
     return (
       <View className="flex-1 bg-background">
         {/* Header */}
         <View className="h-16 w-full flex-row items-center gap-4 bg-primary pr-4">
           <CustomButton
-            handlePress={() => router.back()}
+            handlePress={() => {
+              router.back();
+            }}
             containerStyles="bg-transparent p-2"
           >
             <Ionicons name="arrow-back-sharp" size={24} color="black" />

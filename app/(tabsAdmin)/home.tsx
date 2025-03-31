@@ -12,8 +12,10 @@ import { getRequestList } from "@/services/request";
 import Toast from "react-native-toast-message";
 import { router } from "expo-router";
 import PickupItem from "@/components/admin/requestItem/PickupItem";
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 const home = () => {
+  const { isRefreshAdminData, setIsRefreshAdminData } = useGlobalContext();
   const [requestList, setRequestList] = useState<RequestType[]>([]);
   const [activeTab, setActiveTab] = useState<RequestStatusType>("pending");
   const [pendingList, setPendingList] = useState<RequestType[]>([]);
@@ -73,6 +75,13 @@ const home = () => {
   useEffect(() => {
     queryRequestList();
   }, []);
+
+  useEffect(() => {
+    if (isRefreshAdminData) {
+      queryRequestList();
+      setIsRefreshAdminData(false);
+    }
+  }, [isRefreshAdminData]);
 
   return (
     <View className="flex-1 px-2 py-4 gap-4 bg-background">
