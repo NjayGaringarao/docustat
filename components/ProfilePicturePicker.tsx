@@ -117,6 +117,7 @@ const ProfilePicturePicker = forwardRef(
             visible={isImagePreviewVisible}
             transparent={false}
             animationType="slide"
+            onRequestClose={() => setIsImagePreviewVisible(false)}
           >
             <TouchableOpacity
               className="flex-1 absolute items-center"

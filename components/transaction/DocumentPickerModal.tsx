@@ -117,7 +117,7 @@ const DocumentPickerModal = ({
 
   return (
     <>
-      <Modal visible={isVisible} transparent>
+      <Modal visible={isVisible} onRequestClose={onClose} transparent>
         <View className="flex-1 justify-center">
           <TouchableOpacity
             className="h-full w-full absolute bg-black opacity-80"
