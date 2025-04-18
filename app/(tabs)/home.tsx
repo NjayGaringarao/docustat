@@ -1,6 +1,6 @@
 import { View, Text, FlatList } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
-import TransactionTabBar from "@/components/home/TransactionTabBar";
+import TransactionTabBar from "@/components/admin/TransactionTabBar";
 import { RequestType } from "@/constants/models";
 import RequestItem from "@/components/home/RequestItem";
 import { RequestStatusType } from "@/constants/utils";

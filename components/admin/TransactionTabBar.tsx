@@ -4,12 +4,12 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { color } from "@/constants/color";
-import { RequestStatusType } from "@/constants/utils";
+import { TabBarType } from "@/constants/utils";
 
 interface ITabBar {
   containerStyle?: string;
-  setActiveTab: (e: "pending" | "processing" | "pickup" | "other") => void;
-  activeTab: "pending" | "processing" | "pickup" | "other";
+  setActiveTab: (e: TabBarType) => void;
+  activeTab: TabBarType;
   itemCount: {
     pending: number;
     processing: number;
@@ -125,7 +125,7 @@ const TransactionTabBar = ({
         )}
       </TouchableOpacity>
 
-      {/* Fulfilled Tab */}
+      {/* Other Tab */}
       <TouchableOpacity
         onPress={() => setActiveTab("other")}
         className="items-center justify-center"
