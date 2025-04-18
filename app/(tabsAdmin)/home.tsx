@@ -16,6 +16,7 @@ import { useGlobalContext } from "@/context/GlobalProvider";
 import PendingItem from "@/components/admin/requestItem/PendingItem";
 import ProcessingItem from "@/components/admin/requestItem/ProcessingItem";
 import { RequestType } from "@/constants/models";
+import OtherItem from "@/components/admin/requestItem/OtherItem";
 
 const home = () => {
   const { isRefreshAdminData, setIsRefreshAdminData } = useGlobalContext();
@@ -113,7 +114,12 @@ const home = () => {
         {activeTab === "pending" && !isRefreshing ? (
           <FlatList
             data={pendingList}
-            renderItem={({ item }) => <PendingItem request={item} />}
+            renderItem={({ item }) => (
+              <PendingItem
+                request={item}
+                onPress={() => router.push(`/manageRequest/${item.id}`)}
+              />
+            )}
             ListEmptyComponent={() => (
               <EmptyRequestListItem message="No pending request." />
             )}
@@ -123,7 +129,12 @@ const home = () => {
         ) : activeTab === "processing" && !isRefreshing ? (
           <FlatList
             data={processingList}
-            renderItem={({ item }) => <ProcessingItem request={item} />}
+            renderItem={({ item }) => (
+              <ProcessingItem
+                request={item}
+                onPress={() => router.push(`/manageRequest/${item.id}`)}
+              />
+            )}
             ListEmptyComponent={() => (
               <EmptyRequestListItem message="No on-process request" />
             )}
@@ -133,7 +144,12 @@ const home = () => {
         ) : activeTab === "pickup" && !isRefreshing ? (
           <FlatList
             data={pickupList}
-            renderItem={({ item }) => <PickupItem request={item} />}
+            renderItem={({ item }) => (
+              <PickupItem
+                request={item}
+                onPress={() => router.push(`/manageRequest/${item.id}`)}
+              />
+            )}
             ListEmptyComponent={() => (
               <EmptyRequestListItem message="No for-pickup requests" />
             )}
@@ -143,7 +159,12 @@ const home = () => {
         ) : activeTab === "other" && !isRefreshing ? (
           <FlatList
             data={otherList}
-            renderItem={({ item }) => <RequestItem request={item} />}
+            renderItem={({ item }) => (
+              <OtherItem
+                request={item}
+                onPress={() => router.push(`/manageRequest/${item.id}`)}
+              />
+            )}
             ListEmptyComponent={() => (
               <EmptyRequestListItem message="No completed requests" />
             )}

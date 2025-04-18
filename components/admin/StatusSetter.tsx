@@ -49,6 +49,8 @@ const StatusSetter = ({
     } else {
       if (newStatus == "pickup") {
         setRemarks("Please bring one valid ID.");
+      } else if (newStatus == "success") {
+        setRemarks("Document is claimed.");
       } else {
         setRemarks("Transaction Failed.");
       }
