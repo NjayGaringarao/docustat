@@ -87,21 +87,29 @@ const ModalRequestNotification = ({
             Ready for Pickup
           </Text>
         );
-        icon = <FontAwesome5 name="inbox" size={84} color={color.forPickup} />;
+        icon = <FontAwesome5 name="inbox" size={84} color={color.pickup} />;
         break;
-      case "Request COMPLETE":
+      case "Request SUCCESS":
         statusText = (
           <Text className="text-2xl text-complete font-bold">
-            Transaction Complete
+            Transaction Success
           </Text>
         );
         icon = (
           <MaterialIcons
             name="assignment-turned-in"
             size={84}
-            color={color.complete}
+            color={color.success}
           />
         );
+        break;
+      case "Request FAILED":
+        statusText = (
+          <Text className="text-2xl text-complete font-bold">
+            Transaction Failed
+          </Text>
+        );
+        icon = <MaterialIcons name="error" size={84} color={color.failed} />;
         break;
     }
 
@@ -167,20 +175,6 @@ const ModalRequestNotification = ({
                   </Text>
                 </View>
               )}
-            {/* Success Status (Only for 'complete' status) */}
-            {request.status === "complete" && (
-              <View className="my-2">
-                <Text
-                  className={`text-lg font-bold ${
-                    request.isSuccessful ? "text-green-600" : "text-red-600"
-                  }`}
-                >
-                  {request.isSuccessful
-                    ? "This transaction is successful."
-                    : "This trnasaction is unsuccessful."}
-                </Text>
-              </View>
-            )}
           </ScrollView>
         </View>
 
