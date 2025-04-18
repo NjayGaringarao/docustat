@@ -20,8 +20,10 @@ const StatusView = ({ request }: IStatusView) => {
                 : request.status === "processing"
                 ? "bg-processing"
                 : request.status === "pickup"
-                ? "bg-forPickup"
-                : "bg-complete"
+                ? "bg-pickup"
+                : request.status == "success"
+                ? "bg-success"
+                : "bg-failed"
             }`}
           >
             <Text className="text-white font-semibold">
@@ -31,8 +33,8 @@ const StatusView = ({ request }: IStatusView) => {
         </View>
       </View>
 
-      {/* Remarks when status is 'pickup' or 'complete' */}
-      {["pickup", "complete"].includes(request.status) &&
+      {/* Remarks when status is 'pickup', 'failed' or 'success' */}
+      {["pickup", "failed", "success"].includes(request.status) &&
         request.remarks.length > 0 && (
           <View className="gap-2 mt-4 items-start w-full">
             <View className="gap-2 flex-row w-full">
@@ -54,21 +56,6 @@ const StatusView = ({ request }: IStatusView) => {
             </View>
           </View>
         )}
-
-      {/* Switch for 'complete' status */}
-      {request.status === "complete" && (
-        <View className="flex-row w-full mt-4 gap-2">
-          <Text
-            className={`text-lg font-bold ${
-              request.isSuccessful ? "text-green-600" : "text-red-600"
-            }`}
-          >
-            {request.isSuccessful
-              ? "This transaction is successful."
-              : "This trnasaction is unsuccessful."}
-          </Text>
-        </View>
-      )}
     </View>
   );
 };

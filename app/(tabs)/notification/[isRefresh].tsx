@@ -7,7 +7,7 @@ import { color } from "@/constants/color";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Href, router, useGlobalSearchParams } from "expo-router";
 import NotificationItem from "@/components/notification/notificationItem";
-import EmptyRequestListItem from "@/components/home/EmptyRequestListItem";
+import EmptyRequestListItem from "@/components/requestItem/EmptyRequestListItem";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import Loading from "@/components/Loading";
 import {

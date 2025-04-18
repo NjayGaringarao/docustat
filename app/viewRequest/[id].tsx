@@ -8,7 +8,7 @@ import Toast from "react-native-toast-message";
 import CustomButton from "@/components/CustomButton";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { deleteRequest, getRequest } from "@/services/request";
-import StatusView from "@/components/home/StatusView";
+import StatusView from "@/components/StatusView";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import UserInfoView from "@/components/UserInfoView";
 import { confirmAction } from "@/lib/commonUtil";

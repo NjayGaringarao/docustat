@@ -2,7 +2,7 @@ import { View, Text, FlatList } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import TransactionTabBar from "@/components/admin/TransactionTabBar";
 import { TabBarType } from "@/constants/utils";
-import EmptyRequestListItem from "@/components/home/EmptyRequestListItem";
+import EmptyRequestListItem from "@/components/requestItem/EmptyRequestListItem";
 import Loading from "@/components/Loading";
 import { color } from "@/constants/color";
 import { sortByUpdatedAt } from "@/lib/commonUtil";
