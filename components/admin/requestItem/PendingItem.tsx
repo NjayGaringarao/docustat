@@ -1,29 +1,30 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import Entypo from "@expo/vector-icons/Entypo";
+import { color } from "@/constants/color";
 import { RequestType } from "@/constants/models";
 import { router } from "expo-router";
 
-interface PIckupItemProps {
+interface PendingItemProps {
   request: RequestType;
 }
-const PIckupItem: React.FC<PIckupItemProps> = ({ request }) => {
+const PendingItem: React.FC<PendingItemProps> = ({ request }) => {
   return (
     <TouchableOpacity
       onPress={() => router.push(`/manageRequest/${request.id}`)}
-      className="bg-background my-2 rounded-lg shadow-lg overflow-hidden border border-forPickup"
+      className="bg-background my-2 rounded-lg shadow-lg overflow-hidden border border-pending"
     >
       {/* Header Section */}
-      <View className="flex-row justify-between items-center mb-2 bg-forPickup px-4 py-2">
+      <View className="flex-row justify-between items-center mb-2 bg-pending px-4 py-2">
         <View className="flex-1 justify-start">
-          <Text className="text-lg font-semibold text-background">
+          <Text className="text-lg font-semibold text-uBlack">
             {request.purpose}
           </Text>
-          <Text className="text-gray-200 text-sm -mt-1">{request.id}</Text>
+          <Text className="text-uGray text-sm -mt-1">{request.id}</Text>
         </View>
 
-        <Text className="text-background text-base font-medium">
-          {"PHP ".concat(request.price)}
-        </Text>
+        <MaterialIcons name="pending-actions" size={32} color={color.uBlack} />
       </View>
       <View className="px-4">
         {/* Details Section */}
@@ -54,16 +55,19 @@ const PIckupItem: React.FC<PIckupItemProps> = ({ request }) => {
             </Text>
           </Text>
 
-          <Text className="text-uGray text-sm">
-            Last Updated:{" "}
-            <Text className="text-uBlack">
-              {new Date(request.updated_at).toLocaleDateString()}
+          {request.created_at.toLocaleDateString() !=
+            request.updated_at.toLocaleDateString() && (
+            <Text className="text-uGray text-sm">
+              Last Updated:{" "}
+              <Text className="text-uBlack">
+                {new Date(request.updated_at).toLocaleDateString()}
+              </Text>
             </Text>
-          </Text>
+          )}
         </View>
       </View>
     </TouchableOpacity>
   );
 };
 
-export default PIckupItem;
+export default PendingItem;

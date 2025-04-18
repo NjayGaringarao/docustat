@@ -13,6 +13,8 @@ import Toast from "react-native-toast-message";
 import { router } from "expo-router";
 import PickupItem from "@/components/admin/requestItem/PickupItem";
 import { useGlobalContext } from "@/context/GlobalProvider";
+import PendingItem from "@/components/admin/requestItem/PendingItem";
+import ProcessingItem from "@/components/admin/requestItem/ProcessingItem";
 
 const home = () => {
   const { isRefreshAdminData, setIsRefreshAdminData } = useGlobalContext();
@@ -102,7 +104,7 @@ const home = () => {
         {activeTab === "pending" && !isRefreshing ? (
           <FlatList
             data={pendingList}
-            renderItem={({ item }) => <RequestItem request={item} />}
+            renderItem={({ item }) => <PendingItem request={item} />}
             ListEmptyComponent={() => (
               <EmptyRequestListItem message="No pending request." />
             )}
@@ -112,7 +114,7 @@ const home = () => {
         ) : activeTab === "processing" && !isRefreshing ? (
           <FlatList
             data={processingList}
-            renderItem={({ item }) => <RequestItem request={item} />}
+            renderItem={({ item }) => <ProcessingItem request={item} />}
             ListEmptyComponent={() => (
               <EmptyRequestListItem message="No on-process request" />
             )}
@@ -122,12 +124,7 @@ const home = () => {
         ) : activeTab === "pickup" && !isRefreshing ? (
           <FlatList
             data={pickupList}
-            renderItem={({ item }) => (
-              <PickupItem
-                request={item}
-                onPress={() => router.push(`/manageRequest/${item.id}`)}
-              />
-            )}
+            renderItem={({ item }) => <PickupItem request={item} />}
             ListEmptyComponent={() => (
               <EmptyRequestListItem message="No for-pickup requests" />
             )}
