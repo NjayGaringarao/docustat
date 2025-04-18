@@ -1,7 +1,7 @@
 import { View, Text, FlatList } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import TransactionTabBar from "@/components/admin/TransactionTabBar";
-import { TabBarType } from "@/constants/utils";
+import { AdminTabBarType } from "@/constants/utils";
 import EmptyRequestListItem from "@/components/requestItem/EmptyRequestListItem";
 import Loading from "@/components/Loading";
 import { color } from "@/constants/color";
@@ -19,7 +19,7 @@ import OtherItem from "@/components/requestItem/OtherItem";
 const home = () => {
   const { isRefreshAdminData, setIsRefreshAdminData } = useGlobalContext();
   const [requestList, setRequestList] = useState<RequestType[]>([]);
-  const [activeTab, setActiveTab] = useState<TabBarType>("pending");
+  const [activeTab, setActiveTab] = useState<AdminTabBarType>("pending");
   const [pendingList, setPendingList] = useState<RequestType[]>([]);
   const [processingList, setProcessingList] = useState<RequestType[]>([]);
   const [pickupList, setPickupList] = useState<RequestType[]>([]);

@@ -1,9 +1,9 @@
 import { View, Text, FlatList } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
-import TransactionTabBar from "@/components/admin/TransactionTabBar";
+import TransactionTabBar from "@/components/TransactionTabBar";
 import { RequestType } from "@/constants/models";
 import RequestItem from "@/components/requestItem/RequestItem";
-import { RequestStatusType } from "@/constants/utils";
+import { RequestStatusType, TabBarType } from "@/constants/utils";
 import EmptyRequestListItem from "@/components/requestItem/EmptyRequestListItem";
 import Loading from "@/components/Loading";
 import { color } from "@/constants/color";
@@ -14,26 +14,30 @@ import { router } from "expo-router";
 
 const home = () => {
   const { userRequestList, refreshUserRecord } = useGlobalContext();
-  const [activeTab, setActiveTab] = useState<RequestStatusType>("pending");
-  const [pendingList, setPendingList] = useState<RequestType[]>([]);
-  const [processingList, setProcessingList] = useState<RequestType[]>([]);
-  const [pickupList, setPickupList] = useState<RequestType[]>([]);
-  const [completeList, setCompleteList] = useState<RequestType[]>([]);
+  const [activeTab, setActiveTab] = useState<TabBarType>("active");
+  const [activeList, setActiveList] = useState<RequestType[]>([]);
+  const [archiveList, setArchiveList] = useState<RequestType[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const sortList = async () => {
-    setPendingList(
-      sortByDate(userRequestList.filter((item) => item.status === "pending"))
+    setActiveList(
+      sortByDate(
+        userRequestList.filter(
+          (item) =>
+            item.status === "pending" ||
+            item.status === "processing" ||
+            item.status === "pickup"
+        )
+      )
     );
-    setProcessingList(
-      sortByDate(userRequestList.filter((item) => item.status === "processing"))
+    setArchiveList(
+      sortByDate(
+        userRequestList.filter(
+          (item) => item.status === "success" || item.status === "failed"
+        )
+      )
     );
-    setPickupList(
-      sortByDate(userRequestList.filter((item) => item.status === "pickup"))
-    );
-    setCompleteList(
-      sortByDate(userRequestList.filter((item) => item.status === "complete"))
-    );
+
     setIsRefreshing(false);
   };
 
@@ -55,54 +59,35 @@ const home = () => {
         containerStyle="rounded-xl border-b"
         setActiveTab={setActiveTab}
         activeTab={activeTab}
-        itemCount={{
-          pending: pendingList.length,
-          processing: processingList.length,
-          pickup: pickupList.length,
-        }}
+        itemCount={activeList.length}
       />
       <View className="flex-1 rounded-xl overflow-hidden">
-        {activeTab === "pending" && !isRefreshing ? (
+        {activeTab === "active" && !isRefreshing ? (
           <FlatList
-            data={pendingList}
-            renderItem={({ item }) => <RequestItem request={item} />}
+            data={activeList}
+            renderItem={({ item }) => (
+              <RequestItem
+                request={item}
+                onPress={() => router.push(`/viewRequest/${item.id}`)}
+              />
+            )}
             ListEmptyComponent={() => (
               <EmptyRequestListItem message="You don't have pending request." />
             )}
             onRefresh={onRefreshFeedHandle}
             refreshing={isRefreshing}
           />
-        ) : activeTab === "processing" && !isRefreshing ? (
+        ) : activeTab === "archive" && !isRefreshing ? (
           <FlatList
-            data={processingList}
-            renderItem={({ item }) => <RequestItem request={item} />}
-            ListEmptyComponent={() => (
-              <EmptyRequestListItem message="You don't have a request that is on process." />
-            )}
-            onRefresh={onRefreshFeedHandle}
-            refreshing={isRefreshing}
-          />
-        ) : activeTab === "pickup" && !isRefreshing ? (
-          <FlatList
-            data={pickupList}
+            data={archiveList}
             renderItem={({ item }) => (
-              <PickupItem
+              <RequestItem
                 request={item}
                 onPress={() => router.push(`/viewRequest/${item.id}`)}
               />
             )}
             ListEmptyComponent={() => (
-              <EmptyRequestListItem message="You don't have a document that is ready to pickup." />
-            )}
-            onRefresh={onRefreshFeedHandle}
-            refreshing={isRefreshing}
-          />
-        ) : activeTab === "complete" && !isRefreshing ? (
-          <FlatList
-            data={completeList}
-            renderItem={({ item }) => <RequestItem request={item} />}
-            ListEmptyComponent={() => (
-              <EmptyRequestListItem message="You don't have a completed request yet." />
+              <EmptyRequestListItem message="You don't have a request that is on process." />
             )}
             onRefresh={onRefreshFeedHandle}
             refreshing={isRefreshing}

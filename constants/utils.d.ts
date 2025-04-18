@@ -5,7 +5,9 @@ export type RequestStatusType =
   | "success"
   | "failed";
 
-export type TabBarType = "pending" | "processing" | "pickup" | "other";
+export type AdminTabBarType = "pending" | "processing" | "pickup" | "other";
+
+export type TabBarType = "active" | "archive";
 
 export type COGType = {
   sem: "first" | "second" | "midyear";

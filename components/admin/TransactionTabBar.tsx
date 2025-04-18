@@ -4,12 +4,12 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { color } from "@/constants/color";
-import { TabBarType } from "@/constants/utils";
+import { AdminTabBarType } from "@/constants/utils";
 
 interface ITabBar {
   containerStyle?: string;
-  setActiveTab: (e: TabBarType) => void;
-  activeTab: TabBarType;
+  setActiveTab: (e: AdminTabBarType) => void;
+  activeTab: AdminTabBarType;
   itemCount: {
     pending: number;
     processing: number;
