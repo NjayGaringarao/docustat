@@ -30,7 +30,11 @@ const OtherItem: React.FC<OtherItemProps> = ({ request, onPress }) => {
           <Text className="text-gray-200 text-sm -mt-1">{request.id}</Text>
         </View>
 
-        <MaterialIcons name="hourglass-top" size={32} color={color.white} />
+        <MaterialIcons
+          name={request.status == "success" ? "check-box" : "error"}
+          size={32}
+          color={color.white}
+        />
       </View>
       <View className="px-4">
         {/* Details Section */}
