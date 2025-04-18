@@ -1,7 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { RequestType } from "@/constants/models";
-import { router } from "expo-router";
 
 interface PIckupItemProps {
   request: RequestType;

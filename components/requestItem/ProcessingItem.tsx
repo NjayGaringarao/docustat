@@ -3,7 +3,6 @@ import React from "react";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { color } from "@/constants/color";
 import { RequestType } from "@/constants/models";
-import { router } from "expo-router";
 
 interface ProcessingItemProps {
   request: RequestType;

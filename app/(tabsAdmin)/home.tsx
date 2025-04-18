@@ -2,8 +2,6 @@ import { View, Text, FlatList } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import TransactionTabBar from "@/components/home/TransactionTabBar";
 import { TabBarType } from "@/constants/utils";
-import RequestItem from "@/components/admin/RequestItem";
-import { RequestStatusType } from "@/constants/utils";
 import EmptyRequestListItem from "@/components/home/EmptyRequestListItem";
 import Loading from "@/components/Loading";
 import { color } from "@/constants/color";
@@ -90,10 +88,6 @@ const home = () => {
       setIsRefreshAdminData(false);
     }
   }, [isRefreshAdminData]);
-
-  useEffect(() => {
-    console.log("is Refreshing: ", isRefreshing);
-  }, [isRefreshing]);
 
   return (
     <View className="flex-1 px-2 py-4 gap-4 bg-background">
