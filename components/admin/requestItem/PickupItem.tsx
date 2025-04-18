@@ -5,11 +5,12 @@ import { router } from "expo-router";
 
 interface PIckupItemProps {
   request: RequestType;
+  onPress: () => void;
 }
-const PIckupItem: React.FC<PIckupItemProps> = ({ request }) => {
+const PIckupItem: React.FC<PIckupItemProps> = ({ request, onPress }) => {
   return (
     <TouchableOpacity
-      onPress={() => router.push(`/manageRequest/${request.id}`)}
+      onPress={onPress}
       className="bg-background my-2 rounded-lg shadow-lg overflow-hidden border border-pickup"
     >
       {/* Header Section */}

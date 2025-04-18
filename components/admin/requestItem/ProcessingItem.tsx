@@ -7,11 +7,15 @@ import { router } from "expo-router";
 
 interface ProcessingItemProps {
   request: RequestType;
+  onPress: () => void;
 }
-const ProcessingItem: React.FC<ProcessingItemProps> = ({ request }) => {
+const ProcessingItem: React.FC<ProcessingItemProps> = ({
+  request,
+  onPress,
+}) => {
   return (
     <TouchableOpacity
-      onPress={() => router.push(`/manageRequest/${request.id}`)}
+      onPress={onPress}
       className="bg-background my-2 rounded-lg shadow-lg overflow-hidden border border-processing"
     >
       {/* Header Section */}

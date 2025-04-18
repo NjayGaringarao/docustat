@@ -8,11 +8,12 @@ import { router } from "expo-router";
 
 interface PendingItemProps {
   request: RequestType;
+  onPress: () => void;
 }
-const PendingItem: React.FC<PendingItemProps> = ({ request }) => {
+const PendingItem: React.FC<PendingItemProps> = ({ request, onPress }) => {
   return (
     <TouchableOpacity
-      onPress={() => router.push(`/manageRequest/${request.id}`)}
+      onPress={onPress}
       className="bg-background my-2 rounded-lg shadow-lg overflow-hidden border border-pending"
     >
       {/* Header Section */}
