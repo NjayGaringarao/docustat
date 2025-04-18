@@ -9,7 +9,7 @@ import Loading from "@/components/Loading";
 import { color } from "@/constants/color";
 import { sortByDate } from "@/lib/commonUtil";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import PickupItem from "@/components/admin/requestItem/PickupItem";
+import PickupItem from "@/components/requestItem/PickupItem";
 import { router } from "expo-router";
 
 const home = () => {

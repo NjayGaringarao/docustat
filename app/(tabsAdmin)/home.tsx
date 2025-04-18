@@ -11,12 +11,12 @@ import { sortByUpdatedAt } from "@/lib/commonUtil";
 import { getRequestList } from "@/services/request";
 import Toast from "react-native-toast-message";
 import { router } from "expo-router";
-import PickupItem from "@/components/admin/requestItem/PickupItem";
+import PickupItem from "@/components/requestItem/PickupItem";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import PendingItem from "@/components/admin/requestItem/PendingItem";
-import ProcessingItem from "@/components/admin/requestItem/ProcessingItem";
+import PendingItem from "@/components/requestItem/PendingItem";
+import ProcessingItem from "@/components/requestItem/ProcessingItem";
 import { RequestType } from "@/constants/models";
-import OtherItem from "@/components/admin/requestItem/OtherItem";
+import OtherItem from "@/components/requestItem/OtherItem";
 
 const home = () => {
   const { isRefreshAdminData, setIsRefreshAdminData } = useGlobalContext();
