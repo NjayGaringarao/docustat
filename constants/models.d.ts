@@ -36,7 +36,6 @@ export interface RequestType {
   status: string;
   price: string;
   remarks: string;
-  isSuccessful: boolean;
   updated_at: Date;
   created_at: Date;
 }

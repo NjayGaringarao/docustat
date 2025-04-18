@@ -8,8 +8,8 @@ import { RequestStatusType } from "@/constants/utils";
 
 interface ITabBar {
   containerStyle?: string;
-  setActiveTab: (e: RequestStatusType) => void;
-  activeTab: RequestStatusType;
+  setActiveTab: (e: "pending" | "processing" | "pickup" | "other") => void;
+  activeTab: "pending" | "processing" | "pickup" | "other";
   itemCount: {
     pending: number;
     processing: number;
@@ -127,22 +127,22 @@ const TransactionTabBar = ({
 
       {/* Fulfilled Tab */}
       <TouchableOpacity
-        onPress={() => setActiveTab("complete")}
+        onPress={() => setActiveTab("other")}
         className="items-center justify-center"
       >
         <MaterialIcons
           name="assignment-turned-in"
           size={32}
-          color={activeTab === "complete" ? color.secondary : color.uGrayLight}
+          color={activeTab === "other" ? color.secondary : color.uGrayLight}
         />
         <Text
           className={`text-sm ${
-            activeTab === "complete"
+            activeTab === "other"
               ? "font-semibold text-secondary"
               : "font-normal text-uGrayLight"
           }`}
         >
-          Complete
+          Other
         </Text>
       </TouchableOpacity>
     </View>

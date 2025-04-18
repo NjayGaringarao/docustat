@@ -1,7 +1,7 @@
 import { View, Text, FlatList } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import TransactionTabBar from "@/components/home/TransactionTabBar";
-import { RequestType } from "@/constants/models";
+import { TabBarType } from "@/constants/utils";
 import RequestItem from "@/components/admin/RequestItem";
 import { RequestStatusType } from "@/constants/utils";
 import EmptyRequestListItem from "@/components/home/EmptyRequestListItem";
@@ -15,15 +15,16 @@ import PickupItem from "@/components/admin/requestItem/PickupItem";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import PendingItem from "@/components/admin/requestItem/PendingItem";
 import ProcessingItem from "@/components/admin/requestItem/ProcessingItem";
+import { RequestType } from "@/constants/models";
 
 const home = () => {
   const { isRefreshAdminData, setIsRefreshAdminData } = useGlobalContext();
   const [requestList, setRequestList] = useState<RequestType[]>([]);
-  const [activeTab, setActiveTab] = useState<RequestStatusType>("pending");
+  const [activeTab, setActiveTab] = useState<TabBarType>("pending");
   const [pendingList, setPendingList] = useState<RequestType[]>([]);
   const [processingList, setProcessingList] = useState<RequestType[]>([]);
   const [pickupList, setPickupList] = useState<RequestType[]>([]);
-  const [completeList, setCompleteList] = useState<RequestType[]>([]);
+  const [otherList, setOtherList] = useState<RequestType[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const queryRequestList = async () => {
@@ -60,8 +61,12 @@ const home = () => {
         true
       )
     );
-    setCompleteList(
-      sortByUpdatedAt(requestList.filter((item) => item.status === "complete"))
+    setOtherList(
+      sortByUpdatedAt(
+        requestList.filter(
+          (item) => item.status === "success" || item.status === "failed"
+        )
+      )
     );
     setIsRefreshing(false);
   };
@@ -84,6 +89,10 @@ const home = () => {
       setIsRefreshAdminData(false);
     }
   }, [isRefreshAdminData]);
+
+  useEffect(() => {
+    console.log("is Refreshing: ", isRefreshing);
+  }, [isRefreshing]);
 
   return (
     <View className="flex-1 px-2 py-4 gap-4 bg-background">
@@ -131,9 +140,9 @@ const home = () => {
             onRefresh={onRefreshFeedHandle}
             refreshing={isRefreshing}
           />
-        ) : activeTab === "complete" && !isRefreshing ? (
+        ) : activeTab === "other" && !isRefreshing ? (
           <FlatList
-            data={completeList}
+            data={otherList}
             renderItem={({ item }) => <RequestItem request={item} />}
             ListEmptyComponent={() => (
               <EmptyRequestListItem message="No completed requests" />

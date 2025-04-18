@@ -30,9 +30,8 @@ const StatusSetter = ({
   const [status, setStatus] = useState<string>(request.status);
   const [amount, setAmount] = useState<string>(request.price);
   const [remarks, setRemarks] = useState<string>(request.remarks);
-  const [isSuccessful, setIsSuccessful] = useState(request.isSuccessful);
 
-  const statuses = ["pending", "processing", "pickup", "complete"];
+  const statuses = ["pending", "processing", "pickup", "success", "failed"];
   const currentIndex = statuses.indexOf(status);
 
   const changeStatus = (direction: "left" | "right") => {
@@ -45,17 +44,14 @@ const StatusSetter = ({
 
     setStatus(newStatus);
 
-    // Reset remarks and isSuccessful properly
     if (newStatus === request.status) {
       setRemarks(request.remarks);
-      setIsSuccessful(request.isSuccessful);
     } else {
       if (newStatus == "pickup") {
         setRemarks("Please bring one valid ID.");
       } else {
-        setRemarks("Pickup by the owner.");
+        setRemarks("Transaction Failed.");
       }
-      setIsSuccessful(false);
     }
   };
 
@@ -63,7 +59,6 @@ const StatusSetter = ({
     return (
       status !== request.status ||
       remarks !== request.remarks ||
-      isSuccessful !== request.isSuccessful ||
       amount !== request.price
     );
   };
@@ -71,7 +66,6 @@ const StatusSetter = ({
   const reset = () => {
     setStatus(request.status);
     setRemarks(request.remarks);
-    setIsSuccessful(request.isSuccessful);
     setIsChanged(false);
   };
 
@@ -91,7 +85,6 @@ const StatusSetter = ({
         status: status,
         remarks: remarks,
         price: amount,
-        isSuccessful: isSuccessful,
         user_id: request.user_id,
       });
       Toast.show({
@@ -104,7 +97,6 @@ const StatusSetter = ({
         ...request,
         status: status,
         remarks: remarks,
-        isSuccessful: isSuccessful,
       };
 
       setIsChanged(false);
@@ -130,7 +122,7 @@ const StatusSetter = ({
     }
 
     setIsChanged(isChanged());
-  }, [status, remarks, isSuccessful, amount]);
+  }, [status, remarks, amount]);
 
   return (
     <View className="p-4 bg-background rounded-2xl shadow-md items-center mb-20">
@@ -160,8 +152,10 @@ const StatusSetter = ({
                 : status === "processing"
                 ? "bg-processing"
                 : status === "pickup"
-                ? "bg-forPickup"
-                : "bg-complete"
+                ? "bg-pickup"
+                : status === "success"
+                ? "bg-success"
+                : "bg-failed"
             }`}
           >
             <Text className="text-white font-semibold">
@@ -219,7 +213,7 @@ const StatusSetter = ({
       )}
 
       {/* Switch for 'complete' status */}
-      {status === "complete" && (
+      {(status === "success" || status === "failed") && (
         <View className="gap-2 mt-6 items-start w-full">
           <View className="w-full flex-row justify-between items-center gap-2">
             <Text className="text-lg italic">Payment Upon Pickup</Text>
@@ -244,17 +238,6 @@ const StatusSetter = ({
               handleChangeText={(e) => setRemarks(e)}
               containerStyles="rounded-xl bg-white min-h-20 max-h-40"
             />
-          </View>
-          <View className="flex-row w-full mt-2 gap-2">
-            <Switch
-              trackColor={{ false: color.failed, true: color.success }}
-              thumbColor={color.white}
-              onValueChange={() => setIsSuccessful((prev) => !prev)}
-              value={isSuccessful}
-            />
-            <Text className="text-lg font-semibold">
-              {`Transaction ${isSuccessful ? "Successful" : "Failed"}`}
-            </Text>
           </View>
         </View>
       )}

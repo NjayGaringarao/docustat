@@ -2,7 +2,10 @@ export type RequestStatusType =
   | "pending"
   | "processing"
   | "pickup"
-  | "complete";
+  | "success"
+  | "failed";
+
+export type TabBarType = "pending" | "processing" | "pickup" | "other";
 
 export type COGType = {
   sem: "first" | "second" | "midyear";

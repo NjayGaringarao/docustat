@@ -109,7 +109,6 @@ interface IUpdateRequestStatus {
   status: string;
   remarks: string;
   price: string;
-  isSuccessful: boolean;
   user_id: string;
 }
 export const updateRequestStatus = async (param: IUpdateRequestStatus) => {

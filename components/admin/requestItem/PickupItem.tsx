@@ -10,10 +10,10 @@ const PIckupItem: React.FC<PIckupItemProps> = ({ request }) => {
   return (
     <TouchableOpacity
       onPress={() => router.push(`/manageRequest/${request.id}`)}
-      className="bg-background my-2 rounded-lg shadow-lg overflow-hidden border border-forPickup"
+      className="bg-background my-2 rounded-lg shadow-lg overflow-hidden border border-pickup"
     >
       {/* Header Section */}
-      <View className="flex-row justify-between items-center mb-2 bg-forPickup px-4 py-2">
+      <View className="flex-row justify-between items-center mb-2 bg-pickup px-4 py-2">
         <View className="flex-1 justify-start">
           <Text className="text-lg font-semibold text-background">
             {request.purpose}
