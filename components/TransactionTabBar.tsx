@@ -72,7 +72,7 @@ const TransactionTabBar = ({
               : "font-normal text-uGrayLight"
           }`}
         >
-          Archive Requests
+          Archive Request
         </Text>
       </TouchableOpacity>
     </View>
