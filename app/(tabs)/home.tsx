@@ -72,7 +72,7 @@ const home = () => {
               />
             )}
             ListEmptyComponent={() => (
-              <EmptyRequestListItem message="You don't have pending request." />
+              <EmptyRequestListItem message="You don't have a request that is active on admin list." />
             )}
             onRefresh={onRefreshFeedHandle}
             refreshing={isRefreshing}
@@ -87,7 +87,7 @@ const home = () => {
               />
             )}
             ListEmptyComponent={() => (
-              <EmptyRequestListItem message="You don't have a request that is on process." />
+              <EmptyRequestListItem message="You don't have a request that is on archive." />
             )}
             onRefresh={onRefreshFeedHandle}
             refreshing={isRefreshing}

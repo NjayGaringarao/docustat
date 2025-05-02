@@ -30,7 +30,7 @@ const TransactionTabBar = ({
       >
         <FontAwesome
           name="spinner"
-          size={32}
+          size={48}
           color={activeTab === "active" ? color.secondary : color.uGrayLight}
         />
         <Text
@@ -62,7 +62,7 @@ const TransactionTabBar = ({
       >
         <FontAwesome
           name="archive"
-          size={32}
+          size={48}
           color={activeTab === "archive" ? color.secondary : color.uGrayLight}
         />
         <Text
