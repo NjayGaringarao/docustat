@@ -22,7 +22,10 @@ class AppwriteService {
   storage;
   messaging;
   constructor() {
-    client.setProject(env.APPWRITE_PROJECT).setPlatform(env.APPWRITE_PLATFORM);
+    client
+      .setProject(env.APPWRITE_PROJECT)
+      .setPlatform(env.APPWRITE_PLATFORM)
+      .setEndpoint(env.APPWRITE_ENDPOINT);
 
     this.account = new Account(client);
     this.avatars = new Avatars(client);
