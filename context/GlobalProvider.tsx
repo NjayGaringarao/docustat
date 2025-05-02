@@ -50,7 +50,8 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [fcmToken, setFcmToken] = useState<string>();
   const [isRefreshAdminData, setIsRefreshAdminData] = useState(false);
-  const initializeGlobalState = async () => {
+
+  const initializeGlobalState = async (isNavigate: boolean = true) => {
     try {
       setIsLoading(true);
 
@@ -82,6 +83,9 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
         if (currentUser) {
           console.log("User role:", _userCredential.role);
+
+          if (!isNavigate) throw "bypass navigation";
+
           if (_userCredential.role == "admin") {
             router.replace("/(tabsAdmin)/home");
           } else {
@@ -94,7 +98,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
         setUser(null);
       }
     } catch (error) {
-      console.log(error);
+      if (error != "bypass navigation") console.log(error);
     } finally {
       setIsLoading(false);
     }

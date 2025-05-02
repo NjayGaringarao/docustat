@@ -17,7 +17,7 @@ export interface GlobalContextInterface {
   refreshUserRecord: (update: RefreshUserRecordType) => Promise<void>;
   setIsRefreshAdminData: Dispatch<SetStateAction<boolean>>;
   resetGlobalState: () => void;
-  initializeGlobalState: () => Promise<void>;
+  initializeGlobalState: (isNavigate?: boolean) => Promise<void>;
   user: Models.User<Models.Preferences> | null;
   userInfo: UserType;
   userCredential: UserCredentialType;

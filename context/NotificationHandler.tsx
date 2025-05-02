@@ -21,12 +21,12 @@ const handleNotification = (refreshNotificationHandler: () => void) => {
     if (user) {
       const userCredential = await getUserCredential(user.$id);
       if (userCredential.role == "student") {
-        router.navigate("/(tabs)/notification/true");
+        router.replace("/(tabs)/notification/true");
       } else {
-        router.navigate("/(tabsAdmin)/home");
+        router.replace("/(tabsAdmin)/home");
       }
     } else {
-      router.navigate("/");
+      router.replace("/");
     }
   });
 

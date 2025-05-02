@@ -95,8 +95,20 @@ const Notification = () => {
   useEffect(() => {
     if (!searchParams) return;
     if (searchParams.isRefresh == "true") {
+      const newParams = new URLSearchParams(
+        searchParams as Record<string, string>
+      );
+      newParams.set("isRefresh", "false");
+
+      router.replace({
+        pathname: "/notification/[isRefresh]" as const, // Assuming the path matches `[isRefresh]`
+        params: {
+          ...Object.fromEntries(newParams.entries()),
+          isRefresh: newParams.get("isRefresh") || "false",
+        }, // ensures isRefresh is included
+      });
       setIsRefreshing(true);
-      initializeGlobalState();
+      initializeGlobalState(false);
     }
   }, [searchParams]);
 
