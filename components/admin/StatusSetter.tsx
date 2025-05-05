@@ -113,6 +113,14 @@ const StatusSetter = ({
     }
   };
 
+  const getFloat = (value: string) => {
+    if (value.length) {
+      return parseFloat(value).toFixed(2).toString();
+    } else {
+      return "0.00";
+    }
+  };
+
   // This will allow parent component to trigger reset and saveChanges
   useEffect(() => {
     if (resetRef) {
@@ -199,6 +207,7 @@ const StatusSetter = ({
                 placeholder="100.00"
                 keyboardType="numeric"
                 containerStyles="flex-1 h-11 bg-white rounded-xl"
+                onBlur={() => setAmount(getFloat(amount))}
               />
             </View>
           </View>
@@ -227,6 +236,7 @@ const StatusSetter = ({
                   handleChangeText={(e) => e.length < 9 && setAmount(e)}
                   keyboardType="numeric"
                   containerStyles="flex-1 h-11 bg-white rounded-xl"
+                  onBlur={() => setAmount(getFloat(amount))}
                 />
               </View>
               <View className="absolute h-full w-full bg-gray-400 opacity-50" />
